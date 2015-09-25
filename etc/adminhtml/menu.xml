@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Magento/Backend/etc/menu.xsd">
+    <menu>
+        <add id="GoMage_Feed::marketing_feed" title="GoMage Feeds" module="GoMage_Feed" sortOrder="100" parent="Magento_Backend::marketing"  resource="Magento_Backend::marketing_feed"/>
+        <add id="GoMage_Feed::feeds" title="Manage Feeds" module="GoMage_Feed" parent="GoMage_Feed::marketing_feed" sortOrder="10" action="gomage_feed/feed/index" resource="GoMage_Feed::feeds"/>
+        <add id="GoMage_Feed::attributes" title="Manage Dynamic Attributes" module="GoMage_Feed" parent="GoMage_Feed::marketing_feed" sortOrder="20" action="gomage_feed/attribute/index" resource="GoMage_Feed::attributes"/>
+    </menu>
+</config>

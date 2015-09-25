@@ -1,0 +1,178 @@
+<?php
+
+// @codingStandardsIgnoreFile
+
+/* @var $block \GoMage\Feed\Block\Adminhtml\Feed\Edit\Tab\Content\Mapping */
+$element = $block->getElement();
+?>
+<?php $_htmlId          = $block->getElement()->getHtmlId() ?>
+<?php $_htmlClass       = $block->getElement()->getClass() ?>
+<?php $_htmlName        = $block->getElement()->getName() ?>
+<?php $_types           = $block->getType() ?>
+<?php $_extendedTypes   = $block->getExtendedType() ?>
+<?php $_outputs         = $block->getOutput() ?>
+<?php $_attributes      = $block->getAttributes() ?>
+
+<div class="field">
+    <div class="control">
+        <table class="admin__control-table mapping_table" id="mapping_table">
+            <thead>
+                <tr>
+                    <th class="col-draggable col-order"></th>
+                    <th class="col-name required"><?php echo __('Field Name') ?></th>
+                    <th class="col-type"><?php echo __('Prefix Type') ?></th>
+                    <th class="col-value"><?php echo __('Prefix Value') ?></th>
+                    <th class="col-type"><?php echo __('Type') ?></th>
+                    <th class="col-value"><?php echo __('Value') ?></th>
+                    <th class="col-type"><?php echo __('Suffix Type') ?></th>
+                    <th class="col-value"><?php echo __('Suffix Value') ?></th>
+                    <th class="col-output"><?php echo __('Output Type') ?></th>
+                    <th class="col-limit"><?php echo __('Symbols Limit') ?></th>
+                    <th class="col-delete"><?php echo __('Action') ?></th>
+                </tr>
+            </thead>
+            <tbody data-role="<?php echo $_htmlId ?>_container" id="<?php echo $_htmlId ?>_container"></tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="11" class="col-actions-add"><?php echo $block->getAddButtonHtml() ?></td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+</div>
+<script id="mapping-row-template" type="text/x-magento-template">
+    <tr>
+        <td class="col-draggable col-order">
+            <div data-role="draggable-handle" class="draggable-handle" title="<?php echo __('Sort'); ?>"></div>
+            <input data-role="order" type="hidden" name="<?php echo $_htmlName ?>[<%- data.index %>][order]" value="<%- data.order %>" id="mapping_row_<%- data.index %>_order" />
+        </td>
+        <td class="col-name">
+            <input class="input-text <?php echo $_htmlClass ?> required-entry" type="text" name="<?php echo $_htmlName ?>[<%- data.index %>][name]" value="<%- data.name %>" id="mapping_row_<%- data.index %>_name" />
+        </td>
+        <td class="col-type">
+            <select class="select" name="<?php echo $_htmlName ?>[<%- data.index %>][prefix_type]" id="mapping_row_<%- data.index %>_prefix_type">
+                <?php foreach ($_types as $_type): ?>
+                    <option value="<?php echo $_type['value'] ?>" <% if (typeof data.prefix_type != 'undefined' && data.prefix_type == <?php echo $_type['value'] ?>) { %> selected="selected" <% } %>><?php echo $_type['label'] ?></option>
+                <?php endforeach ?>
+            </select>
+        </td>
+        <td class="col-value">
+            <select class="select" name="<?php echo $_htmlName ?>[<%- data.index %>][prefix_value]" id="mapping_row_<%- data.index %>_prefix_value">
+                <option value=""><?php echo __('Not Set') ?></option>
+                <?php foreach ($_attributes as $_attribute): ?>
+                    <option value="<?php echo $_attribute->getAttributeCode() ?>" <% if (typeof data.prefix_value != 'undefined' && data.prefix_value == '<?php echo $_attribute->getAttributeCode() ?>') { %> selected="selected" <% } %>><?php echo $_attribute->getStoreLabel() ?></option>
+                <?php endforeach ?>
+            </select>
+        </td>
+        <td class="col-type">
+            <select class="select" name="<?php echo $_htmlName ?>[<%- data.index %>][type]" id="mapping_row_<%- data.index %>_type">
+                <?php foreach ($_extendedTypes as $_type): ?>
+                    <option value="<?php echo $_type['value'] ?>" <% if (typeof data.type != 'undefined' && data.type == <?php echo $_type['value'] ?>) { %> selected="selected" <% } %>><?php echo $_type['label'] ?></option>
+                <?php endforeach ?>
+            </select>
+        </td>
+        <td class="col-value">
+            <select class="select" name="<?php echo $_htmlName ?>[<%- data.index %>][value]" id="mapping_row_<%- data.index %>_value">
+                <option value=""><?php echo __('Not Set') ?></option>
+                <?php foreach ($_attributes as $_attribute): ?>
+                    <option value="<?php echo $_attribute->getAttributeCode() ?>" <% if (typeof data.value != 'undefined' && data.value == '<?php echo $_attribute->getAttributeCode() ?>') { %> selected="selected" <% } %>><?php echo $_attribute->getStoreLabel() ?></option>
+                <?php endforeach ?>
+            </select>
+        </td>
+        <td class="col-type">
+            <select class="select" name="<?php echo $_htmlName ?>[<%- data.index %>][suffix_type]" id="mapping_row_<%- data.index %>_suffix_type">
+                <?php foreach ($_types as $_type): ?>
+                    <option value="<?php echo $_type['value'] ?>" <% if (typeof data.suffix_type != 'undefined' && data.suffix_type == <?php echo $_type['value'] ?>) { %> selected="selected" <% } %>><?php echo $_type['label'] ?></option>
+                <?php endforeach ?>
+            </select>
+        </td>
+        <td class="col-value">
+            <select class="select" name="<?php echo $_htmlName ?>[<%- data.index %>][suffix_value]" id="mapping_row_<%- data.index %>_suffix_value">
+                <option value=""><?php echo __('Not Set') ?></option>
+                <?php foreach ($_attributes as $_attribute): ?>
+                    <option value="<?php echo $_attribute->getAttributeCode() ?>" <% if (typeof data.suffix_value != 'undefined' && data.suffix_value == '<?php echo $_attribute->getAttributeCode() ?>') { %> selected="selected" <% } %>><?php echo $_attribute->getStoreLabel() ?></option>
+                <?php endforeach ?>
+            </select>
+        </td>
+        <td class="col-output">
+            <select class="select" name="<?php echo $_htmlName ?>[<%- data.index %>][output]" id="mapping_row_<%- data.index %>_output">
+                <?php foreach ($_outputs as $_output): ?>
+                    <option value="<?php echo $_output['value'] ?>" <% if (typeof data.output != 'undefined' && data.output == <?php echo $_output['value'] ?>) { %> selected="selected" <% } %>><?php echo $_output['label'] ?></option>
+                <?php endforeach ?>
+            </select>
+        </td>
+        <td class="col-limit">
+            <input class="input-text <?php echo $_htmlClass ?> validate-number" type="text" name="<?php echo $_htmlName ?>[<%- data.index %>][limit]" value="<%- data.limit %>" id="mapping_row_<%- data.index %>_limit" />
+        </td>
+        <td class="col-delete">
+            <button title="<?php echo __("Delete") ?>" type="button" class="action- scalable delete icon-btn" id="mapping_row_<%- data.index %>_delete_button" onclick="return mappingControl.deleteItem(event);">
+                <span><?php echo __("Delete") ?></span>
+            </button>
+        </td>
+        </tr>
+</script>
+<script>
+//<![CDATA[
+
+require([
+    'jquery',
+    'mage/template',
+    'jquery/ui',
+    'prototype'
+], function (jQuery, mageTemplate) {
+
+var mappingControl = {
+    template: mageTemplate('#mapping-row-template'),
+    itemsCount: 0,
+    addItem : function (data) {
+        if (typeof(data) == 'undefined'){
+            data = {};
+        }
+        data.order = this.itemsCount;
+        data.index = this.itemsCount;
+
+
+        Element.insert($('<?php echo $_htmlId ?>_container'), {
+            bottom : this.template({
+                data: data
+            })
+        });
+
+        $('<?php echo $_htmlId ?>_container').select('input', 'select').each(function(el){
+            if (el.hasOwnProperty('setHasChanges')) {
+                Event.observe(el, 'change', el.setHasChanges.bind(el));
+            }
+        });
+
+        this.itemsCount++;
+    },
+    deleteItem: function(event) {
+        var tr = Event.findElement(event, 'tr');
+        if (tr) {
+            Element.remove(tr);
+        }
+        return false;
+    }
+};
+<?php foreach ($block->getValues() as $_item): ?>
+    mappingControl.addItem(<?php echo $_item->toJson() ?>);
+<?php endforeach; ?>
+
+jQuery(function($) {
+    $('[data-role=<?php echo $_htmlId ?>_container]').sortable({
+        distance: 8,
+        tolerance: "pointer",
+        axis: 'y',
+        update: function() {
+            $('[data-role=<?php echo $_htmlId ?>_container] [data-role=order]').each(function(index, element) {
+                $(element).val(index + 1);
+            });
+        }
+    });
+});
+
+window.mappingControl = mappingControl;
+//]]>
+
+});
+</script>

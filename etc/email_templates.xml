@@ -1,0 +1,4 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../Magento/Email/etc/email_templates.xsd">
+    <template id="gomage_feed_notification_template" label="Feed Pro Notifications" file="feed_notification.html" type="text" module="GoMage_Feed" area="adminhtml"/>
+</config>

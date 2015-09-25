@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="admin-2columns-left" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceContainer name="content">
+            <block class="GoMage\Feed\Block\Adminhtml\Attribute\Edit" name="gomage.feed.attribute.edit"/>
+        </referenceContainer>
+        <referenceContainer name="left">
+            <block class="GoMage\Feed\Block\Adminhtml\Attribute\Edit\Tabs" name="gomage_feed_attribute_edit_tabs">
+                <block class="GoMage\Feed\Block\Adminhtml\Attribute\Edit\Tab\Main" name="gomage_feed_attribute_tab_main"/>
+                <block class="GoMage\Feed\Block\Adminhtml\Attribute\Edit\Tab\Conditions" name="gomage_feed_attribute_tab_conditions"/>
+                <action method="addTab">
+                    <argument name="name" xsi:type="string">main_section</argument>
+                    <argument name="block" xsi:type="string">gomage_feed_attribute_tab_main</argument>
+                </action>
+                <action method="addTab">
+                    <argument name="name" xsi:type="string">conditions_section</argument>
+                    <argument name="block" xsi:type="string">gomage_feed_attribute_tab_conditions</argument>
+                </action>
+            </block>
+        </referenceContainer>
+    </body>
+</page>
