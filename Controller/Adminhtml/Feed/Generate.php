@@ -16,12 +16,10 @@ class Generate extends FeedController
         $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
         if ($id) {
             try {
+                /** @var \GoMage\Feed\Model\Feed $model */
                 $model = $this->_objectManager->create('GoMage\Feed\Model\Feed');
-                $model->setId($id);
-
-                /** @var \GoMage\Feed\Model\GeneratorInterface $generator */
-                $generator = $this->_objectManager->get('GoMage\Feed\Model\Generator');
-                $generator->generate($model);
+                $model->load($id);
+                $model->generate();
 
                 $this->messageManager->addSuccess(__('Feed has been successfully generated.'));
                 $resultRedirect->setPath('gomage_feed/feed/edit', ['id' => $id]);

@@ -6,6 +6,7 @@ use GoMage\Feed\Model\Feed;
 use GoMage\Feed\Model\Config\Source\Extension\Csv;
 use GoMage\Feed\Model\Config\Source\Extension\Xml;
 use Magento\Store\Model\System\Store;
+use Magento\Framework\App\Filesystem\DirectoryList;
 
 class Main extends \Magento\Backend\Block\Widget\Form\Generic implements \Magento\Backend\Block\Widget\Tab\TabInterface
 {
@@ -26,12 +27,28 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
     protected $_systemStore;
 
     /**
+     * @var \Magento\Framework\Filesystem
+     */
+    protected $_filesystem;
+
+    /**
+     * Store manager
+     *
+     * @var \Magento\Store\Model\StoreManagerInterface
+     */
+    protected $_storeManager;
+
+
+    /**
+     * Main constructor.
+     *
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Data\FormFactory $formFactory
      * @param Csv $csv
      * @param Xml $xml
      * @param Store $systemStore
+     * @param \Magento\Framework\Filesystem $filesystem
      * @param array $data
      */
     public function __construct(
@@ -41,11 +58,15 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
         Csv $csv,
         Xml $xml,
         Store $systemStore,
+        \Magento\Framework\Filesystem $filesystem,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         array $data = []
     ) {
-        $this->_xml         = $xml;
-        $this->_csv         = $csv;
-        $this->_systemStore = $systemStore;
+        $this->_xml          = $xml;
+        $this->_csv          = $csv;
+        $this->_systemStore  = $systemStore;
+        $this->_filesystem   = $filesystem;
+        $this->_storeManager = $storeManager;
 
         parent::__construct($context, $registry, $formFactory, $data);
     }
@@ -89,7 +110,14 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
             ]
         );
 
-        $url = 'test_feed.csv';
+        $url       = false;
+        $directory = $this->_filesystem->getDirectoryRead(DirectoryList::MEDIA);
+        if ($directory->isExist($model->getDestination())) {
+            $url = $this->_storeManager->getStore($model->getStoreId())->getBaseUrl(
+                    \Magento\Framework\UrlInterface::URL_TYPE_MEDIA
+                ) . $model->getDestination();
+        }
+
         if ($model->getId() && $url) {
             $fieldset->addField(
                 'comments',
@@ -97,7 +125,7 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
                 [
                     'label' => __('Access Url'),
                     'title' => __('Access Url'),
-                    'text'  => '<a href="' . $url . '" target="_blank">' . $url . '</a>',
+                    'text'  => $url ? '<a href="' . $url . '" target="_blank">' . $url . '</a>' : '',
                 ]
             );
         }

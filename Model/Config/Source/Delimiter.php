@@ -34,23 +34,23 @@ class Delimiter implements \Magento\Framework\Option\ArrayInterface
     {
         switch (intval($delimiter)) {
             case (self::TAB):
-                return '\t';
+                return "\t";
                 break;
             case (self::COLON):
-                return ':';
+                return ":";
                 break;
             case (self::SPACE):
-                return ' ';
+                return " ";
                 break;
             case (self::VERTICAL_PIPE):
-                return '|';
+                return "|";
                 break;
             case (self::SEMI_COLON):
-                return ';';
+                return ";";
                 break;
             case (self::COMMA):
             default:
-                return ',';
+                return ",";
                 break;
         }
     }

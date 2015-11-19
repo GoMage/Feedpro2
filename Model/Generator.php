@@ -34,6 +34,20 @@ class Generator extends \Magento\Framework\Object implements GeneratorInterface
     protected $_dateModel;
 
     /**
+     * Product collection factory
+     *
+     * @var \Magento\Catalog\Model\Resource\Product\CollectionFactory
+     */
+    protected $_productCollectionFactory;
+
+    /**
+     * Catalog product visibility
+     *
+     * @var \Magento\Catalog\Model\Product\Visibility
+     */
+    protected $_catalogProductVisibility;
+
+    /**
      * @param \Magento\Framework\Escaper $escaper
      * @param \Magento\Framework\Filesystem $filesystem
      * @param array $data
@@ -42,12 +56,18 @@ class Generator extends \Magento\Framework\Object implements GeneratorInterface
         \Magento\Framework\Escaper $escaper,
         \Magento\Framework\Filesystem $filesystem,
         \Magento\Framework\Stdlib\DateTime\DateTime $dateModel,
+        \Magento\Catalog\Model\Resource\Product\CollectionFactory $productCollectionFactory,
+        \Magento\Catalog\Model\Product\Visibility $catalogProductVisibility,
         array $data = []
     ) {
 
         $this->_escaper   = $escaper;
         $this->_directory = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
         $this->_dateModel = $dateModel;
+
+        $this->_productCollectionFactory = $productCollectionFactory;
+        $this->_catalogProductVisibility = $catalogProductVisibility;
+
 
         parent::__construct($data);
     }
@@ -80,4 +100,22 @@ class Generator extends \Magento\Framework\Object implements GeneratorInterface
 
         return true;
     }
+
+    /**
+     * @return \Magento\Catalog\Model\Resource\Product\Collection
+     */
+    protected function getProductCollection()
+    {
+        $collection = $this->_productCollectionFactory->create();
+
+        $collection->setStoreId($this->_feed->getStoreId())
+            ->setVisibility($this->_catalogProductVisibility->getVisibleInSiteIds());
+
+        if ($filter = $this->_feed->getFilter()) {
+            $filter = json_decode($filter, true);
+        }
+
+        return $collection;
+    }
+
 }
