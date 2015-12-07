@@ -1,7 +1,7 @@
 <?php
 namespace GoMage\Feed\Model\Resource;
 
-class Attribute extends \Magento\Framework\Model\Resource\Db\AbstractDb
+class Attribute extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
      * Init resource model

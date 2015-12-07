@@ -56,49 +56,82 @@ $element = $block->getElement();
             <input class="input-text <?php echo $_htmlClass ?> required-entry" type="text" name="<?php echo $_htmlName ?>[<%- data.index %>][name]" value="<%- data.name %>" id="mapping_row_<%- data.index %>_name" />
         </td>
         <td class="col-type">
-            <select class="select" name="<?php echo $_htmlName ?>[<%- data.index %>][prefix_type]" id="mapping_row_<%- data.index %>_prefix_type">
+            <select class="select" name="<?php echo $_htmlName ?>[<%- data.index %>][prefix_type]"
+                    id="mapping_row_<%- data.index %>_prefix_type"
+                    onchange="mappingControl.changeType(this);"
+                    data-value-select="mapping_row_<%- data.index %>_prefix_value_select"
+                    data-value-input="mapping_row_<%- data.index %>_prefix_value_input">
                 <?php foreach ($_types as $_type): ?>
                     <option value="<?php echo $_type['value'] ?>" <% if (typeof data.prefix_type != 'undefined' && data.prefix_type == <?php echo $_type['value'] ?>) { %> selected="selected" <% } %>><?php echo $_type['label'] ?></option>
                 <?php endforeach ?>
             </select>
         </td>
         <td class="col-value">
-            <select class="select" name="<?php echo $_htmlName ?>[<%- data.index %>][prefix_value]" id="mapping_row_<%- data.index %>_prefix_value">
+            <select class="select" name="<?php echo $_htmlName ?>[<%- data.index %>][prefix_value]"
+                    id="mapping_row_<%- data.index %>_prefix_value_select"
+                    <% if (data.prefix_type == '2') { %> disabled="disabled" style="display:none" <% } %>>
                 <option value=""><?php echo __('Not Set') ?></option>
                 <?php foreach ($_attributes as $_attribute): ?>
                     <option value="<?php echo $_attribute->getAttributeCode() ?>" <% if (typeof data.prefix_value != 'undefined' && data.prefix_value == '<?php echo $_attribute->getAttributeCode() ?>') { %> selected="selected" <% } %>><?php echo $_attribute->getStoreLabel() ?></option>
                 <?php endforeach ?>
             </select>
+            <input type="text" class="input-text <?php echo $_htmlClass ?>"
+                   name="<?php echo $_htmlName ?>[<%- data.index %>][prefix_value]"
+                   id="mapping_row_<%- data.index %>_prefix_value_input"
+                    <% if (data.prefix_type != '2') { %> disabled="disabled" style="display:none" <% } %>
+                    value="<%- data.prefix_value %>" />
         </td>
         <td class="col-type">
-            <select class="select" name="<?php echo $_htmlName ?>[<%- data.index %>][type]" id="mapping_row_<%- data.index %>_type">
+            <select class="select" name="<?php echo $_htmlName ?>[<%- data.index %>][type]"
+                    id="mapping_row_<%- data.index %>_type"
+                    onchange="mappingControl.changeType(this);"
+                    data-value-select="mapping_row_<%- data.index %>_value_select"
+                    data-value-input="mapping_row_<%- data.index %>_value_input">
                 <?php foreach ($_extendedTypes as $_type): ?>
                     <option value="<?php echo $_type['value'] ?>" <% if (typeof data.type != 'undefined' && data.type == <?php echo $_type['value'] ?>) { %> selected="selected" <% } %>><?php echo $_type['label'] ?></option>
                 <?php endforeach ?>
             </select>
         </td>
         <td class="col-value">
-            <select class="select" name="<?php echo $_htmlName ?>[<%- data.index %>][value]" id="mapping_row_<%- data.index %>_value">
+            <select class="select" name="<?php echo $_htmlName ?>[<%- data.index %>][value]"
+                    id="mapping_row_<%- data.index %>_value_select"
+                    <% if (data.type == '2') { %> disabled="disabled" style="display:none" <% } %>>
                 <option value=""><?php echo __('Not Set') ?></option>
                 <?php foreach ($_attributes as $_attribute): ?>
                     <option value="<?php echo $_attribute->getAttributeCode() ?>" <% if (typeof data.value != 'undefined' && data.value == '<?php echo $_attribute->getAttributeCode() ?>') { %> selected="selected" <% } %>><?php echo $_attribute->getStoreLabel() ?></option>
                 <?php endforeach ?>
             </select>
+            <input type="text" class="input-text <?php echo $_htmlClass ?>"
+                   name="<?php echo $_htmlName ?>[<%- data.index %>][value]"
+                   id="mapping_row_<%- data.index %>_value_input"
+                    <% if (data.type != '2') { %> disabled="disabled" style="display:none" <% } %>
+                    value="<%- data.value %>" />
         </td>
         <td class="col-type">
-            <select class="select" name="<?php echo $_htmlName ?>[<%- data.index %>][suffix_type]" id="mapping_row_<%- data.index %>_suffix_type">
+            <select class="select" name="<?php echo $_htmlName ?>[<%- data.index %>][suffix_type]"
+                    id="mapping_row_<%- data.index %>_suffix_type"
+                    onchange="mappingControl.changeType(this);"
+                    data-value-select="mapping_row_<%- data.index %>_suffix_value_select"
+                    data-value-input="mapping_row_<%- data.index %>_suffix_value_input">
                 <?php foreach ($_types as $_type): ?>
                     <option value="<?php echo $_type['value'] ?>" <% if (typeof data.suffix_type != 'undefined' && data.suffix_type == <?php echo $_type['value'] ?>) { %> selected="selected" <% } %>><?php echo $_type['label'] ?></option>
                 <?php endforeach ?>
             </select>
         </td>
         <td class="col-value">
-            <select class="select" name="<?php echo $_htmlName ?>[<%- data.index %>][suffix_value]" id="mapping_row_<%- data.index %>_suffix_value">
+            <select class="select" name="<?php echo $_htmlName ?>[<%- data.index %>][suffix_value]"
+                    id="mapping_row_<%- data.index %>_suffix_value_select"
+                    <% if (data.suffix_type == '2') { %> disabled="disabled" style="display:none" <% } %>>
                 <option value=""><?php echo __('Not Set') ?></option>
                 <?php foreach ($_attributes as $_attribute): ?>
                     <option value="<?php echo $_attribute->getAttributeCode() ?>" <% if (typeof data.suffix_value != 'undefined' && data.suffix_value == '<?php echo $_attribute->getAttributeCode() ?>') { %> selected="selected" <% } %>><?php echo $_attribute->getStoreLabel() ?></option>
                 <?php endforeach ?>
             </select>
+            <input type="text" class="input-text <?php echo $_htmlClass ?>"
+                   name="<?php echo $_htmlName ?>[<%- data.index %>][suffix_value]"
+                   id="mapping_row_<%- data.index %>_prefix_value_input"
+                    <% if (data.suffix_value != '2') { %> disabled="disabled" style="display:none" <% } %>
+                    value="<%- data.suffix_value %>" />
         </td>
         <td class="col-output">
             <select class="select" name="<?php echo $_htmlName ?>[<%- data.index %>][output]" id="mapping_row_<%- data.index %>_output">
@@ -158,6 +191,23 @@ var mappingControl = {
             Element.remove(tr);
         }
         return false;
+    },
+    changeType: function (control){
+
+        var value_select = $('#' + $(control).attr('data-value-select'));
+        var value_input = $('#' + $(control).attr('data-value-select'));
+
+        if ($(control).val() == '2'){
+            value_select.hide();
+            value_select.prop( "disabled", true);
+            value_input.show();
+            value_input.prop( "disabled", false);
+        }else{
+            value_input.hide();
+            value_input.prop( "disabled", true);
+            value_select.show();
+            value_select.prop( "disabled", false);
+        }
     }
 };
 <?php foreach ($block->getValues() as $_item): ?>

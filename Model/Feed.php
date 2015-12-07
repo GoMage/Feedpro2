@@ -4,6 +4,8 @@
 namespace GoMage\Feed\Model;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
+use Magento\Catalog\Api\CategoryRepositoryInterface;
 use GoMage\Feed\Model\Config\Source\Enclosure;
 use GoMage\Feed\Model\Config\Source\Delimiter;
 
@@ -30,7 +32,7 @@ class Feed extends \Magento\Framework\Model\AbstractModel
     /**
      * Product collection factory
      *
-     * @var \Magento\Catalog\Model\Resource\Product\CollectionFactory
+     * @var \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory
      */
     protected $_productCollectionFactory;
 
@@ -45,6 +47,16 @@ class Feed extends \Magento\Framework\Model\AbstractModel
      * @var ProductRepositoryInterface
      */
     protected $_productRepository;
+
+    /**
+     * @var ProductAttributeRepositoryInterface
+     */
+    protected $_attributeRepository;
+
+    /**
+     * @var CategoryRepositoryInterface
+     */
+    protected $_categoryRepository;
 
     /**
      * @var array
@@ -66,21 +78,30 @@ class Feed extends \Magento\Framework\Model\AbstractModel
      *
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Framework\Model\Resource\AbstractResource|null $resource
-     * @param \Magento\Framework\Data\Collection\AbstractDb|null $resourceCollection
      * @param Adapter\Factory $adapterFactory
+     * @param \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory
+     * @param \Magento\Catalog\Model\Product\Visibility $catalogProductVisibility
+     * @param ProductRepositoryInterface $productRepository
+     * @param ProductAttributeRepositoryInterface $attributeRepository
+     * @param CategoryRepositoryInterface $categoryRepository
+     * @param Enclosure $enclosure
+     * @param Delimiter $delimiter
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource|null $resource
+     * @param \Magento\Framework\Data\Collection\AbstractDb|null $resourceCollection
      * @param array $data
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
         \GoMage\Feed\Model\Adapter\Factory $adapterFactory,
-        \Magento\Catalog\Model\Resource\Product\CollectionFactory $productCollectionFactory,
+        \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory,
         \Magento\Catalog\Model\Product\Visibility $catalogProductVisibility,
         ProductRepositoryInterface $productRepository,
+        ProductAttributeRepositoryInterface $attributeRepository,
+        CategoryRepositoryInterface $categoryRepository,
         Enclosure $enclosure,
         Delimiter $delimiter,
-        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
+        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
@@ -88,8 +109,11 @@ class Feed extends \Magento\Framework\Model\AbstractModel
         $this->_productCollectionFactory = $productCollectionFactory;
         $this->_catalogProductVisibility = $catalogProductVisibility;
         $this->_productRepository        = $productRepository;
-        $this->_enclosureModel           = $enclosure;
-        $this->_delimiterModel           = $delimiter;
+        $this->_attributeRepository      = $attributeRepository;
+        $this->_categoryRepository       = $categoryRepository;
+
+        $this->_enclosureModel = $enclosure;
+        $this->_delimiterModel = $delimiter;
 
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
     }
@@ -169,7 +193,7 @@ class Feed extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
-     * @return \Magento\Catalog\Model\Resource\Product\Collection
+     * @return \Magento\Catalog\Model\ResourceModel\Product\Collection
      */
     protected function _getProductCollection()
     {
@@ -196,7 +220,7 @@ class Feed extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
-     * @param  \Magento\Catalog\Model\Resource\Product\Collection $collection
+     * @param  \Magento\Catalog\Model\ResourceModel\Product\Collection $collection
      * @return array
      */
     protected function getGenerationData($collection)
@@ -220,10 +244,67 @@ class Feed extends \Magento\Framework\Model\AbstractModel
         $fieldsMapping = $this->getFieldsMapping();
 
         foreach ($fieldsMapping as $field) {
-            $data[$field->name] = $product->getData($field->prefix_value) . $product->getData($field->value) . $product->getData($field->suffix_value);
+            $data[$field->name] = $this->getFieldData($product, $field->prefix_type, $field->prefix_value) .
+                $this->getFieldData($product, $field->type, $field->value) .
+                $this->getFieldData($product, $field->suffix_type, $field->suffix_value);
         }
 
         return $data;
+    }
+
+    /**
+     * @param  \Magento\Catalog\Model\Product $product
+     * @param  string $type
+     * @param  string $code
+     * @return mixed
+     */
+    protected function getFieldData($product, $type, $code)
+    {
+        if ($type == \GoMage\Feed\Model\Config\Source\Mapping\TypeInterface::STATIC_VALUE) {
+            return $code;
+        }
+
+        if (!$code) {
+            return "";
+        }
+
+        //TODO: hard code
+        if ($code == 'id') {
+            return $product->getId();
+        } elseif ($code == 'category_subcategory') {
+            $categoryIds = $product->getCategoryIds();
+            if (count($categoryIds)) {
+                $categoryId = max($categoryIds);
+                $category   = $this->_categoryRepository->get($categoryId);
+                $categories = $category->getParentCategories();
+                return implode(' > ', array_map(function ($cat) {
+                        return $cat->getName();
+                    }, $categories
+                    )
+                );
+            }
+            return "";
+        } elseif ($code == 'free_shipping_feed') {
+            return "";
+        } elseif ($code == 'url_key') {
+            return $product->getProductUrl();
+        } elseif ($code == 'small_image') {
+            return $product->getImage();
+        }
+
+        $attribute = $this->getProductAttribute($code);
+        $value     = $attribute->getFrontend()->getValue($product);
+
+        return $value;
+    }
+
+    /**
+     * @param $code
+     * @return \Magento\Catalog\Api\Data\ProductAttributeInterface
+     */
+    protected function getProductAttribute($code)
+    {
+        return $this->_attributeRepository->get($code);
     }
 
     /**

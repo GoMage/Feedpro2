@@ -5,7 +5,7 @@ namespace GoMage\Feed\Model;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 
-class Generator extends \Magento\Framework\Object implements GeneratorInterface
+class Generator implements GeneratorInterface
 {
 
     /**
@@ -36,7 +36,7 @@ class Generator extends \Magento\Framework\Object implements GeneratorInterface
     /**
      * Product collection factory
      *
-     * @var \Magento\Catalog\Model\Resource\Product\CollectionFactory
+     * @var \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory
      */
     protected $_productCollectionFactory;
 
@@ -56,7 +56,7 @@ class Generator extends \Magento\Framework\Object implements GeneratorInterface
         \Magento\Framework\Escaper $escaper,
         \Magento\Framework\Filesystem $filesystem,
         \Magento\Framework\Stdlib\DateTime\DateTime $dateModel,
-        \Magento\Catalog\Model\Resource\Product\CollectionFactory $productCollectionFactory,
+        \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory,
         \Magento\Catalog\Model\Product\Visibility $catalogProductVisibility,
         array $data = []
     ) {
@@ -102,7 +102,7 @@ class Generator extends \Magento\Framework\Object implements GeneratorInterface
     }
 
     /**
-     * @return \Magento\Catalog\Model\Resource\Product\Collection
+     * @return \Magento\Catalog\Model\ResourceModel\Product\Collection
      */
     protected function getProductCollection()
     {

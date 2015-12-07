@@ -47,7 +47,7 @@ class Mapping extends Widget implements RendererInterface
     protected $_output;
 
     /**
-     * @var \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory
+     * @var \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory
      */
     protected $_collectionFactory;
 
@@ -58,7 +58,7 @@ class Mapping extends Widget implements RendererInterface
      * @param \GoMage\Feed\Model\Config\Source\Mapping\Type $type
      * @param \GoMage\Feed\Model\Config\Source\Mapping\ExtendedType $extendedType
      * @param \GoMage\Feed\Model\Config\Source\Mapping\Output $output
-     * @param \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory $collectionFactory
+     * @param \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory $collectionFactory
      * @param array $data
      */
     public function __construct(
@@ -68,7 +68,7 @@ class Mapping extends Widget implements RendererInterface
         \GoMage\Feed\Model\Config\Source\Mapping\Type $type,
         \GoMage\Feed\Model\Config\Source\Mapping\ExtendedType $extendedType,
         \GoMage\Feed\Model\Config\Source\Mapping\Output $output,
-        \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory $collectionFactory,
+        \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory $collectionFactory,
         array $data = []
     ) {
 
@@ -141,7 +141,7 @@ class Mapping extends Widget implements RendererInterface
             if (is_array($items)) {
                 $items = $this->_sortValues($items);
                 foreach ($items as $item) {
-                    $values[] = new \Magento\Framework\Object($item);
+                    $values[] = new \Magento\Framework\DataObject($item);
                 }
             }
         }
@@ -219,7 +219,28 @@ class Mapping extends Widget implements RendererInterface
     public function getAttributes()
     {
         // TODO: add mapper; add dynamic attributes
-        return $this->_collectionFactory->create()->addVisibleFilter()->load();
+        $items = $this->_collectionFactory->create()->getItems();
+
+        $items[] = new \Magento\Framework\DataObject([
+                'attribute_code' => 'id',
+                'store_label'    => __('Product Id')
+            ]
+        );
+
+        //TODO: Hard code
+        $items[] = new \Magento\Framework\DataObject([
+                'attribute_code' => 'category_subcategory',
+                'store_label'    => __('Category > SubCategory')
+            ]
+        );
+
+        $items[] = new \Magento\Framework\DataObject([
+                'attribute_code' => 'free_shipping_feed',
+                'store_label'    => __('* Free Shipping Feed')
+            ]
+        );
+
+        return $items;
     }
 
 }

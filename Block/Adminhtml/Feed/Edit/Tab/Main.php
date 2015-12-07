@@ -48,7 +48,6 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
      * @param Csv $csv
      * @param Xml $xml
      * @param Store $systemStore
-     * @param \Magento\Framework\Filesystem $filesystem
      * @param array $data
      */
     public function __construct(
@@ -58,15 +57,13 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
         Csv $csv,
         Xml $xml,
         Store $systemStore,
-        \Magento\Framework\Filesystem $filesystem,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
         array $data = []
     ) {
         $this->_xml          = $xml;
         $this->_csv          = $csv;
         $this->_systemStore  = $systemStore;
-        $this->_filesystem   = $filesystem;
-        $this->_storeManager = $storeManager;
+        $this->_filesystem   = $context->getFilesystem();
+        $this->_storeManager = $context->getStoreManager();
 
         parent::__construct($context, $registry, $formFactory, $data);
     }

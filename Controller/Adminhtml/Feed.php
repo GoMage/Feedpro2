@@ -4,7 +4,7 @@ namespace GoMage\Feed\Controller\Adminhtml;
 use Magento\Backend\App\Action;
 use Magento\Framework\Controller\ResultFactory;
 
-class Feed extends Action
+abstract class Feed extends Action
 {
     /**
      * @return \Magento\Backend\Model\View\Result\Page
