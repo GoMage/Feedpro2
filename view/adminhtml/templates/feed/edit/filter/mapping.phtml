@@ -1,0 +1,125 @@
+<?php
+
+// @codingStandardsIgnoreFile
+
+/* @var $block \GoMage\Feed\Block\Adminhtml\Feed\Edit\Tab\Filter\Mapping */
+$element = $block->getElement();
+?>
+<?php $_htmlId          = $block->getElement()->getHtmlId() ?>
+<?php $_htmlClass       = $block->getElement()->getClass() ?>
+<?php $_htmlName        = $block->getElement()->getName() ?>
+<?php $_attributes      = $block->getAttributes() ?>
+<?php $_conditions      = $block->getCondition() ?>
+<?php $_values          = $block->getAttributeValues(); ?>
+
+<style type="text/css">
+@-moz-document url-prefix() { /* Only target Gecko. (Breaks layout in IE.) */
+  .admin__scope-old .fieldset-wrapper, .admin__scope-old .fieldset { display: table-cell; }
+}
+</style>
+
+<div class="field">
+    <div class="control" style="float:none;width:100%;overflow:auto;">
+        <table class="admin__control-table filter_table" id="filter_table">
+            <thead>
+                <tr>
+                    <th class="col-attribute"><?php echo __('Attribute') ?></th>
+                    <th class="col-condition"><?php echo __('Condition') ?></th>
+                    <th class="col-value"><?php echo __('Value') ?></th>
+                    <th class="col-delete"><?php echo __('Action') ?></th>
+                </tr>
+            </thead>
+            <tbody data-role="<?php echo $_htmlId ?>_container" id="<?php echo $_htmlId ?>_container"></tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="11" class="col-actions-add"><?php echo $block->getAddButtonHtml() ?></td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+</div>
+<script id="filter-row-template" type="text/x-magento-template">
+    <tr>
+        <td class="col-attribute">
+            <select class="select" name="<?php echo $_htmlName ?>[<%- data.index %>][attribute]"
+                    id="filter_row_<%- data.index %>_attribute_select">
+                <?php foreach ($_attributes as $_attribute): ?>
+                    <option value="<?php echo $_attribute->getAttributeCode() ?>" <% if (typeof data.attribute != 'undefined' && data.attribute == '<?php echo $_attribute->getAttributeCode() ?>') { %> selected="selected" <% } %>><?php echo $_attribute->getStoreLabel() ?></option>
+                <?php endforeach ?>
+            </select>
+        </td>
+        <td class="col-condition">
+            <select class="select" name="<?php echo $_htmlName ?>[<%- data.index %>][condition]"
+                    id="filter_row_<%- data.index %>_condition_select">
+                <?php foreach ($_conditions as $_condition): ?>
+                    <option value="<?php echo $_condition['value'] ?>" <% if (typeof data.condition != 'undefined' && data.condition == '<?php echo $_condition['value'] ?>') { %> selected="selected" <% } %>><?php echo $_condition['label'] ?></option>
+                <?php endforeach ?>
+            </select>
+        </td>
+        <td class="col-value">
+            <select class="select" name="<?php echo $_htmlName ?>[<%- data.index %>][value]"
+                    id="filter_row_<%- data.index %>_value_select">
+                <?php foreach ($_values as $key => $label): ?>
+                    <option value="<?php echo $key ?>" <% if (typeof data.value != 'undefined' && data.value == '<?php echo $key ?>') { %> selected="selected" <% } %>><?php echo $label ?></option>
+                <?php endforeach ?>
+            </select>
+        </td>
+        <td class="col-delete">
+            <button title="<?php echo __("Delete") ?>" type="button" class="action- scalable delete icon-btn" id="filter_row_<%- data.index %>_delete_button" onclick="return filterControl.deleteItem(event);">
+                <span><?php echo __("Delete") ?></span>
+            </button>
+        </td>
+        </tr>
+</script>
+<script>
+//<![CDATA[
+
+require([
+    'jquery',
+    'mage/template',
+    'jquery/ui',
+    'prototype'
+], function (jQuery, mageTemplate) {
+
+var filterControl = {
+    template: mageTemplate('#filter-row-template'),
+    itemsCount: 0,
+    addItem : function (data) {
+        if (typeof(data) == 'undefined'){
+            data = {};
+        }
+        data.order = this.itemsCount;
+        data.index = this.itemsCount;
+
+
+        Element.insert($('<?php echo $_htmlId ?>_container'), {
+            bottom : this.template({
+                data: data
+            })
+        });
+
+        $('<?php echo $_htmlId ?>_container').select('input', 'select').each(function(el){
+            if (el.hasOwnProperty('setHasChanges')) {
+                Event.observe(el, 'change', el.setHasChanges.bind(el));
+            }
+        });
+
+        this.itemsCount++;
+    },
+    deleteItem: function(event) {
+        var tr = Event.findElement(event, 'tr');
+        if (tr) {
+            Element.remove(tr);
+        }
+        return false;
+    }
+};
+<?php foreach ($block->getValues() as $_item): ?>
+    filterControl.addItem(<?php echo $_item->toJson() ?>);
+<?php endforeach; ?>
+
+window.filterControl = filterControl;
+//]]>
+
+});
+</script>

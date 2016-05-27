@@ -68,6 +68,18 @@ class Filter extends \Magento\Backend\Block\Widget\Form\Generic implements \Mage
             ]
         );
 
+        $field = $fieldset->addField(
+            'filter',
+            'text',
+            ['name' => 'filter', 'class' => 'requried-entry', 'value' => $model->getData('filter')]
+        );
+
+        $renderer = $this->getLayout()->createBlock(
+            'GoMage\Feed\Block\Adminhtml\Feed\Edit\Tab\Filter\Mapping'
+        );
+        $field->setRenderer($renderer);
+
+
         $form->setValues($model->getData());
         $this->setForm($form);
 

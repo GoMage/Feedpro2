@@ -1,6 +1,6 @@
 <?php
 
-namespace GoMage\Feed\Block\Adminhtml\Feed\Edit\Tab\Content;
+namespace GoMage\Feed\Block\Adminhtml\Feed\Edit\Tab\Filter;
 
 use Magento\Backend\Block\Widget;
 use Magento\Framework\Data\Form\Element\Renderer\RendererInterface;
@@ -10,7 +10,7 @@ class Mapping extends Widget implements RendererInterface
     /**
      * @var string
      */
-    protected $_template = 'feed/edit/content/mapping.phtml';
+    protected $_template = 'feed/edit/filter/mapping.phtml';
 
     /**
      * Form element instance
@@ -32,51 +32,27 @@ class Mapping extends Widget implements RendererInterface
     protected $_jsonHelper;
 
     /**
-     * @var \GoMage\Feed\Model\Config\Source\Mapping\Type
+     * @var \GoMage\Feed\Model\Config\Source\Filter\Condition
      */
-    protected $_type;
-
-    /**
-     * @var \GoMage\Feed\Model\Config\Source\Mapping\ExtendedType
-     */
-    protected $_extendedType;
-
-    /**
-     * @var \GoMage\Feed\Model\Config\Source\Mapping\Output
-     */
-    protected $_output;
+    protected $_condition;
 
     /**
      * @var \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory
      */
     protected $_collectionFactory;
 
-    /**
-     * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Framework\Json\Helper\Data $jsonHelper
-     * @param \GoMage\Feed\Model\Config\Source\Mapping\Type $type
-     * @param \GoMage\Feed\Model\Config\Source\Mapping\ExtendedType $extendedType
-     * @param \GoMage\Feed\Model\Config\Source\Mapping\Output $output
-     * @param \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory $collectionFactory
-     * @param array $data
-     */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Framework\Registry $registry,
         \Magento\Framework\Json\Helper\Data $jsonHelper,
-        \GoMage\Feed\Model\Config\Source\Mapping\Type $type,
-        \GoMage\Feed\Model\Config\Source\Mapping\ExtendedType $extendedType,
-        \GoMage\Feed\Model\Config\Source\Mapping\Output $output,
+        \GoMage\Feed\Model\Config\Source\Filter\Condition $condition,
         \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory $collectionFactory,
         array $data = []
     ) {
 
         $this->_coreRegistry      = $registry;
         $this->_jsonHelper        = $jsonHelper;
-        $this->_type              = $type;
-        $this->_extendedType      = $extendedType;
-        $this->_output            = $output;
+        $this->_condition         = $condition;
         $this->_collectionFactory = $collectionFactory;
 
         parent::__construct($context, $data);
@@ -181,66 +157,61 @@ class Mapping extends Widget implements RendererInterface
         $button = $this->getLayout()->createBlock(
             'Magento\Backend\Block\Widget\Button'
         )->setData(
-            ['label' => __('Add New Row'), 'onclick' => 'return mappingControl.addItem()', 'class' => 'add']
+            ['label' => __('Add Filter Row'), 'onclick' => 'return filterControl.addItem()', 'class' => 'add']
         );
-        $button->setName('add_feed_mapping_item_button');
+        $button->setName('add_feed_filter_add_button');
 
         $this->setChild('add_button', $button);
         return parent::_prepareLayout();
     }
 
-    /**
-     * @return array
-     */
-    public function getType()
-    {
-        return $this->_type->toOptionArray();
-    }
-
-    /**
-     * @return array
-     */
-    public function getExtendedType()
-    {
-        return $this->_extendedType->toOptionArray();
-    }
-
-    /**
-     * @return array
-     */
-    public function getOutput()
-    {
-        return $this->_output->toOptionArray();
-    }
 
     /**
      * @return array
      */
     public function getAttributes()
     {
-        // TODO: add mapper; add dynamic attributes
-        $items = $this->_collectionFactory->create()->getItems();
+        return $this->_collectionFactory->create()->load();
+    }
 
-        $items[] = new \Magento\Framework\DataObject([
-                'attribute_code' => 'id',
-                'store_label'    => __('Product Id')
-            ]
-        );
+    /**
+     * @return array
+     */
+    public function getCondition()
+    {
+        return $this->_condition->toOptionArray();
+    }
 
-        //TODO: Hard code
-        $items[] = new \Magento\Framework\DataObject([
-                'attribute_code' => 'category_subcategory',
-                'store_label'    => __('Category > SubCategory')
-            ]
-        );
+    //TODO: hard code only for one attribute
+    public function getAttributeValues()
+    {
+        $attribute = $this->_collectionFactory->create()
+            ->addFilter('attribute_code', ['eq' => 'manufacturer_for_navigation'])
+            ->getFirstItem();
 
-        $items[] = new \Magento\Framework\DataObject([
-                'attribute_code' => 'free_shipping_feed',
-                'store_label'    => __('* Free Shipping Feed')
-            ]
-        );
+        $options = [];
 
-        return $items;
+        if ($attribute->usesSource()) {
+            // should attribute has index (option value) instead of a label?
+            $index = 'label';
+
+            // only default (admin) store values used
+            $attribute->setStoreId(\Magento\Store\Model\Store::DEFAULT_STORE_ID);
+
+            try {
+                foreach ($attribute->getSource()->getAllOptions(false) as $option) {
+                    foreach (is_array($option['value']) ? $option['value'] : [$option] as $innerOption) {
+                        if (strlen($innerOption['value'])) {
+                            // skip ' -- Please Select -- ' option
+                            $options[$innerOption['value']] = (string)$innerOption[$index];
+                        }
+                    }
+                }
+            } catch (\Exception $e) {
+                // ignore exceptions connected with source models
+            }
+        }
+        return $options;
     }
 
 }

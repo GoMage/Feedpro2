@@ -194,10 +194,11 @@ var mappingControl = {
     },
     changeType: function (control){
 
-        var value_select = $('#' + $(control).attr('data-value-select'));
-        var value_input = $('#' + $(control).attr('data-value-select'));
+        control = jQuery(control);
+        var value_select = jQuery('#' + control.attr('data-value-select'));
+        var value_input = jQuery('#' + control.attr('data-value-input'));
 
-        if ($(control).val() == '2'){
+        if (control.val() == '2'){
             value_select.hide();
             value_select.prop( "disabled", true);
             value_input.show();

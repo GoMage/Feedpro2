@@ -31,6 +31,11 @@ class Save extends FeedController
                         ->jsonEncode($data['content']);
                 }
 
+                if (isset($data['filter']) && $data['filter']) {
+                    $data['filter'] = $this->_objectManager->get('Magento\Framework\Json\Helper\Data')
+                        ->jsonEncode($data['filter']);
+                }
+
                 $model->addData($data);
                 $model->save();
                 $this->messageManager->addSuccess(__('You saved the feed.'));

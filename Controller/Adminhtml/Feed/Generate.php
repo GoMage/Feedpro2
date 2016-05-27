@@ -20,6 +20,8 @@ class Generate extends FeedController
                 $model = $this->_objectManager->create('GoMage\Feed\Model\Feed');
                 $model->load($id);
                 $model->generate();
+                $model->setData('generated_at', date('Y-m-j H:i:s', time()));
+                $model->save();
 
                 $this->messageManager->addSuccess(__('Feed has been successfully generated.'));
                 $resultRedirect->setPath('gomage_feed/feed/edit', ['id' => $id]);

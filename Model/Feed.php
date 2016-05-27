@@ -8,6 +8,7 @@ use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
 use Magento\Catalog\Api\CategoryRepositoryInterface;
 use GoMage\Feed\Model\Config\Source\Enclosure;
 use GoMage\Feed\Model\Config\Source\Delimiter;
+use GoMage\Feed\Model\Config\Source\Mapping\Output;
 
 class Feed extends \Magento\Framework\Model\AbstractModel
 {
@@ -74,6 +75,11 @@ class Feed extends \Magento\Framework\Model\AbstractModel
     protected $_delimiterModel;
 
     /**
+     * @var \Magento\Store\Model\StoreManagerInterface
+     */
+    protected $_storeManager;
+
+    /**
      * Feed constructor.
      *
      * @param \Magento\Framework\Model\Context $context
@@ -86,6 +92,7 @@ class Feed extends \Magento\Framework\Model\AbstractModel
      * @param CategoryRepositoryInterface $categoryRepository
      * @param Enclosure $enclosure
      * @param Delimiter $delimiter
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource|null $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb|null $resourceCollection
      * @param array $data
@@ -101,6 +108,7 @@ class Feed extends \Magento\Framework\Model\AbstractModel
         CategoryRepositoryInterface $categoryRepository,
         Enclosure $enclosure,
         Delimiter $delimiter,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
@@ -114,6 +122,8 @@ class Feed extends \Magento\Framework\Model\AbstractModel
 
         $this->_enclosureModel = $enclosure;
         $this->_delimiterModel = $delimiter;
+
+        $this->_storeManager = $storeManager;
 
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
     }
@@ -204,6 +214,13 @@ class Feed extends \Magento\Framework\Model\AbstractModel
 
         if ($filter = $this->getFilter()) {
             $filter = json_decode($filter, true);
+
+            $ids = [];
+            foreach ($filter as $row) {
+                $ids[] = intval($row['value']);
+            }
+
+            $collection->addAttributeToFilter('manufacturer_for_navigation', ['in' => $ids]);
         }
 
         $collection->setOrder('id');
@@ -238,15 +255,53 @@ class Feed extends \Magento\Framework\Model\AbstractModel
      */
     protected function getProductData($productId)
     {
-        $product = $this->_productRepository->getById($productId, false, $this->getStoreId());
+        $product = $this->_productRepository->getById($productId, false, $this->getStoreId(), true);
 
         $data          = [];
         $fieldsMapping = $this->getFieldsMapping();
 
         foreach ($fieldsMapping as $field) {
-            $data[$field->name] = $this->getFieldData($product, $field->prefix_type, $field->prefix_value) .
+            $value = $this->getFieldData($product, $field->prefix_type, $field->prefix_value) .
                 $this->getFieldData($product, $field->type, $field->value) .
                 $this->getFieldData($product, $field->suffix_type, $field->suffix_value);
+
+            if ($limit = intval($field->limit)) {
+                $value = $value = substr($value, 0, $limit);
+            }
+
+            if ($output = intval($field->output)) {
+                switch (trim($output)) {
+                    case Output::FLOAT:
+                        $value = number_format(( float )$value, 2, '.', '');
+                        break;
+                    case Output::INTEGER:
+                        $value = intval($value);
+                        break;
+                    case Output::STRIP_TAGS:
+                        $value = strip_tags($value);
+                        $value = trim($value);
+                        break;
+                    case Output::SPECIAL_ENCODE:
+                        $encoding = mb_detect_encoding($value);
+                        $value    = mb_convert_encoding($value, "UTF-8", $encoding);
+                        $value    = htmlentities($value, null, "UTF-8");
+                        break;
+                    case Output::SPECIAL_DECODE:
+                        $value = htmlspecialchars_decode($value);
+                        break;
+                    case Output::DELETE_SPACE:
+                        $value = str_replace(" ", "", $value);
+                        break;
+                    case Output::BIG_TO_SMALL:
+                        $value = strtolower($value);
+                        break;
+                }
+            }
+
+            //TODO: hard code only for icemaker
+            $value = str_replace('&amp;amp;', '&amp;', $value);
+
+            $data[$field->name] = $value;
         }
 
         return $data;
@@ -285,17 +340,39 @@ class Feed extends \Magento\Framework\Model\AbstractModel
             }
             return "";
         } elseif ($code == 'free_shipping_feed') {
-            return "";
+            return ($product->getWeight() ? '' : 'US:::0.00 USD');
         } elseif ($code == 'url_key') {
             return $product->getProductUrl();
         } elseif ($code == 'small_image') {
-            return $product->getImage();
+            return $this->_getMediaUrl($product->getImage());
         }
 
         $attribute = $this->getProductAttribute($code);
         $value     = $attribute->getFrontend()->getValue($product);
 
+        if ($this->getIsRemoveLb()) {
+            $value = str_replace("\n", '', $value);
+            $value = str_replace("\r", '', $value);
+        }
+
+        //TODO: hard code
+        if (in_array($value, ['Not Specified', 'No', 'Use config'])) {
+            $value = '';
+        }
+
         return $value;
+    }
+
+    /**
+     * Get media url
+     *
+     * @param string $url
+     * @return string
+     */
+    protected function _getMediaUrl($url)
+    {
+        //TODO: hard code
+        return $this->_storeManager->getStore()->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_MEDIA) . 'catalog/product' . $url;
     }
 
     /**
