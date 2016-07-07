@@ -80,23 +80,11 @@ class Feed extends \Magento\Framework\Model\AbstractModel
     protected $_storeManager;
 
     /**
-     * Feed constructor.
-     *
-     * @param \Magento\Framework\Model\Context $context
-     * @param \Magento\Framework\Registry $registry
-     * @param Adapter\Factory $adapterFactory
-     * @param \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory
-     * @param \Magento\Catalog\Model\Product\Visibility $catalogProductVisibility
-     * @param ProductRepositoryInterface $productRepository
-     * @param ProductAttributeRepositoryInterface $attributeRepository
-     * @param CategoryRepositoryInterface $categoryRepository
-     * @param Enclosure $enclosure
-     * @param Delimiter $delimiter
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Framework\Model\ResourceModel\AbstractResource|null $resource
-     * @param \Magento\Framework\Data\Collection\AbstractDb|null $resourceCollection
-     * @param array $data
+     * @var \Magento\Framework\App\Filesystem\DirectoryList
      */
+    protected $_directoryList;
+
+
     public function __construct(
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
@@ -109,6 +97,7 @@ class Feed extends \Magento\Framework\Model\AbstractModel
         Enclosure $enclosure,
         Delimiter $delimiter,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\App\Filesystem\DirectoryList $_directoryList,
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
@@ -124,6 +113,8 @@ class Feed extends \Magento\Framework\Model\AbstractModel
         $this->_delimiterModel = $delimiter;
 
         $this->_storeManager = $storeManager;
+
+        $this->_directoryList = $_directoryList;
 
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
     }
@@ -172,8 +163,21 @@ class Feed extends \Magento\Framework\Model\AbstractModel
         return $this->_writer;
     }
 
+    protected function log($message)
+    {
+        $file   = $this->_directoryList->getPath('log') . '/feed-' . $this->getId() . '.log';
+        $string = date("m.d.y H:i:s") . ' ' . $message . PHP_EOL;
+        file_put_contents($file, $string, FILE_APPEND);
+    }
+
     public function generate()
     {
+        $this->log('START');
+        $this->log('Page Size:' . $this->getLimit());
+
+        $collection = $this->_getProductCollection();
+        $this->log('Items:' . $collection->count());
+
         //Execution time may be very long
         set_time_limit(0);
 
@@ -181,6 +185,8 @@ class Feed extends \Magento\Framework\Model\AbstractModel
         $page   = 0;
         while (true) {
             ++$page;
+
+            $this->log('Page - ' . $page);
 
             $collection = $this->_getProductCollection();
             $collection->setPage($page, $this->getLimit());
@@ -200,6 +206,7 @@ class Feed extends \Magento\Framework\Model\AbstractModel
                 break;
             }
         }
+        $this->log('END');
     }
 
     /**
@@ -212,17 +219,19 @@ class Feed extends \Magento\Framework\Model\AbstractModel
         $collection->setStoreId($this->getStoreId())
             ->setVisibility($this->_catalogProductVisibility->getVisibleInSiteIds());
 
+        $ids = [];
         if ($filter = $this->getFilter()) {
             $filter = json_decode($filter, true);
-
-            $ids = [];
             foreach ($filter as $row) {
                 $ids[] = intval($row['value']);
             }
+        }
 
+        if (count($ids)) {
             $collection->addAttributeToFilter('manufacturer_for_navigation', ['in' => $ids]);
         }
 
+        $collection->getSelect()->distinct();
         $collection->setOrder('id');
 
         return $collection;
@@ -284,7 +293,7 @@ class Feed extends \Magento\Framework\Model\AbstractModel
                     case Output::SPECIAL_ENCODE:
                         $encoding = mb_detect_encoding($value);
                         $value    = mb_convert_encoding($value, "UTF-8", $encoding);
-                        $value    = htmlentities($value, null, "UTF-8");
+                        $value    = htmlentities($value, ENT_QUOTES, "UTF-8");
                         break;
                     case Output::SPECIAL_DECODE:
                         $value = htmlspecialchars_decode($value);
@@ -341,10 +350,14 @@ class Feed extends \Magento\Framework\Model\AbstractModel
             return "";
         } elseif ($code == 'free_shipping_feed') {
             return ($product->getWeight() ? '' : 'US:::0.00 USD');
+        } elseif ($code == 'weight') {
+            return $product->getData('free_shipping') ? 0 : $product->getWeight();
         } elseif ($code == 'url_key') {
             return $product->getProductUrl();
         } elseif ($code == 'small_image') {
             return $this->_getMediaUrl($product->getImage());
+        } elseif ($code == 'price') {
+            return $product->getPrice() ? $product->getPrice() : $product->getFinalPrice();
         }
 
         $attribute = $this->getProductAttribute($code);

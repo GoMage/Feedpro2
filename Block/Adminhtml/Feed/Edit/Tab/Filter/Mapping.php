@@ -211,6 +211,9 @@ class Mapping extends Widget implements RendererInterface
                 // ignore exceptions connected with source models
             }
         }
+
+        asort($options);
+
         return $options;
     }
 
