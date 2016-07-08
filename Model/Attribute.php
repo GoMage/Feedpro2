@@ -12,7 +12,7 @@ class Attribute extends \Magento\Framework\Model\AbstractModel
      */
     protected function _construct()
     {
-        $this->_init('GoMage\Feed\Model\Resource\Attribute');
+        $this->_init('GoMage\Feed\Model\ResourceModel\Attribute');
     }
 
 }

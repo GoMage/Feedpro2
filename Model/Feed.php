@@ -126,7 +126,7 @@ class Feed extends \Magento\Framework\Model\AbstractModel
      */
     protected function _construct()
     {
-        $this->_init('GoMage\Feed\Model\Resource\Feed');
+        $this->_init('GoMage\Feed\Model\ResourceModel\Feed');
     }
 
     /**

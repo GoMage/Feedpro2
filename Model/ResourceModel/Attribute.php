@@ -1,5 +1,5 @@
 <?php
-namespace GoMage\Feed\Model\Resource;
+namespace GoMage\Feed\Model\ResourceModel;
 
 class Attribute extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {

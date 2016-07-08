@@ -1,6 +1,6 @@
 <?php
 
-namespace GoMage\Feed\Model\Resource\Feed;
+namespace GoMage\Feed\Model\ResourceModel\Feed;
 
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
@@ -11,7 +11,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      */
     public function _construct()
     {
-        $this->_init('GoMage\Feed\Model\Feed', 'GoMage\Feed\Model\Resource\Feed');
+        $this->_init('GoMage\Feed\Model\Feed', 'GoMage\Feed\Model\ResourceModel\Feed');
     }
 
 }

@@ -1,5 +1,5 @@
 <?php
-namespace GoMage\Feed\Model\Resource;
+namespace GoMage\Feed\Model\ResourceModel;
 
 class Feed extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
