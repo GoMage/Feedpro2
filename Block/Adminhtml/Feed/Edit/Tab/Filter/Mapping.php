@@ -186,7 +186,7 @@ class Mapping extends Widget implements RendererInterface
     public function getAttributeValues()
     {
         $attribute = $this->_collectionFactory->create()
-            ->addFilter('attribute_code', ['eq' => 'manufacturer_for_navigation'])
+            ->addFilter('attribute_code', ['eq' => 'brand'])
             ->getFirstItem();
 
         $options = [];

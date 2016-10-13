@@ -19,7 +19,12 @@ class Generate extends FeedController
                 /** @var \GoMage\Feed\Model\Feed $model */
                 $model = $this->_objectManager->create('GoMage\Feed\Model\Feed');
                 $model->load($id);
-                $model->generate();
+
+                /** @var \GoMage\Feed\Model\Generator $generator */
+                $generator = $this->_objectManager->get('GoMage\Feed\Model\Generator');
+
+                $generator->generate($model);
+
                 $model->setData('generated_at', date('Y-m-j H:i:s', time()));
                 $model->save();
 

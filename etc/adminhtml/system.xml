@@ -1,6 +1,5 @@
 <?xml version="1.0"?>
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
     <system>
         <tab id="gomage" translate="label" sortOrder="1000">
             <label>GoMage</label>
@@ -13,28 +12,23 @@
             <group id="server" translate="label" type="text" sortOrder="10" showInDefault="1"
                    showInWebsite="1" showInStore="1">
                 <label>Server Configurations</label>
-                <field id="generate" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1"
-                       showInStore="1">
+                <field id="generate" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Generate Function</label>
                     <source_model>GoMage\Feed\Model\Config\Source\Generate</source_model>
                 </field>
-                <field id="memory_limit" translate="label comment" type="text" sortOrder="20" showInDefault="1"
-                       showInWebsite="1" showInStore="1">
+                <field id="memory_limit" translate="label comment" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Memory Limit, Mb</label>
                     <frontend_class>validate-number</frontend_class>
                 </field>
-                <field id="upload_max_filesize" translate="label comment" type="text" sortOrder="30" showInDefault="1"
-                       showInWebsite="1" showInStore="1">
+                <field id="upload_max_filesize" translate="label comment" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Max Upload File Size, Mb</label>
                     <frontend_class>validate-number</frontend_class>
                 </field>
-                <field id="post_max_size" translate="label comment" type="text" sortOrder="40" showInDefault="1"
-                       showInWebsite="1" showInStore="1">
+                <field id="post_max_size" translate="label comment" type="text" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Max Post Size, Mb</label>
                     <frontend_class>validate-number</frontend_class>
                 </field>
-                <field id="time_limit" translate="label comment" type="text" sortOrder="50" showInDefault="1"
-                       showInWebsite="1" showInStore="1">
+                <field id="time_limit" translate="label comment" type="text" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Execution time, seconds</label>
                     <comment>If set to zero, no time limit is imposed.</comment>
                     <frontend_class>validate-number</frontend_class>
@@ -43,18 +37,15 @@
             <group id="image" translate="label" type="text" sortOrder="20" showInDefault="1"
                    showInWebsite="1" showInStore="1">
                 <label>Image Settings</label>
-                <field id="resize" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1"
-                       showInStore="1">
+                <field id="resize" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Resize Image</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
-                <field id="width" translate="label comment" type="text" sortOrder="20" showInDefault="1"
-                       showInWebsite="1" showInStore="1">
+                <field id="width" translate="label comment" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Max Image Width, px</label>
                     <frontend_class>validate-number</frontend_class>
                 </field>
-                <field id="height" translate="label comment" type="text" sortOrder="30" showInDefault="1"
-                       showInWebsite="1" showInStore="1">
+                <field id="height" translate="label comment" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Max Image Height, px</label>
                     <frontend_class>validate-number</frontend_class>
                 </field>
@@ -62,38 +53,31 @@
             <group id="notification" translate="label" type="text" sortOrder="30" showInDefault="1"
                    showInWebsite="1" showInStore="1">
                 <label>Feed Pro Notifications</label>
-                <field id="enable" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1"
-                       showInStore="1">
+                <field id="enable" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Enabled</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
-                <field id="receiver" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="1"
-                       showInStore="1">
+                <field id="receiver" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Email Receiver</label>
                     <source_model>Magento\Config\Model\Config\Source\Email\Identity</source_model>
                 </field>
-                <field id="sender" translate="label" type="select" sortOrder="30" showInDefault="1" showInWebsite="1"
-                       showInStore="1">
+                <field id="sender" translate="label" type="select" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Email Sender</label>
                     <source_model>Magento\Config\Model\Config\Source\Email\Identity</source_model>
                 </field>
-                <field id="template" translate="label comment" type="select" sortOrder="40" showInDefault="1"
-                       showInWebsite="1" showInStore="1">
+                <field id="template" translate="label comment" type="select" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Email Template</label>
                     <source_model>Magento\Config\Model\Config\Source\Email\Template</source_model>
                 </field>
-                <field id="notify" translate="label comment" type="multiselect" sortOrder="50" showInDefault="1"
-                       showInWebsite="1" showInStore="1">
+                <field id="notify" translate="label comment" type="multiselect" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Notify About</label>
                     <source_model>GoMage\Feed\Model\Config\Source\Notify</source_model>
                 </field>
-                <field id="copy_to" translate="label comment" type="text" sortOrder="60" showInDefault="1"
-                       showInWebsite="1" showInStore="1">
+                <field id="copy_to" translate="label comment" type="text" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Send Email Copy To</label>
                     <comment>Comma-separated.</comment>
                 </field>
-                <field id="copy_method" translate="label comment" type="select" sortOrder="50" showInDefault="1"
-                       showInWebsite="1" showInStore="1">
+                <field id="copy_method" translate="label comment" type="select" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Send Email Copy Method</label>
                     <source_model>Magento\Config\Model\Config\Source\Email\Method</source_model>
                 </field>

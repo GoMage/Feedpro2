@@ -50,16 +50,22 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
             10
         );
 
-        if ($feedId = $this->coreRegistry->registry('current_feed')->getId()) {
-            $this->buttonList->add(
-                'generate',
-                [
-                    'label'   => __('Generate'),
-                    'onclick' => 'setLocation(\'' . $this->getUrl('gomage_feed/feed/generate', ['id' => $feedId]) . '\')',
-                    'class'   => 'generate'
-                ],
-                5
-            );
+        if ($feed = $this->coreRegistry->registry('current_feed')) {
+            if ($feed->getId()) {
+                $url = $this->getUrl('gomage_feed/feed/generate', [
+                        'id'                                                  => $feed->getId(),
+                        \Magento\Store\Api\StoreResolverInterface::PARAM_NAME => $feed->getStoreId()]
+                );
+                $this->buttonList->add(
+                    'generate',
+                    [
+                        'label'   => __('Generate'),
+                        'onclick' => 'setLocation(\'' . $url . '\')',
+                        'class'   => 'generate'
+                    ],
+                    5
+                );
+            }
         }
 
 

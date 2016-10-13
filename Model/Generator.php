@@ -1,121 +1,169 @@
 <?php
-// @codingStandardsIgnoreFile
 
 namespace GoMage\Feed\Model;
-
-use Magento\Framework\App\Filesystem\DirectoryList;
 
 class Generator implements GeneratorInterface
 {
 
     /**
-     * @var Feed
+     * @var FeedInterface
      */
     protected $_feed;
 
     /**
-     * @var \Magento\Framework\Filesystem\Directory\Write
+     * @var \Magento\Framework\ObjectManagerInterface
      */
-    protected $_directory;
+    protected $_objectManager;
 
     /**
-     * @var \Magento\Framework\Filesystem\File\Write
+     * @var \GoMage\Feed\Model\Reader\Factory
      */
-    protected $_stream;
+    protected $_readerFactory;
 
     /**
-     * @var \Magento\Framework\Escaper
+     * @var \GoMage\Feed\Model\Writer\Factory
      */
-    protected $_escaper;
+    protected $_writerFactory;
 
     /**
-     * @var \Magento\Framework\Stdlib\DateTime\DateTime
+     * @var \Magento\Framework\App\Filesystem\DirectoryList
      */
-    protected $_dateModel;
+    protected $_directoryList;
 
-    /**
-     * Product collection factory
-     *
-     * @var \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory
-     */
-    protected $_productCollectionFactory;
 
-    /**
-     * Catalog product visibility
-     *
-     * @var \Magento\Catalog\Model\Product\Visibility
-     */
-    protected $_catalogProductVisibility;
-
-    /**
-     * @param \Magento\Framework\Escaper $escaper
-     * @param \Magento\Framework\Filesystem $filesystem
-     * @param array $data
-     */
     public function __construct(
-        \Magento\Framework\Escaper $escaper,
-        \Magento\Framework\Filesystem $filesystem,
-        \Magento\Framework\Stdlib\DateTime\DateTime $dateModel,
-        \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory,
-        \Magento\Catalog\Model\Product\Visibility $catalogProductVisibility,
-        array $data = []
+        \Magento\Framework\ObjectManagerInterface $objectManager,
+        \GoMage\Feed\Model\Reader\Factory $readerFactory,
+        \GoMage\Feed\Model\Writer\Factory $writerFactory,
+        \Magento\Framework\App\Filesystem\DirectoryList $_directoryList
     ) {
-
-        $this->_escaper   = $escaper;
-        $this->_directory = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
-        $this->_dateModel = $dateModel;
-
-        $this->_productCollectionFactory = $productCollectionFactory;
-        $this->_catalogProductVisibility = $catalogProductVisibility;
-
-
-        parent::__construct($data);
+        $this->_objectManager = $objectManager;
+        $this->_readerFactory = $readerFactory;
+        $this->_writerFactory = $writerFactory;
+        $this->_directoryList = $_directoryList;
     }
 
     /**
-     * Get file handler
-     *
-     * @return \Magento\Framework\Filesystem\File\WriteInterface
-     * @throws \Magento\Framework\Exception\LocalizedException
-     */
-    protected function _getStream()
-    {
-        if ($this->_stream) {
-            return $this->_stream;
-        } else {
-            throw new \Magento\Framework\Exception\LocalizedException(__('File handler unreachable'));
-        }
-    }
-
-    /**
-     * @param Feed $feed
+     * @param  FeedInterface
      * @return bool
      */
-    public function generate(Feed $feed)
+    public function generate(FeedInterface $feed)
     {
         $this->_feed = $feed;
 
-        $this->_feed->setData('generated_at', $this->_dateModel->date('Y-m-d H:i:s'))
-            ->save();
+        $rows   = $this->_getRows();
+        $reader = $this->_getReader($this->_getAttributes($rows), $this->_getFilters(), $this->_feed->getStoreId());
+        $writer = $this->_getWriter($this->_feed->getFullFileName());
+
+        $page  = 1;
+        $limit = $this->_feed->getLimit();
+
+        $this->log('START');
+        $this->log('Page Size:' . $limit);
+
+        //Execution time may be very long
+        set_time_limit(0);
+
+        while ($items = $reader->read($page, $limit)) {
+            $this->log('Page - ' . $page);
+            foreach ($items as $item) {
+                $data = $rows->map($item);
+                $writer->write($data);
+            }
+            $page++;
+        }
+        $this->log('END');
 
         return true;
     }
 
     /**
-     * @return \Magento\Catalog\Model\ResourceModel\Product\Collection
+     * @param  int $storeId
+     * @param  array $filters
+     * @param  array $attributes
+     * @return \GoMage\Feed\Model\Reader\ReaderInterface
      */
-    protected function getProductCollection()
+    protected function _getReader($attributes = [], $filters = [], $storeId = 0)
     {
-        $collection = $this->_productCollectionFactory->create();
+        return $this->_readerFactory->create('GoMage\Feed\Model\Reader\Collection',
+            [
+                'attributes' => $attributes,
+                'filters'    => $filters,
+                'storeId'    => $storeId,
+            ]
+        );
+    }
 
-        $collection->setStoreId($this->_feed->getStoreId())
-            ->setVisibility($this->_catalogProductVisibility->getVisibleInSiteIds());
+    /**
+     * @param  string $fileName
+     * @return \GoMage\Feed\Model\Writer\WriterInterface
+     */
+    protected function _getWriter($fileName)
+    {
+        return $this->_writerFactory->create('GoMage\Feed\Model\Writer\Csv',
+            ['fileName' => $fileName]
+        );
+    }
 
-        if ($filter = $this->_feed->getFilter()) {
-            $filter = json_decode($filter, true);
+    /**
+     * @return \GoMage\Feed\Model\Feed\Row\Collection
+     */
+    protected function _getRows()
+    {
+        /** @var \GoMage\Feed\Model\Feed\Row\Collection $rowCollection */
+        $rows    = $this->_objectManager->create('GoMage\Feed\Model\Feed\Row\Collection');
+        $content = json_decode($this->_feed->getContent(), true);
+        foreach ($content as $data) {
+
+            /** @var \GoMage\Feed\Model\Feed\Row\Data $rowData */
+            $rowData = $this->_objectManager->create('GoMage\Feed\Model\Feed\Row\Data', ['data' => $data]);
+
+            /** @var \GoMage\Feed\Model\Feed\Row $row */
+            $row = $this->_objectManager->create('GoMage\Feed\Model\Feed\Row', ['rowData' => $rowData]);
+
+            $rows->add($row);
         }
 
-        return $collection;
+        return $rows;
+    }
+
+    /**
+     * @param  \GoMage\Feed\Model\Feed\Row\Collection $rows
+     * @return array
+     */
+    protected function _getAttributes(\GoMage\Feed\Model\Feed\Row\Collection $rows)
+    {
+        $attributes = [];
+        foreach ($rows->get() as $row) {
+            foreach ($row->getFields()->get() as $field) {
+                $attributes = array_merge($attributes, $field->getMapper()->getUsedAttributes());
+            }
+        }
+        return array_unique($attributes);
+    }
+
+    /**
+     * TODO: add filter interface
+     *
+     * @return array
+     */
+    protected function _getFilters()
+    {
+        if ($filters = $this->_feed->getFilter()) {
+            return json_decode($filters, true);
+        }
+        return [];
+    }
+
+    /**
+     * @deprecated
+     * @param string $message
+     */
+    protected function log($message)
+    {
+        $file   = $this->_directoryList->getPath('log') . '/feed-' . $this->_feed->getId() . '.log';
+        $string = date("m.d.y H:i:s") . ' ' . $message . PHP_EOL;
+        file_put_contents($file, $string, FILE_APPEND);
     }
 
 }

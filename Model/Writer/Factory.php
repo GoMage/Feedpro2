@@ -1,6 +1,6 @@
 <?php
 
-namespace GoMage\Feed\Model\Adapter;
+namespace GoMage\Feed\Model\Writer;
 
 class Factory
 {
@@ -21,15 +21,12 @@ class Factory
 
     /**
      * @param string $className
-     * @return \GoMage\Feed\Model\Adapter\AbstractAdapter
-     * @throws \InvalidArgumentException
+     * @param array $arguments
+     * @return \GoMage\Feed\Model\Writer\WriterInterface
      */
     public function create($className, array $arguments = [])
     {
-        if (!$className) {
-            throw new \InvalidArgumentException('Incorrect class name');
-        }
-
         return $this->_objectManager->create($className, $arguments);
     }
+
 }

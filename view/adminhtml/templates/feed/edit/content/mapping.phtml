@@ -17,6 +17,12 @@ $element = $block->getElement();
 @-moz-document url-prefix() { /* Only target Gecko. (Breaks layout in IE.) */
   .admin__scope-old .fieldset-wrapper, .admin__scope-old .fieldset { display: table-cell; }
 }
+.mapping_table select,
+.filter_table select,
+.mapping_table .input-text,
+.filter_table .input-text{
+  max-width: 150px;
+}
 </style>
 
 <div class="field">
@@ -56,7 +62,7 @@ $element = $block->getElement();
             <input class="input-text <?php echo $_htmlClass ?> required-entry" type="text" name="<?php echo $_htmlName ?>[<%- data.index %>][name]" value="<%- data.name %>" id="mapping_row_<%- data.index %>_name" />
         </td>
         <td class="col-type">
-            <select class="select" name="<?php echo $_htmlName ?>[<%- data.index %>][prefix_type]"
+            <select class="select admin__control-select" name="<?php echo $_htmlName ?>[<%- data.index %>][prefix_type]"
                     id="mapping_row_<%- data.index %>_prefix_type"
                     onchange="mappingControl.changeType(this);"
                     data-value-select="mapping_row_<%- data.index %>_prefix_value_select"
@@ -67,7 +73,7 @@ $element = $block->getElement();
             </select>
         </td>
         <td class="col-value">
-            <select class="select" name="<?php echo $_htmlName ?>[<%- data.index %>][prefix_value]"
+            <select class="select admin__control-select" name="<?php echo $_htmlName ?>[<%- data.index %>][prefix_value]"
                     id="mapping_row_<%- data.index %>_prefix_value_select"
                     <% if (data.prefix_type == '2') { %> disabled="disabled" style="display:none" <% } %>>
                 <option value=""><?php echo __('Not Set') ?></option>
@@ -82,7 +88,7 @@ $element = $block->getElement();
                     value="<%- data.prefix_value %>" />
         </td>
         <td class="col-type">
-            <select class="select" name="<?php echo $_htmlName ?>[<%- data.index %>][type]"
+            <select class="select admin__control-select" name="<?php echo $_htmlName ?>[<%- data.index %>][type]"
                     id="mapping_row_<%- data.index %>_type"
                     onchange="mappingControl.changeType(this);"
                     data-value-select="mapping_row_<%- data.index %>_value_select"
@@ -93,7 +99,7 @@ $element = $block->getElement();
             </select>
         </td>
         <td class="col-value">
-            <select class="select" name="<?php echo $_htmlName ?>[<%- data.index %>][value]"
+            <select class="select admin__control-select" name="<?php echo $_htmlName ?>[<%- data.index %>][value]"
                     id="mapping_row_<%- data.index %>_value_select"
                     <% if (data.type == '2') { %> disabled="disabled" style="display:none" <% } %>>
                 <option value=""><?php echo __('Not Set') ?></option>
@@ -108,7 +114,7 @@ $element = $block->getElement();
                     value="<%- data.value %>" />
         </td>
         <td class="col-type">
-            <select class="select" name="<?php echo $_htmlName ?>[<%- data.index %>][suffix_type]"
+            <select class="select admin__control-select" name="<?php echo $_htmlName ?>[<%- data.index %>][suffix_type]"
                     id="mapping_row_<%- data.index %>_suffix_type"
                     onchange="mappingControl.changeType(this);"
                     data-value-select="mapping_row_<%- data.index %>_suffix_value_select"
@@ -119,7 +125,7 @@ $element = $block->getElement();
             </select>
         </td>
         <td class="col-value">
-            <select class="select" name="<?php echo $_htmlName ?>[<%- data.index %>][suffix_value]"
+            <select class="select admin__control-select" name="<?php echo $_htmlName ?>[<%- data.index %>][suffix_value]"
                     id="mapping_row_<%- data.index %>_suffix_value_select"
                     <% if (data.suffix_type == '2') { %> disabled="disabled" style="display:none" <% } %>>
                 <option value=""><?php echo __('Not Set') ?></option>
@@ -134,7 +140,7 @@ $element = $block->getElement();
                     value="<%- data.suffix_value %>" />
         </td>
         <td class="col-output">
-            <select class="select" name="<?php echo $_htmlName ?>[<%- data.index %>][output]" id="mapping_row_<%- data.index %>_output">
+            <select class="select admin__control-select" name="<?php echo $_htmlName ?>[<%- data.index %>][output]" id="mapping_row_<%- data.index %>_output">
                 <?php foreach ($_outputs as $_output): ?>
                     <option value="<?php echo $_output['value'] ?>" <% if (typeof data.output != 'undefined' && data.output == <?php echo $_output['value'] ?>) { %> selected="selected" <% } %>><?php echo $_output['label'] ?></option>
                 <?php endforeach ?>

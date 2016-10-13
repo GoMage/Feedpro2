@@ -109,10 +109,11 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
 
         $url       = false;
         $directory = $this->_filesystem->getDirectoryRead(DirectoryList::MEDIA);
-        if ($directory->isExist($model->getDestination())) {
+        $path      = \GoMage\Feed\Model\Writer\WriterInterface::DIRECTORY . '/' . $model->getFullFileName();
+        if ($directory->isExist($path)) {
             $url = $this->_storeManager->getStore($model->getStoreId())->getBaseUrl(
                     \Magento\Framework\UrlInterface::URL_TYPE_MEDIA
-                ) . $model->getDestination();
+                ) . $path;
         }
 
         if ($model->getId() && $url) {

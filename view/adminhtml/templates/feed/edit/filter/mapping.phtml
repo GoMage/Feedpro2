@@ -41,7 +41,7 @@ $element = $block->getElement();
 <script id="filter-row-template" type="text/x-magento-template">
     <tr>
         <td class="col-attribute">
-            <select class="select" name="<?php echo $_htmlName ?>[<%- data.index %>][attribute]"
+            <select class="select admin__control-select" name="<?php echo $_htmlName ?>[<%- data.index %>][attribute]"
                     id="filter_row_<%- data.index %>_attribute_select">
                 <?php foreach ($_attributes as $_attribute): ?>
                     <option value="<?php echo $_attribute->getAttributeCode() ?>" <% if (typeof data.attribute != 'undefined' && data.attribute == '<?php echo $_attribute->getAttributeCode() ?>') { %> selected="selected" <% } %>><?php echo $_attribute->getStoreLabel() ?></option>
@@ -49,7 +49,7 @@ $element = $block->getElement();
             </select>
         </td>
         <td class="col-condition">
-            <select class="select" name="<?php echo $_htmlName ?>[<%- data.index %>][condition]"
+            <select class="select admin__control-select" name="<?php echo $_htmlName ?>[<%- data.index %>][condition]"
                     id="filter_row_<%- data.index %>_condition_select">
                 <?php foreach ($_conditions as $_condition): ?>
                     <option value="<?php echo $_condition['value'] ?>" <% if (typeof data.condition != 'undefined' && data.condition == '<?php echo $_condition['value'] ?>') { %> selected="selected" <% } %>><?php echo $_condition['label'] ?></option>
@@ -57,7 +57,7 @@ $element = $block->getElement();
             </select>
         </td>
         <td class="col-value">
-            <select class="select" name="<?php echo $_htmlName ?>[<%- data.index %>][value]"
+            <select class="select admin__control-select" name="<?php echo $_htmlName ?>[<%- data.index %>][value]"
                     id="filter_row_<%- data.index %>_value_select">
                 <?php foreach ($_values as $key => $label): ?>
                     <option value="<?php echo $key ?>" <% if (typeof data.value != 'undefined' && data.value == '<?php echo $key ?>') { %> selected="selected" <% } %>><?php echo $label ?></option>
