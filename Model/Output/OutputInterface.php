@@ -1,7 +1,6 @@
 <?php
 namespace GoMage\Feed\Model\Output;
 
-
 interface OutputInterface
 {
     const DEFAULTS = 0;

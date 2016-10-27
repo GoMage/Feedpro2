@@ -2,6 +2,8 @@
 
 namespace GoMage\Feed\Model;
 
+use Psr\Log\LoggerInterface;
+
 class Generator implements GeneratorInterface
 {
 
@@ -30,17 +32,35 @@ class Generator implements GeneratorInterface
      */
     protected $_directoryList;
 
+    /**
+     * @var LoggerInterface
+     */
+    protected $_logger;
+
+    /**
+     * @var \GoMage\Feed\Model\Logger\Handler
+     */
+    protected $_logHandler;
+
+    /**
+     * @var \Magento\Framework\Json\Helper\Data
+     */
+    protected $_jsonHelper;
 
     public function __construct(
         \Magento\Framework\ObjectManagerInterface $objectManager,
         \GoMage\Feed\Model\Reader\Factory $readerFactory,
         \GoMage\Feed\Model\Writer\Factory $writerFactory,
-        \Magento\Framework\App\Filesystem\DirectoryList $_directoryList
+        \Magento\Framework\App\Filesystem\DirectoryList $_directoryList,
+        LoggerInterface $logger,
+        \Magento\Framework\Json\Helper\Data $jsonHelper
     ) {
         $this->_objectManager = $objectManager;
         $this->_readerFactory = $readerFactory;
         $this->_writerFactory = $writerFactory;
         $this->_directoryList = $_directoryList;
+        $this->_logger        = $logger;
+        $this->_jsonHelper    = $jsonHelper;
     }
 
     /**
@@ -49,6 +69,8 @@ class Generator implements GeneratorInterface
      */
     public function generate(FeedInterface $feed)
     {
+        set_time_limit(0);
+
         $this->_feed = $feed;
 
         $rows   = $this->_getRows();
@@ -58,21 +80,17 @@ class Generator implements GeneratorInterface
         $page  = 1;
         $limit = $this->_feed->getLimit();
 
-        $this->log('START');
-        $this->log('Page Size:' . $limit);
-
-        //Execution time may be very long
-        set_time_limit(0);
+        $this->log('Start generation', ['limit' => $limit]);
 
         while ($items = $reader->read($page, $limit)) {
             $this->log('Page - ' . $page);
             foreach ($items as $item) {
-                $data = $rows->map($item);
+                $data = $rows->calc($item);
                 $writer->write($data);
             }
             $page++;
         }
-        $this->log('END');
+        $this->log('Finish');
 
         return true;
     }
@@ -101,7 +119,12 @@ class Generator implements GeneratorInterface
     protected function _getWriter($fileName)
     {
         return $this->_writerFactory->create('GoMage\Feed\Model\Writer\Csv',
-            ['fileName' => $fileName]
+            [
+                'fileName'  => $fileName,
+                'delimiter' => $this->_feed->getDelimiter(),
+                'enclosure' => $this->_feed->getEnclosure(),
+                'isHeader'  => boolval($this->_feed->getIsHeader())
+            ]
         );
     }
 
@@ -110,9 +133,9 @@ class Generator implements GeneratorInterface
      */
     protected function _getRows()
     {
-        /** @var \GoMage\Feed\Model\Feed\Row\Collection $rowCollection */
+        /** @var \GoMage\Feed\Model\Feed\Row\Collection $rows */
         $rows    = $this->_objectManager->create('GoMage\Feed\Model\Feed\Row\Collection');
-        $content = json_decode($this->_feed->getContent(), true);
+        $content = $this->_jsonHelper->jsonDecode($this->_feed->getContent());
         foreach ($content as $data) {
 
             /** @var \GoMage\Feed\Model\Feed\Row\Data $rowData */
@@ -134,36 +157,41 @@ class Generator implements GeneratorInterface
     protected function _getAttributes(\GoMage\Feed\Model\Feed\Row\Collection $rows)
     {
         $attributes = [];
-        foreach ($rows->get() as $row) {
-            foreach ($row->getFields()->get() as $field) {
-                $attributes = array_merge($attributes, $field->getMapper()->getUsedAttributes());
-            }
+        /** @var \GoMage\Feed\Model\Feed\Row $row */
+        foreach ($rows as $row) {
+            $attributes = array_merge($attributes, $row->getUsedAttributes());
         }
         return array_unique($attributes);
     }
 
     /**
-     * TODO: add filter interface
+     * TODO: add filters collection
      *
      * @return array
      */
     protected function _getFilters()
     {
         if ($filters = $this->_feed->getFilter()) {
-            return json_decode($filters, true);
+            return $this->_jsonHelper->jsonDecode($filters);
         }
         return [];
     }
 
     /**
-     * @deprecated
-     * @param string $message
+     * @param $message
+     * @param array $context
      */
-    protected function log($message)
+    protected function log($message, array $context = [])
     {
-        $file   = $this->_directoryList->getPath('log') . '/feed-' . $this->_feed->getId() . '.log';
-        $string = date("m.d.y H:i:s") . ' ' . $message . PHP_EOL;
-        file_put_contents($file, $string, FILE_APPEND);
+        if ($this->_feed && !$this->_logHandler) {
+            $this->_logHandler = $this->_objectManager->create('GoMage\Feed\Model\Logger\Handler', [
+                    'fileName' => '/var/log/feed-' . $this->_feed->getId() . '.log'
+                ]
+            );
+            $this->_logger->setHandlers([$this->_logHandler]);
+        }
+
+        $this->_logger->info($message, $context);
     }
 
 }

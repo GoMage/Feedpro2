@@ -8,7 +8,7 @@
             <block class="GoMage\Feed\Block\Adminhtml\Feed\Edit\Tabs" name="gomage_feed_edit_tabs">
                 <block class="GoMage\Feed\Block\Adminhtml\Feed\Edit\Tab\Main" name="gomage_feed_tab_main"/>
                 <block class="GoMage\Feed\Block\Adminhtml\Feed\Edit\Tab\Content" name="gomage_feed_tab_content"/>
-                <block class="GoMage\Feed\Block\Adminhtml\Feed\Edit\Tab\Filter" name="gomage_feed_tab_filter"/>
+                <block class="GoMage\Feed\Block\Adminhtml\Feed\Edit\Tab\Conditions" name="gomage_feed_tab_conditions"/>
                 <block class="GoMage\Feed\Block\Adminhtml\Feed\Edit\Tab\Ftp" name="gomage_feed_tab_ftp"/>
                 <block class="GoMage\Feed\Block\Adminhtml\Feed\Edit\Tab\Advanced" name="gomage_feed_tab_advanced"/>
                 <action method="addTab">
@@ -20,8 +20,8 @@
                     <argument name="block" xsi:type="string">gomage_feed_tab_content</argument>
                 </action>
                 <action method="addTab">
-                    <argument name="name" xsi:type="string">filter_section</argument>
-                    <argument name="block" xsi:type="string">gomage_feed_tab_filter</argument>
+                    <argument name="name" xsi:type="string">conditions_section</argument>
+                    <argument name="block" xsi:type="string">gomage_feed_tab_conditions</argument>
                 </action>
                 <action method="addTab">
                     <argument name="name" xsi:type="string">ftp_section</argument>

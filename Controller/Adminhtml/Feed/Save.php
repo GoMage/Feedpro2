@@ -27,11 +27,13 @@ class Save extends FeedController
                 }
 
                 if (isset($data['content']) && $data['content']) {
+                    $data['content'] = $this->_prepareData($data['content']);
                     $data['content'] = $this->_objectManager->get('Magento\Framework\Json\Helper\Data')
                         ->jsonEncode($data['content']);
                 }
 
                 if (isset($data['filter']) && $data['filter']) {
+                    $data['filter'] = $this->_prepareData($data['filter']);
                     $data['filter'] = $this->_objectManager->get('Magento\Framework\Json\Helper\Data')
                         ->jsonEncode($data['filter']);
                 }
@@ -51,6 +53,20 @@ class Save extends FeedController
         /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
         $redirectResult = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
         return $redirectResult->setPath('gomage_feed/feed/index');
+    }
+
+    /**
+     * @param  array $data
+     * @return array
+     */
+    protected function _prepareData(array $data)
+    {
+        foreach ($data as $key => $value) {
+            if (is_array($value)) {
+                $data[$key] = $this->_prepareData($value);
+            }
+        }
+        return array_merge($data, []);
     }
 
     /**

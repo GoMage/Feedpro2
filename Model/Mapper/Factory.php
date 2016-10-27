@@ -3,6 +3,7 @@
 namespace GoMage\Feed\Model\Mapper;
 
 use GoMage\Feed\Model\Config\Source\Mapping\TypeInterface;
+use GoMage\Feed\Model\AttributeInterface;
 
 class Factory
 {
@@ -18,12 +19,7 @@ class Factory
         TypeInterface::ATTRIBUTE => [
             'category_subcategory' => 'GoMage\Feed\Model\Mapper\Attribute\CategorySubcategory',
             'id'                   => 'GoMage\Feed\Model\Mapper\Attribute\ProductId',
-
-            //TODO: only for restaurantsupply.com
-            'free_shipping_feed'   => 'GoMage\Feed\Model\Mapper\Attribute\FreeShipping',
-            'url_key'              => 'GoMage\Feed\Model\Mapper\Attribute\UrlKey',
-            'weight'               => 'GoMage\Feed\Model\Mapper\Attribute\Weight',
-            'small_image'          => 'GoMage\Feed\Model\Mapper\Attribute\SmallImage',
+            'product_url'          => 'GoMage\Feed\Model\Mapper\Attribute\ProductUrl',
         ]
     ];
 
@@ -36,39 +32,51 @@ class Factory
     }
 
     /**
-     * @param  string $fieldType
-     * @param  string $fieldValue
+     * @param  string $type
+     * @param  string $value
      * @return \GoMage\Feed\Model\Mapper\MapperInterface
      */
-    public function create($fieldType, $fieldValue)
+    public function create($type, $value)
     {
-        $className = $this->_getCustomMapper($fieldType, $fieldValue);
+        $className = $this->_getCustomMapper($type, $value);
 
         if (!$className) {
-            switch ($fieldType) {
+            switch ($type) {
                 case TypeInterface::ATTRIBUTE:
-                    $className = 'GoMage\Feed\Model\Mapper\Attribute';
+                    if (strpos($value, AttributeInterface::PREFIX) === 0) {
+                        $value     = str_replace(AttributeInterface::PREFIX, '', $value);
+                        $className = 'GoMage\Feed\Model\Mapper\DynamicAttribute';
+                    } else {
+                        $className = 'GoMage\Feed\Model\Mapper\Attribute';
+                    }
                     break;
                 case TypeInterface::STATIC_VALUE:
                     $className = 'GoMage\Feed\Model\Mapper\StaticValue';
                     break;
+                case TypeInterface::PERCENT:
+                    $className = 'GoMage\Feed\Model\Mapper\AttributePercent';
+                    break;
+                case TypeInterface::ATTRIBUTE_SET:
+                    $className = 'GoMage\Feed\Model\Mapper\AttributeSet';
+                    break;
+                case TypeInterface::CONFIGURABLE_VALUES:
+                    $className = 'GoMage\Feed\Model\Mapper\ConfigurableValue';
+                    break;
             }
         }
 
-        $arguments = ['field_value' => $fieldValue];
-
-        return $this->_objectManager->create($className, $arguments);
+        return $this->_objectManager->create($className, ['value' => $value]);
     }
 
     /**
-     * @param  string $fieldType
-     * @param  string $fieldValue
+     * @param  string $type
+     * @param  string $value
      * @return string
      */
-    protected function _getCustomMapper($fieldType, $fieldValue)
+    protected function _getCustomMapper($type, $value)
     {
-        if (isset($this->_customMappers[$fieldType][$fieldValue])) {
-            return $this->_customMappers[$fieldType][$fieldValue];
+        if (isset($this->_customMappers[$type][$value])) {
+            return $this->_customMappers[$type][$value];
         }
         return false;
     }

@@ -3,15 +3,17 @@
 // @codingStandardsIgnoreFile
 
 /* @var $block \GoMage\Feed\Block\Adminhtml\Feed\Edit\Tab\Content\Mapping */
-$element = $block->getElement();
 ?>
-<?php $_htmlId          = $block->getElement()->getHtmlId() ?>
-<?php $_htmlClass       = $block->getElement()->getClass() ?>
-<?php $_htmlName        = $block->getElement()->getName() ?>
-<?php $_types           = $block->getType() ?>
-<?php $_extendedTypes   = $block->getExtendedType() ?>
-<?php $_outputs         = $block->getOutput() ?>
-<?php $_attributes      = $block->getAttributes() ?>
+<?php
+    $element        = $block->getElement();
+    $_htmlId        = $element->getHtmlId();
+    $_htmlClass     = $element->getClass();
+    $_htmlName      = $element->getName();
+    $_types         = $block->getType();
+    $_extendedTypes = $block->getExtendedType();
+    $_outputs       = $block->getOutput();
+    $_attributes    = $block->getProductAttributes();
+?>
 
 <style type="text/css">
 @-moz-document url-prefix() { /* Only target Gecko. (Breaks layout in IE.) */
@@ -78,7 +80,7 @@ $element = $block->getElement();
                     <% if (data.prefix_type == '2') { %> disabled="disabled" style="display:none" <% } %>>
                 <option value=""><?php echo __('Not Set') ?></option>
                 <?php foreach ($_attributes as $_attribute): ?>
-                    <option value="<?php echo $_attribute->getAttributeCode() ?>" <% if (typeof data.prefix_value != 'undefined' && data.prefix_value == '<?php echo $_attribute->getAttributeCode() ?>') { %> selected="selected" <% } %>><?php echo $_attribute->getStoreLabel() ?></option>
+                    <option value="<?php echo $_attribute['value'] ?>" <% if (typeof data.prefix_value != 'undefined' && data.prefix_value == '<?php echo $_attribute['value'] ?>') { %> selected="selected" <% } %>><?php echo $_attribute['label'] ?></option>
                 <?php endforeach ?>
             </select>
             <input type="text" class="input-text <?php echo $_htmlClass ?>"
@@ -104,7 +106,7 @@ $element = $block->getElement();
                     <% if (data.type == '2') { %> disabled="disabled" style="display:none" <% } %>>
                 <option value=""><?php echo __('Not Set') ?></option>
                 <?php foreach ($_attributes as $_attribute): ?>
-                    <option value="<?php echo $_attribute->getAttributeCode() ?>" <% if (typeof data.value != 'undefined' && data.value == '<?php echo $_attribute->getAttributeCode() ?>') { %> selected="selected" <% } %>><?php echo $_attribute->getStoreLabel() ?></option>
+                    <option value="<?php echo $_attribute['value'] ?>" <% if (typeof data.value != 'undefined' && data.value == '<?php echo $_attribute['value'] ?>') { %> selected="selected" <% } %>><?php echo $_attribute['label'] ?></option>
                 <?php endforeach ?>
             </select>
             <input type="text" class="input-text <?php echo $_htmlClass ?>"
@@ -130,7 +132,7 @@ $element = $block->getElement();
                     <% if (data.suffix_type == '2') { %> disabled="disabled" style="display:none" <% } %>>
                 <option value=""><?php echo __('Not Set') ?></option>
                 <?php foreach ($_attributes as $_attribute): ?>
-                    <option value="<?php echo $_attribute->getAttributeCode() ?>" <% if (typeof data.suffix_value != 'undefined' && data.suffix_value == '<?php echo $_attribute->getAttributeCode() ?>') { %> selected="selected" <% } %>><?php echo $_attribute->getStoreLabel() ?></option>
+                    <option value="<?php echo $_attribute['value'] ?>" <% if (typeof data.suffix_value != 'undefined' && data.suffix_value == '<?php echo $_attribute['value'] ?>') { %> selected="selected" <% } %>><?php echo $_attribute['label'] ?></option>
                 <?php endforeach ?>
             </select>
             <input type="text" class="input-text <?php echo $_htmlClass ?>"

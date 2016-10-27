@@ -42,7 +42,7 @@ class Data extends \Magento\Framework\DataObject
     /**
      * @return array
      */
-    public function getFieldsData()
+    public function getFields()
     {
         $data = [];
         if ($this->getPrefixValue()) {

@@ -61,7 +61,7 @@ class Advanced extends \Magento\Backend\Block\Widget\Form\Generic implements \Ma
         $form->setHtmlIdPrefix('feed_');
 
         $fieldset = $form->addFieldset(
-            'file_settings_fieldset',
+            'advanced_fieldset',
             ['legend' => __('File Creation Settings')]
         );
 

@@ -24,7 +24,12 @@ class Mapping extends Widget implements RendererInterface
      *
      * @var \Magento\Framework\Registry
      */
-    protected $_coreRegistry = null;
+    protected $_coreRegistry;
+
+    /**
+     * @var \GoMage\Feed\Helper\Data
+     */
+    protected $_helper;
 
     /**
      * @var \Magento\Framework\Json\Helper\Data
@@ -46,38 +51,24 @@ class Mapping extends Widget implements RendererInterface
      */
     protected $_output;
 
-    /**
-     * @var \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory
-     */
-    protected $_collectionFactory;
 
-    /**
-     * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Framework\Json\Helper\Data $jsonHelper
-     * @param \GoMage\Feed\Model\Config\Source\Mapping\Type $type
-     * @param \GoMage\Feed\Model\Config\Source\Mapping\ExtendedType $extendedType
-     * @param \GoMage\Feed\Model\Config\Source\Mapping\Output $output
-     * @param \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory $collectionFactory
-     * @param array $data
-     */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Framework\Registry $registry,
+        \GoMage\Feed\Helper\Data $helper,
         \Magento\Framework\Json\Helper\Data $jsonHelper,
         \GoMage\Feed\Model\Config\Source\Mapping\Type $type,
         \GoMage\Feed\Model\Config\Source\Mapping\ExtendedType $extendedType,
         \GoMage\Feed\Model\Config\Source\Mapping\Output $output,
-        \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory $collectionFactory,
         array $data = []
     ) {
 
-        $this->_coreRegistry      = $registry;
-        $this->_jsonHelper        = $jsonHelper;
-        $this->_type              = $type;
-        $this->_extendedType      = $extendedType;
-        $this->_output            = $output;
-        $this->_collectionFactory = $collectionFactory;
+        $this->_coreRegistry = $registry;
+        $this->_helper       = $helper;
+        $this->_jsonHelper   = $jsonHelper;
+        $this->_type         = $type;
+        $this->_extendedType = $extendedType;
+        $this->_output       = $output;
 
         parent::__construct($context, $data);
     }
@@ -216,31 +207,9 @@ class Mapping extends Widget implements RendererInterface
     /**
      * @return array
      */
-    public function getAttributes()
+    public function getProductAttributes()
     {
-        // TODO: add mapper; add dynamic attributes
-        $items = $this->_collectionFactory->create()->getItems();
-
-        $items[] = new \Magento\Framework\DataObject([
-                'attribute_code' => 'id',
-                'store_label'    => __('Product Id')
-            ]
-        );
-
-        //TODO: Hard code
-        $items[] = new \Magento\Framework\DataObject([
-                'attribute_code' => 'category_subcategory',
-                'store_label'    => __('Category > SubCategory')
-            ]
-        );
-
-        $items[] = new \Magento\Framework\DataObject([
-                'attribute_code' => 'free_shipping_feed',
-                'store_label'    => __('* Free Shipping Feed')
-            ]
-        );
-
-        return $items;
+        return $this->_helper->getProductAttributes(true);
     }
 
 }

@@ -5,10 +5,10 @@ namespace GoMage\Feed\Model\Mapper;
 interface MapperInterface
 {
     /**
-     * @param  $object
+     * @param  \Magento\Framework\DataObject $object
      * @return mixed
      */
-    public function map($object);
+    public function map(\Magento\Framework\DataObject $object);
 
     /**
      * @return array

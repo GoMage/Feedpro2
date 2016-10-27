@@ -3,17 +3,16 @@ namespace GoMage\Feed\Model\Mapper\Attribute;
 
 use GoMage\Feed\Model\Mapper\MapperInterface;
 
-
-class Weight implements MapperInterface
+class ProductUrl implements MapperInterface
 {
 
     /**
-     * @param  $object
+     * @param  \Magento\Framework\DataObject $object
      * @return mixed
      */
-    public function map($object)
+    public function map(\Magento\Framework\DataObject $object)
     {
-        return $object->getData('free_shipping') ? 0 : $object->getWeight();
+        return $object->getProductUrl();
     }
 
     /**
@@ -21,7 +20,7 @@ class Weight implements MapperInterface
      */
     public function getUsedAttributes()
     {
-        return ['weight', 'free_shipping'];
+        return [];
     }
 
 }

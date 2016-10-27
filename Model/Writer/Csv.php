@@ -2,9 +2,11 @@
 
 namespace GoMage\Feed\Model\Writer;
 
+use GoMage\Feed\Model\Config\Source\Enclosure;
+use GoMage\Feed\Model\Config\Source\Delimiter;
+
 class Csv extends AbstractWriter
 {
-
     /**
      * @var string
      */
@@ -16,18 +18,27 @@ class Csv extends AbstractWriter
     protected $_enclosure;
 
     /**
+     * @var bool
+     */
+    protected $_isHeader;
+
+    /**
      * @var array
      */
     protected $_headerCols = null;
 
     public function __construct(
         \Magento\Framework\Filesystem $filesystem,
+        Enclosure $enclosureModel,
+        Delimiter $delimiterModel,
         $fileName,
-        $delimiter = ',',
-        $enclosure = '"'
+        $delimiter = Delimiter::COMMA,
+        $enclosure = Enclosure::DOUBLE_QUOTE,
+        $isHeader = true
     ) {
-        $this->_delimiter = $delimiter;
-        $this->_enclosure = $enclosure;
+        $this->_delimiter = $delimiterModel->getSymbol($delimiter);
+        $this->_enclosure = $enclosureModel->getSymbol($enclosure);
+        $this->_isHeader  = $isHeader;
 
         parent::__construct($filesystem, $fileName);
     }
@@ -37,7 +48,6 @@ class Csv extends AbstractWriter
      *
      * @param array $headerColumns
      * @throws \Exception
-     * @return $this
      */
     public function setHeaderCols(array $headerColumns)
     {
@@ -48,9 +58,10 @@ class Csv extends AbstractWriter
             foreach ($headerColumns as $columnName) {
                 $this->_headerCols[$columnName] = false;
             }
-            $this->_fileHandler->writeCsv(array_keys($this->_headerCols), $this->_delimiter, $this->_enclosure);
+            if ($this->_isHeader) {
+                $this->_fileHandler->writeCsv(array_keys($this->_headerCols), $this->_delimiter, $this->_enclosure);
+            }
         }
-        return $this;
     }
 
     /**

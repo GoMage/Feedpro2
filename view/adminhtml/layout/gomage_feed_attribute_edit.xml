@@ -7,14 +7,14 @@
         <referenceContainer name="left">
             <block class="GoMage\Feed\Block\Adminhtml\Attribute\Edit\Tabs" name="gomage_feed_attribute_edit_tabs">
                 <block class="GoMage\Feed\Block\Adminhtml\Attribute\Edit\Tab\Main" name="gomage_feed_attribute_tab_main"/>
-                <block class="GoMage\Feed\Block\Adminhtml\Attribute\Edit\Tab\Conditions" name="gomage_feed_attribute_tab_conditions"/>
+                <block class="GoMage\Feed\Block\Adminhtml\Attribute\Edit\Tab\Condition" name="gomage_feed_attribute_tab_condition"/>
                 <action method="addTab">
                     <argument name="name" xsi:type="string">main_section</argument>
                     <argument name="block" xsi:type="string">gomage_feed_attribute_tab_main</argument>
                 </action>
                 <action method="addTab">
-                    <argument name="name" xsi:type="string">conditions_section</argument>
-                    <argument name="block" xsi:type="string">gomage_feed_attribute_tab_conditions</argument>
+                    <argument name="name" xsi:type="string">condition_section</argument>
+                    <argument name="block" xsi:type="string">gomage_feed_attribute_tab_condition</argument>
                 </action>
             </block>
         </referenceContainer>

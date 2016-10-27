@@ -7,4 +7,16 @@
             </argument>
         </arguments>
     </type>
+    <virtualType name="GoMage\Feed\Model\Logger\Logger" type="Magento\Framework\Logger\Monolog">
+        <arguments>
+            <argument name="handlers" xsi:type="array">
+                <item name="info" xsi:type="object">GoMage\Feed\Model\Logger\Handler</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <type name="GoMage\Feed\Model\Generator">
+        <arguments>
+            <argument name="logger" xsi:type="object">GoMage\Feed\Model\Logger\Logger</argument>
+        </arguments>
+    </type>
 </config>

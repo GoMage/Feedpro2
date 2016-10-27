@@ -18,18 +18,18 @@ class Attribute implements MapperInterface
 
 
     public function __construct(
-        $field_value,
+        $value,
         ProductAttributeRepositoryInterface $attributeRepository
     ) {
-        $this->_code      = $field_value;
+        $this->_code      = $value;
         $this->_attribute = $attributeRepository->get($this->_code);
     }
 
     /**
-     * @param  $object
+     * @param  \Magento\Framework\DataObject $object
      * @return mixed
      */
-    public function map($object)
+    public function map(\Magento\Framework\DataObject $object)
     {
         return $this->_attribute->getFrontendModel() == 'Magento\Catalog\Model\Product\Attribute\Frontend\Image' ?
             $this->_attribute->getFrontend()->getUrl($object) :

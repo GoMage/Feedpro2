@@ -20,10 +20,16 @@ class Save extends AttributeController
         $data = $this->getRequest()->getPostValue();
         if ($this->getRequest()->isPost() && $data) {
             try {
+                /** @var \GoMage\Feed\Model\Attribute $model */
                 $model = $this->_objectManager->create('GoMage\Feed\Model\Attribute');
                 $id    = $this->getRequest()->getPost('id');
                 if ($id) {
                     $model->load($id);
+                }
+                if (isset($data['content']) && $data['content']) {
+                    $data['content'] = $this->_prepareData($data['content']);
+                    $data['content'] = $this->_objectManager->get('Magento\Framework\Json\Helper\Data')
+                        ->jsonEncode($data['content']);
                 }
                 $model->addData($data);
                 $model->save();
@@ -40,6 +46,20 @@ class Save extends AttributeController
         /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
         $redirectResult = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
         return $redirectResult->setPath('gomage_feed/attribute/index');
+    }
+
+    /**
+     * @param  array $data
+     * @return array
+     */
+    protected function _prepareData(array $data)
+    {
+        foreach ($data as $key => $value) {
+            if (is_array($value)) {
+                $data[$key] = $this->_prepareData($value);
+            }
+        }
+        return array_merge($data, []);
     }
 
     /**

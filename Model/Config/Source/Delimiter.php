@@ -22,7 +22,7 @@ class Delimiter implements \Magento\Framework\Option\ArrayInterface
             ['value' => self::COLON, 'label' => __('Colon')],
             ['value' => self::SPACE, 'label' => __('Space')],
             ['value' => self::VERTICAL_PIPE, 'label' => __('Vertical pipe')],
-            ['value' => self::SEMI_COLON, 'label' => __('>Semi-colon')],
+            ['value' => self::SEMI_COLON, 'label' => __('Semi-colon')],
         ];
     }
 

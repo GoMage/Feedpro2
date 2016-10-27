@@ -25,10 +25,10 @@ class CategorySubcategory implements MapperInterface
     }
 
     /**
-     * @param  $object
+     * @param  \Magento\Framework\DataObject $object
      * @return mixed
      */
-    public function map($object)
+    public function map(\Magento\Framework\DataObject $object)
     {
         $categoryIds = $object->getCategoryIds();
         if (count($categoryIds)) {

@@ -10,16 +10,16 @@ class StaticValue implements MapperInterface
     protected $_value;
 
     public function __construct(
-        $field_value
+        $value
     ) {
-        $this->_value = $field_value;
+        $this->_value = $value;
     }
 
     /**
-     * @param  $object
+     * @param  \Magento\Framework\DataObject $object
      * @return mixed
      */
-    public function map($object)
+    public function map(\Magento\Framework\DataObject $object)
     {
         return $this->_value;
     }

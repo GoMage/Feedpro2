@@ -1,9 +1,26 @@
 <?php
 namespace GoMage\Feed\Block\Adminhtml\Attribute\Edit\Tab;
 
-class Conditions extends \Magento\Backend\Block\Widget\Form\Generic implements
+class Condition extends \Magento\Backend\Block\Widget\Form\Generic implements
     \Magento\Backend\Block\Widget\Tab\TabInterface
 {
+
+    /**
+     * @var \GoMage\Feed\Helper\Data
+     */
+    protected $_helper;
+
+    public function __construct(
+        \Magento\Backend\Block\Template\Context $context,
+        \Magento\Framework\Registry $registry,
+        \Magento\Framework\Data\FormFactory $formFactory,
+        \GoMage\Feed\Helper\Data $helper,
+        array $data = []
+    ) {
+        $this->_helper = $helper;
+        parent::__construct($context, $registry, $formFactory, $data);
+    }
+
     /**
      * Prepare form
      *
@@ -25,10 +42,33 @@ class Conditions extends \Magento\Backend\Block\Widget\Form\Generic implements
             ['legend' => __('Conditions and Values'), 'class' => 'fieldset-wide']
         );
 
+        $field = $fieldset->addField(
+            'content',
+            'text',
+            ['name' => 'content', 'class' => 'requried-entry', 'value' => $model->getContent()]
+        );
 
-        $this->_eventManager->dispatch('gomage_feed_attribute_tab_conditions_prepare_form', ['form' => $form]);
+        $renderer = $this->getLayout()
+            ->createBlock('GoMage\Feed\Block\Adminhtml\Attribute\Edit\Tab\Condition\Rows');
+
+        $field->setRenderer($renderer);
+
+        $fieldset->addField(
+            'default_value',
+            'select',
+            [
+                'name'     => 'default_value',
+                'required' => true,
+                'label'    => __('Use Default Attribute'),
+                'title'    => __('Use Default Attribute'),
+                'values'   => $this->_helper->getProductAttributes(),
+            ]
+        );
+
         $form->setValues($model->getData());
         $this->setForm($form);
+
+        $this->_eventManager->dispatch('gomage_feed_attribute_tab_condition_prepare_form', ['form' => $form]);
 
         return parent::_prepareForm();
     }

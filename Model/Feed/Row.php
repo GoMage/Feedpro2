@@ -23,7 +23,7 @@ class Row
     protected $_output;
 
     /**
-     * @var \GoMage\Feed\Model\Feed\Field\Collection
+     * @var \GoMage\Feed\Model\Collection
      */
     protected $_fields;
 
@@ -37,11 +37,11 @@ class Row
         $this->_limit = intval($rowData->getLimit());
 
         $this->_output = $outputFactory->get(intval($rowData->getOutput()));
-        $this->_fields = $objectManager->create('GoMage\Feed\Model\Feed\Field\Collection');
+        $this->_fields = $objectManager->create('GoMage\Feed\Model\Collection');
 
-        foreach ($rowData->getFieldsData() as $fieldData) {
+        foreach ($rowData->getFields() as $data) {
             /** @var \GoMage\Feed\Model\Feed\Field $field */
-            $field = $objectManager->create('GoMage\Feed\Model\Feed\Field', $fieldData);
+            $field = $objectManager->create('GoMage\Feed\Model\Feed\Field', $data);
             $this->_fields->add($field);
         }
     }
@@ -55,19 +55,17 @@ class Row
     }
 
     /**
-     * @param  $object
+     * @param  \Magento\Framework\DataObject $object
      * @return mixed
      */
-    public function map($object)
+    public function map(\Magento\Framework\DataObject $object)
     {
-        $array = array_map(function ($field) use ($object) {
+        $array = array_map(function (\GoMage\Feed\Model\Feed\Field $field) use ($object) {
             return $field->map($object);
-        }, $this->_fields->get()
+        }, iterator_to_array($this->_fields)
         );
 
-        $value = implode('', array_filter($array));
-
-        return $this->format($value);
+        return $this->format(implode('', $array));
     }
 
     /**
@@ -84,11 +82,16 @@ class Row
     }
 
     /**
-     * @return \GoMage\Feed\Model\Feed\Field\Collection
+     * @return array
      */
-    public function getFields()
+    public function getUsedAttributes()
     {
-        return $this->_fields;
+        $attributes = [];
+        /** @var \GoMage\Feed\Model\Feed\Field $field */
+        foreach ($this->_fields as $field) {
+            $attributes = array_merge($attributes, $field->getUsedAttributes());
+        }
+        return $attributes;
     }
 
 }

@@ -55,7 +55,7 @@ class InstallSchema implements InstallSchemaInterface
                 'Default value'
             )
             ->addColumn(
-                'data',
+                'content',
                 \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
                 null,
                 ['nullable' => true],
@@ -102,7 +102,7 @@ class InstallSchema implements InstallSchemaInterface
                 'is_active',
                 \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
                 null,
-                ['unsigned' => true, 'default'  => '0', 'nullable' => false],
+                ['unsigned' => true, 'default' => '0', 'nullable' => false],
                 'Feed status'
             )
             ->addColumn(
@@ -130,7 +130,7 @@ class InstallSchema implements InstallSchemaInterface
                 'filter_type',
                 \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
                 null,
-                ['unsigned' => true, 'default'  => '0', 'nullable' => false],
+                ['unsigned' => true, 'default' => '0', 'nullable' => false],
                 'Filter Type'
             )
             ->addColumn(
@@ -165,21 +165,21 @@ class InstallSchema implements InstallSchemaInterface
                 'is_header',
                 \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
                 null,
-                ['unsigned' => true, 'default'  => '0', 'nullable' => false],
+                ['unsigned' => true, 'default' => '0', 'nullable' => false],
                 'Show feed header'
             )
             ->addColumn(
                 'enclosure',
                 \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
                 null,
-                ['unsigned' => true, 'default'  => '0', 'nullable' => false],
+                ['unsigned' => true, 'default' => '0', 'nullable' => false],
                 'Feed enclosure'
             )
             ->addColumn(
                 'delimiter',
                 \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
                 null,
-                ['unsigned' => true, 'default'  => '0', 'nullable' => false],
+                ['unsigned' => true, 'default' => '0', 'nullable' => false],
                 'Feed delimiter'
             )
             ->addColumn(
@@ -200,14 +200,14 @@ class InstallSchema implements InstallSchemaInterface
                 'is_remove_lb',
                 \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
                 null,
-                ['unsigned' => true, 'default'  => '0', 'nullable' => false],
+                ['unsigned' => true, 'default' => '0', 'nullable' => false],
                 'Remove line break symbols'
             )
             ->addColumn(
                 'is_ftp',
                 \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
                 null,
-                ['unsigned' => true, 'default'  => '0', 'nullable' => false],
+                ['unsigned' => true, 'default' => '0', 'nullable' => false],
                 'Is ftp active'
             )
             ->addColumn(
@@ -242,7 +242,7 @@ class InstallSchema implements InstallSchemaInterface
                 'is_ftp_passive',
                 \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
                 null,
-                ['unsigned' => true, 'default'  => '0', 'nullable' => false],
+                ['unsigned' => true, 'default' => '0', 'nullable' => false],
                 'Is FTP passive mode'
             )
             ->addColumn(
@@ -256,14 +256,14 @@ class InstallSchema implements InstallSchemaInterface
                 'ftp_protocol',
                 \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
                 null,
-                ['unsigned' => true, 'default'  => '0', 'nullable' => false],
+                ['unsigned' => true, 'default' => '0', 'nullable' => false],
                 'FTP protocol'
             )
             ->addColumn(
                 'limit',
                 \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
                 null,
-                ['unsigned' => true, 'default'  => '0', 'nullable' => false],
+                ['unsigned' => true, 'default' => '0', 'nullable' => false],
                 'Limit'
             )
             ->addColumn(
@@ -298,14 +298,14 @@ class InstallSchema implements InstallSchemaInterface
                 'is_out_of_stock',
                 \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
                 null,
-                ['unsigned' => true, 'default'  => '0', 'nullable' => false],
+                ['unsigned' => true, 'default' => '0', 'nullable' => false],
                 'Export Out of Stock Products'
             )
             ->addColumn(
                 'is_disabled',
                 \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
                 null,
-                ['unsigned' => true, 'default'  => '0', 'nullable' => false],
+                ['unsigned' => true, 'default' => '0', 'nullable' => false],
                 'Export Disabled Products'
             )
             ->addColumn(
@@ -326,7 +326,7 @@ class InstallSchema implements InstallSchemaInterface
                 'is_addition_header',
                 \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
                 null,
-                ['unsigned' => true, 'default'  => '0', 'nullable' => false],
+                ['unsigned' => true, 'default' => '0', 'nullable' => false],
                 'Is Addition header'
             )
             ->addColumn(
@@ -340,7 +340,7 @@ class InstallSchema implements InstallSchemaInterface
                 'is_upload',
                 \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
                 null,
-                ['unsigned' => true, 'default'  => '0', 'nullable' => false],
+                ['unsigned' => true, 'default' => '0', 'nullable' => false],
                 'Upload Status'
             )
             ->addColumn(
@@ -354,7 +354,7 @@ class InstallSchema implements InstallSchemaInterface
                 'is_generate',
                 \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
                 null,
-                ['unsigned' => true, 'default'  => '0', 'nullable' => false],
+                ['unsigned' => true, 'default' => '0', 'nullable' => false],
                 'Generate Status'
             )
             ->addColumn(

@@ -1,8 +1,6 @@
 <?php
 namespace GoMage\Feed\Model;
 
-use GoMage\Feed\Model\FeedInterface;
-
 interface GeneratorInterface
 {
     /**

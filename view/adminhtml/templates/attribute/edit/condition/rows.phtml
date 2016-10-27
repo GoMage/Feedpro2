@@ -1,0 +1,197 @@
+<?php
+
+// @codingStandardsIgnoreFile
+
+/* @var $block \GoMage\Feed\Block\Adminhtml\Attribute\Edit\Tab\Condition\Rows */
+?>
+<?php
+$element     = $block->getElement();
+$_htmlId     = $element->getHtmlId();
+$_htmlClass  = $element->getClass();
+$_htmlName   = $element->getName();
+$_types      = $block->getTypes();
+$_attributes = $block->getProductAttributes();
+$_operators  = $block->getOperators();
+?>
+<div class="field">
+    <div class="control" style="float:none;width:100%;overflow:auto;">
+        <table class="admin__control-table">
+            <thead>
+            <tr>
+                <th class="col-condition"><?php echo __('Condition') ?></th>
+                <th class="col-value"><?php echo __('Value') ?></th>
+                <th class="col-type"><?php echo __('Type') ?></th>
+                <th class="col-action"><?php echo __('Action') ?></th>
+            </tr>
+            </thead>
+            <tbody id="rows-container"></tbody>
+            <tfoot>
+            <tr>
+                <td class="col-actions-add"><?php echo $block->getAddButtonHtml() ?></td>
+            </tr>
+            </tfoot>
+        </table>
+    </div>
+</div>
+<script id="row-template" type="text/x-magento-template">
+    <tr>
+        <td class="col-condition">
+            <table>
+                <tbody id="conditions-container-<%- data.row_id %>"></tbody>
+            </table>
+        </td>
+        <td class="col-value">
+            <table>
+                <tbody id="values-container-<%- data.row_id %>"></tbody>
+            </table>
+        </td>
+        <td class="col-type">
+            <select class="select type-select admin__control-select" data-row-id="<%- data.row_id %>"
+                    name="<?php echo $_htmlName ?>[<%- data.row_id %>][type]">
+                <?php foreach ($_types as $_type): ?>
+                    <option value="<?php echo $_type['value'] ?>" <% if (typeof data.type != 'undefined' && data.type == <?php echo $_type['value'] ?>) { %> selected="selected" <% } %>><?php echo $_type['label'] ?></option>
+                <?php endforeach ?>
+            </select>
+        </td>
+        <td class="col-action">
+            <button title="<?php echo __("Delete") ?>" type="button" class="action- scalable delete delete-row">
+                <span><?php echo __("Delete") ?></span>
+            </button>
+        </td>
+    </tr>
+</script>
+
+<script id="condition-template" type="text/x-magento-template">
+    <% if (data.condition_id == 0) { %>
+    <tr>
+        <td class="col-action">
+            <button title="<?php echo __("Add Condition") ?>" type="button" class="action- scalable add add-condition"
+                    data-row-id="<%- data.row_id %>">
+                <span><?php echo __("Add Condition") ?></span>
+            </button>
+        </td>
+    </tr>
+    <% } %>
+    <tr>
+        <td class="col-attribute">
+            <select class="select attribute-select admin__control-select"
+                    name="<?php echo $_htmlName ?>[<%- data.row_id %>][conditions][<%- data.condition_id %>][code]"
+                    data-value="<?php echo $_htmlName ?>[<%- data.row_id %>][conditions][<%- data.condition_id %>][value]">
+                <option value=""><?php echo __('Not Set') ?></option>
+                <?php foreach ($_attributes as $_attribute): ?>
+                    <option value="<?php echo $_attribute['value'] ?>" <% if (typeof data.code != 'undefined' && data.code == '<?php echo $_attribute['value'] ?>') { %> selected="selected" <% } %>><?php echo $_attribute['label'] ?></option>
+                <?php endforeach ?>
+            </select>
+        </td>
+        <td class="col-operator">
+            <select class="select admin__control-select"
+                    name="<?php echo $_htmlName ?>[<%- data.row_id %>][conditions][<%- data.condition_id %>][operator]">
+                <?php foreach ($_operators as $_operator): ?>
+                    <option value="<?php echo $_operator['value'] ?>" <% if (typeof data.operator != 'undefined' && data.operator == '<?php echo $_operator['value'] ?>') { %> selected="selected" <% } %>><?php echo $_operator['label'] ?></option>
+                <?php endforeach ?>
+            </select>
+        </td>
+        <td class="col-value">
+            <input name="<?php echo $_htmlName ?>[<%- data.row_id %>][conditions][<%- data.condition_id %>][value]"
+                   value="<%- data.value %>" class="input-text admin__control-text" type="text"/>
+            <select disabled="disabled" style="display: none" class="select admin__control-select"
+                    name="<?php echo $_htmlName ?>[<%- data.row_id %>][conditions][<%- data.condition_id %>][value]">
+            </select>
+        </td>
+        <td class="col-action">
+            <button title="<?php echo __("Delete") ?>" type="button" class="action- scalable delete delete-condition">
+                <span><?php echo __("Delete") ?></span>
+            </button>
+        </td>
+    </tr>
+</script>
+
+<script id="static-value-template" type="text/x-magento-template">
+    <tr>
+        <td class="col-value">
+            <input name="<?php echo $_htmlName ?>[<%- data.row_id %>][value]"
+                   value="<%- data.value %>" class="input-text admin__control-text" type="text"/>
+        </td>
+    </tr>
+</script>
+
+<script id="percent-value-template" type="text/x-magento-template">
+    <tr>
+        <td class="col-value">
+            <input name="<?php echo $_htmlName ?>[<%- data.row_id %>][value][percent]"
+                   value="<%- data.percent %>" class="input-text admin__control-text" type="text"/>
+        </td>
+        <td class="col-attribute">
+            <select class="select admin__control-select"
+                    name="<?php echo $_htmlName ?>[<%- data.row_id %>][value][code]">
+                <option value=""><?php echo __('Not Set') ?></option>
+                <?php foreach ($_attributes as $_attribute): ?>
+                    <option value="<?php echo $_attribute['value'] ?>" <% if (typeof data.code != 'undefined' && data.code == '<?php echo $_attribute['value'] ?>') { %> selected="selected" <% } %>><?php echo $_attribute['label'] ?></option>
+                <?php endforeach ?>
+            </select>
+        </td>
+    </tr>
+</script>
+
+<script id="configurable-value-template" type="text/x-magento-template">
+    <tr>
+        <td class="col-value">
+            <input name="<?php echo $_htmlName ?>[<%- data.row_id %>][value][prefix]"
+                   value="<%- data.prefix %>" class="input-text admin__control-text" type="text"/>
+        </td>
+        <td class="col-attribute">
+            <select class="select admin__control-select"
+                    name="<?php echo $_htmlName ?>[<%- data.row_id %>][value][code]">
+                <option value=""><?php echo __('Not Set') ?></option>
+                <?php foreach ($_attributes as $_attribute): ?>
+                    <option value="<?php echo $_attribute['value'] ?>" <% if (typeof data.code != 'undefined' && data.code == '<?php echo $_attribute['value'] ?>') { %> selected="selected" <% } %>><?php echo $_attribute['label'] ?></option>
+                <?php endforeach ?>
+            </select>
+        </td>
+    </tr>
+</script>
+
+<script id="attribute-value-template" type="text/x-magento-template">
+    <% if (data.value_id == 0) { %>
+    <tr>
+        <td class="col-action">
+            <button title="<?php echo __("Add") ?>" type="button" class="action- scalable add add-value"
+                    data-row-id="<%- data.row_id %>">
+                <span><?php echo __("Add") ?></span>
+            </button>
+        </td>
+    </tr>
+    <% } %>
+    <tr>
+        <td class="col-value">
+            <input name="<?php echo $_htmlName ?>[<%- data.row_id %>][value][<%- data.value_id %>][prefix]"
+                   value="<%- data.prefix %>" class="input-text admin__control-text" type="text"/>
+        </td>
+        <td class="col-attribute">
+            <select class="select attribute-select admin__control-select"
+                    name="<?php echo $_htmlName ?>[<%- data.row_id %>][value][<%- data.value_id %>][code]">
+                <option value=""><?php echo __('Not Set') ?></option>
+                <?php foreach ($_attributes as $_attribute): ?>
+                    <option value="<?php echo $_attribute['value'] ?>" <% if (typeof data.code != 'undefined' && data.code == '<?php echo $_attribute['value'] ?>') { %> selected="selected" <% } %>><?php echo $_attribute['label'] ?></option>
+                <?php endforeach ?>
+            </select>
+        </td>
+        <td class="col-action">
+            <button title="<?php echo __("Delete") ?>" type="button" class="action- scalable delete delete-value">
+                <span><?php echo __("Delete") ?></span>
+            </button>
+        </td>
+    </tr>
+</script>
+
+<script type="text/x-magento-init">
+    {
+        "*": {
+            "GoMage_Feed/js/attribute/rows": {
+                "rowsData": <?php /* @noEscape */ echo $block->getValue(); ?>,
+                "url": "<?php echo $block->getUrl('gomage_feed/attribute/value') ?>"
+            }
+        }
+    }
+
+</script>

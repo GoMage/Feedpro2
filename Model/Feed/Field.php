@@ -20,10 +20,7 @@ class Field
      */
     protected $_mapper;
 
-    /**
-     * @param $type
-     * @param $value
-     */
+
     public function __construct($type, $value, \GoMage\Feed\Model\Mapper\Factory $mapperFactory)
     {
         $this->_type   = $type;
@@ -32,20 +29,20 @@ class Field
     }
 
     /**
-     * @param  $object
+     * @param  \Magento\Framework\DataObject $object
      * @return mixed
      */
-    public function map($object)
+    public function map(\Magento\Framework\DataObject $object)
     {
         return $this->_mapper->map($object);
     }
 
     /**
-     * @return \GoMage\Feed\Model\Mapper\MapperInterface
+     * @return array
      */
-    public function getMapper()
+    public function getUsedAttributes()
     {
-        return $this->_mapper;
+        return $this->_mapper->getUsedAttributes();
     }
 
 }

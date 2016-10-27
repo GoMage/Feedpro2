@@ -4,11 +4,58 @@ namespace GoMage\Feed\Model\Feed\Row;
 
 use GoMage\Feed\Model\Feed\Row;
 
-class Collection
+class Collection implements \Iterator
 {
 
-    /** @var Row[] */
-    protected $_rows;
+    /**
+     * @var array
+     */
+    private $_items = [];
+
+    public function __construct()
+    {
+        $this->rewind();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    function rewind()
+    {
+        reset($this->_items);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    function current()
+    {
+        return current($this->_items);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    function key()
+    {
+        return key($this->_items);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    function next()
+    {
+        next($this->_items);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    function valid()
+    {
+        return key($this->_items) !== null;
+    }
 
     /**
      * @param  Row $row
@@ -16,30 +63,22 @@ class Collection
      */
     public function add(Row $row)
     {
-        if (isset($this->_rows[$row->getName()])) {
+        if (isset($this->_items[$row->getName()])) {
             throw new \Magento\Framework\Exception\LocalizedException(__('Duplicate row.'));
         }
-        $this->_rows[$row->getName()] = $row;
+        $this->_items[$row->getName()] = $row;
     }
 
     /**
-     * @param  $object
+     * @param  \Magento\Framework\DataObject $object
      * @return array
      */
-    public function map($object)
+    public function calc(\Magento\Framework\DataObject $object)
     {
-        return array_map(function ($row) use ($object) {
+        return array_map(function (Row $row) use ($object) {
             return $row->map($object);
-        }, $this->_rows
+        }, $this->_items
         );
-    }
-
-    /**
-     * @return Row[]
-     */
-    public function get()
-    {
-        return $this->_rows;
     }
 
 }
