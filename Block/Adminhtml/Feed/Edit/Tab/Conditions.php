@@ -33,7 +33,7 @@ class Conditions extends \Magento\Backend\Block\Widget\Form\Generic implements \
         array $data = []
     ) {
         $this->_rendererFieldset = $rendererFieldset;
-        $this->_conditions = $conditions;
+        $this->_conditions       = $conditions;
         parent::__construct($context, $registry, $formFactory, $data);
     }
 
@@ -82,36 +82,14 @@ class Conditions extends \Magento\Backend\Block\Widget\Form\Generic implements \
     }
 
     /**
-     * Tab class getter
+     * Check permission for passed action
      *
-     * @return string
-     * @codeCoverageIgnore
-     */
-    public function getTabClass()
-    {
-        return null;
-    }
-
-    /**
-     * Return URL link to Tab content
-     *
-     * @return string
-     * @codeCoverageIgnore
-     */
-    public function getTabUrl()
-    {
-        return null;
-    }
-
-    /**
-     * Tab should be loaded trough Ajax call
-     *
+     * @param string $resourceId
      * @return bool
-     * @codeCoverageIgnore
      */
-    public function isAjaxLoaded()
+    protected function _isAllowedAction($resourceId)
     {
-        return false;
+        return $this->_authorization->isAllowed($resourceId);
     }
 
     /**
@@ -152,10 +130,10 @@ class Conditions extends \Magento\Backend\Block\Widget\Form\Generic implements \
             'conditions',
             'text',
             [
-                'name' => 'conditions',
-                'label' => __('Conditions'),
-                'title' => __('Conditions'),
-                'required' => true,
+                'name'           => 'conditions',
+                'label'          => __('Conditions'),
+                'title'          => __('Conditions'),
+                'required'       => true,
                 'data-form-part' => $formName
             ]
         )
