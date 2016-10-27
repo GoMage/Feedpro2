@@ -55,7 +55,7 @@ class Feed extends \Magento\Rule\Model\AbstractModel implements FeedInterface
     }
 
     /**
-     * @param string $formName
+     * @param  string $formName
      * @return string
      */
     public function getConditionsFieldSetId($formName = '')
