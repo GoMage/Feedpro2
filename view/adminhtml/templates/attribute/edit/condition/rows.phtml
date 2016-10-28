@@ -15,7 +15,7 @@ $_operators  = $block->getOperators();
 ?>
 <div class="field">
     <div class="control" style="float:none;width:100%;overflow:auto;">
-        <table class="admin__control-table">
+        <table class="admin__control-table feed-conditions-values">
             <thead>
             <tr>
                 <th class="col-condition"><?php echo __('Condition') ?></th>
@@ -27,7 +27,7 @@ $_operators  = $block->getOperators();
             <tbody id="rows-container"></tbody>
             <tfoot>
             <tr>
-                <td class="col-actions-add"><?php echo $block->getAddButtonHtml() ?></td>
+                <td class="col-actions-add" colspan="4"><?php echo $block->getAddButtonHtml() ?></td>
             </tr>
             </tfoot>
         </table>

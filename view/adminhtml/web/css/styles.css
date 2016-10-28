@@ -1,0 +1,56 @@
+/* Conditions tab
+-------------------------------------------------- */
+#feed_tabs_conditions_section_content .rule-tree ul{
+  border-left-style: solid;
+  border-left-color: #cac3b5;
+}
+#feed_tabs_conditions_section_content .rule-tree .rule-param-remove,
+#feed_tabs_conditions_section_content .rule-tree .rule-param-new-child > a.label{
+  width: 22px;
+  height: 22px;
+  display: inline-block;
+  background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACwAAAAsCAYAAAAehFoBAAADV0lEQVR42tWZzW7TQBDHfaRSC63oFQkKPFHbAwi4kEOPUAkhcQPaV4ACjfoEUatE6qESidQYJQdE8wC9QYISqXUSaEMSJcP+zaxYjB17483XSCPF9s7MT3Z2dnbHsmJIKpVaEfpY6AeheaFloXWhxFrne3i2y2NXrHGKCLgo9KnQEwVMV0/Yx+IoQeeFbgttyMDpdJoKhQKdnp5SrVajy8tL6nQ6JAW/cQ/PMAZjYaOAN9jnvGnYVf60bqB8Pk/lcpl6vR7pCmxga9u2Cg7fqyZArwhNSsfZbJbOzs7IlMBXLpdTwd8hZpz/6jEcHRwcuJ+03++TaYFP+EYMhsYEXdKFvS4n1eHhIdXrdRq1IAZiMXQJDDp/gyIMj46O6OLigsYliIWYDA2GuSjAb+WbxQwftyCm8qaTUbIB7e/vk+M4NClBbDAw9FoQ7FWh3zEIk2DSAgYGroLNDxgJ3E0zo8gGw2QPJeVt+6UwtwYIy7P9nw1qvn9BztYjapeOtUFgA1v4gK+wPK3UJIsq8CYeYPUJk+abZ1RdvfFH12/Sr0+ZyLAYCxtpD19hoqyIT1RgN+diyQydEK/u/wXWgPbCQp2X90LtwCQLJgl7SxYyUWqD9pfsf4HDoP1gcQ1fUWoPpWBaAXACF8ViMfKnbdnpyNBBsPARVcDGwAmLC2vtVBYF2gSsJ8XtWlxsuDWrrgyCNgULARsD2wD+iothl+EgaFOwssZg4G+W3EGoOwUj0IZg5c6FgZuWLJ7jSiB0TFgpknMmgWfuLzFLk64MYNt0WsP9Qc9ipLWi8YVDBTIFrSwcewDeMLU0+4GYgFaW5g0A3zFR/AwCCIIeovi5q19ebj0c6m35QcOXdnkZt4DX+bRe6DgFfOQtUu+HQ82d5+7baX/+qL9FEjbO6weuD/gaJOfn5/5bpJnbhCrb/OqUbvOvBZ1NrE3LQYpyOLgedvqzMzNHVQw8N1OHgQy9zEeekzxuXdY9I16S+72pP9D2nBXvyeIZacZkywB51ljLwCd7VNSmTKVSGbopA1tPU6YSeKwaA3rB2/bKZDJuJSXbXq1W65+dS7fbde/JthfGwsan7bUwyn7dEjcFSzEai6WRNxYHtG4TvAmwud/W8LzBMj9L8tjbcWL+BrkWT7+E2ZFOAAAAAElFTkSuQmCC);
+  background-size: 22px;
+  vertical-align: middle;
+}
+#feed_tabs_conditions_section_content .rule-tree .rule-param-new-child > a.label{
+  background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACwAAAAsCAYAAAAehFoBAAAC8klEQVR42tWZzW7aQBDHfWykpAU1L1Davk1uSY9pD+WQWz/u7S3P0FQNyhMgEEgcOIBULGGllcKlPXFr7CpIfFUCJBBs97+albYWBNu7pvZIIxl7d+cn452ZnbEsDSkWizmur7l+4dri6nIdcWWkI7qHZ5c0NmftUrjBDNd3XG8UsLB6Q2tk4gTd53rOdSwNVyoV1m63WbfbZb1ej02nUzafz5kUXOMenmEMxmKOAj6mNfdNwx7TXysMtVot5rouWy6XLKxgDubatq2CY+1jE6APuBbkwo1Gg/X7fWZKsFaz2VTBP8Omzrf6FQuVy2Xxl65WK2ZasCbWhg2CxgbNhoV9LDdVrVZjo9GIxS2wAVsE3QFDmM/AwcR6vc4mkwnblcAWbBI0GPaCAH+SbxY7fNcCm8qbLgTxBqxUKrHhcBjJ4M/Bd/bh+qVQXEcR2AYDQZ9sgn3I9TcGYRNEFYC+sY+E4jqqgIGA78C2DhgOXLgZHW8gYaXqeA/F5Z2vc2EiB9D1s6aApZ9WcpKMCvweDxB9dMUkMESJiG9VYOFzETKTBgwmmTBJ2CcykYmSG8QNDCYlYcoBOI8fjuMY8aOmgSFgI+C8RYm1liuLG1hxcZcWJRsiZ00qMNgI2AbwL/wwFYbjAEaOQcC3ljxBqCeFTeHWD2NKt4VxsBHwH0smz0HDbZzQ94nkTBDwaWDgrZ/Ej8E3sWBcsB+vXwkbQT+JNG06F8B2ityak7bAcQXgsxSF5jMAP0tR8vM8fellWhP4RB6RBoPB+iNS6g6hyjH/zuwx/9TUMf/RptrEiW4hRYbxbeF2WyFFKQ6+2Fb9uUhNqYqA91JVDCToQyp5/s9y62HYGnFWnvcSX9D21YqvZPIMN2OyZQA/a6xlsMZ7eGpTxvO8yE0ZzPU1ZbyNZVUN6AN/26tarYpMSra9ZrPZPyeXxWIh7sm2F8Zizpq210Gc/bosNQU7Go3FTuyNxXtat3k6BNjUbxv73qBLzwo09qmOzb/mOGtXBJoQGgAAAABJRU5ErkJggg==);
+}
+#feed_tabs_conditions_section_content .rule-tree .rule-param-remove img,
+#feed_tabs_conditions_section_content .rule-tree .rule-param-new-child > a.label img,
+#feed_tabs_conditions_section_content .rule-tree .rule-param-new-child.rule-param-edit > a.label{
+  display: none;
+}
+#feed_tabs_conditions_section_content .rule-tree .rule-param .element select{
+  margin-left: 5px;
+}
+
+/* Conditions and Values tab
+-------------------------------------------------- */
+.admin__control-table.feed-conditions-values > thead > tr > th,
+.admin__control-table.feed-conditions-values > tbody > tr > td{
+  border-right: 1px solid #fff;
+  padding-left: 1rem;
+}
+.admin__control-table.feed-conditions-values > thead > tr > th:last-child,
+.admin__control-table.feed-conditions-values > tbody > tr > td:last-child{
+  border-right: 0;
+}
+.admin__control-table.feed-conditions-values table td{
+  padding: 0 0 0 1rem;
+}
+.admin__control-table.feed-conditions-values table td:first-child{
+  padding-left: 0;
+}
+.admin__control-table.feed-conditions-values table td.col-action:first-child{
+  padding-bottom: 1rem;
+}
+div.admin__field[data-ui-id="gomage-feed-attribute-tab-condition-fieldset-element-form-field-default-value"] .label.admin__field-label{
+  width: auto;
+}
+.admin__scope-old div.admin__field[data-ui-id="gomage-feed-attribute-tab-condition-fieldset-element-form-field-default-value"] .label.admin__field-label span{
+  white-space: nowrap;
+}
+.admin__scope-old .form-inline div.admin__field[data-ui-id="gomage-feed-attribute-tab-condition-fieldset-element-form-field-default-value"] .label.admin__field-label span:after{
+  top: .7rem;
+}
