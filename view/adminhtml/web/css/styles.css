@@ -25,6 +25,7 @@
   margin-left: 5px;
 }
 
+
 /* Conditions and Values tab
 -------------------------------------------------- */
 .admin__control-table.feed-conditions-values > thead > tr > th,
@@ -53,4 +54,125 @@ div.admin__field[data-ui-id="gomage-feed-attribute-tab-condition-fieldset-elemen
 }
 .admin__scope-old .form-inline div.admin__field[data-ui-id="gomage-feed-attribute-tab-condition-fieldset-element-form-field-default-value"] .label.admin__field-label span:after{
   top: .7rem;
+}
+
+
+/* Fields Mapping tab
+-------------------------------------------------- */
+.fm-block{
+  margin: 0 0 1px;
+  background: #efefef;
+}
+.fm-block-title{
+  padding: 12px 10px 12px 27px;
+  position: relative;
+}
+.fm-block-title:after,
+.fm-block-content-cols:after,
+.fm-block-content-col .admin__field:after{
+  content: '';
+  clear: both;
+  display: block;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+  font-size: 0;
+}
+.admin__scope-old .fm-block-title .draggable-handle{
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  width: 8px;
+  height: 14px;
+  margin-top: -6px;
+  background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAcCAYAAABoMT8aAAAAKElEQVR42mPYu3PLf2TMAAVEiw8DAwYejMbCaCyMxsJoLIzGwiAyAABMvPaP3JRJGAAAAABJRU5ErkJggg==);
+  background-size: 8px;
+}
+.fm-block-title-left{
+  margin-right: 175px;
+}
+.fm-block-title-right{
+  float: right;
+  padding: 3px 0 0;
+}
+.fm-block-title-right button + button{
+  margin-left: 5px;
+}
+.fm-actions{
+  padding: 10px;
+  background: #efefef;
+  margin: 0 0 10px;
+}
+.fm-block-title-text{
+  font-size: 14px;
+  font-weight: 600;
+  color: #303030;
+  margin-bottom: 1px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;  
+}
+.fm-block-title-sub{
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.fm-block-title-sub-item{
+  display: inline-block;
+  vertical-align: middle;
+  color: #777;
+  font-size: 12px;
+}
+.fm-block-title-sub-item strong{
+  font-weight: 600;
+}
+.fm-block-title-sub-sep{
+  display: inline-block;
+  width: 1px;
+  height: 15px;
+  overflow: hidden;
+  margin: 0 5px;
+  vertical-align: middle;
+  background: #bdb9b4;
+}
+.fm-block-content{
+  display: none;
+  margin: 0 10px;
+  padding: 10px 0;
+  background: #e6e6e6;
+}
+.fm-block.__opened{
+  background: #e6e6e6;
+}
+.fm-block.__opened .fm-block-title-sub{
+  display: none;
+}
+.fm-block.__opened .fm-block-title-text{
+  padding-top: 10px;
+}
+.fm-block.__opened .fm-block-content{
+  display: block;
+}
+.admin__fieldset.fm-block-content-line{
+  border-top: 1px solid #fff;
+  padding: 20px 0 0;
+}
+.admin__fieldset.fm-block-content-line .admin__field{
+  margin-bottom: 20px;
+}
+.fm-block-content-cols{
+  width: 75%;
+}
+.fm-block-content-col{
+  float: left;
+  width: 50%;
+}
+.fm-block-content-col .admin__field .admin__field-label{
+  float: left;
+  width: calc(100% * 0.50 - 22px);
+}
+.fm-block-content-col .admin__field .admin__field-control{
+  float: left;
+  margin-left: 30px;
+  width: calc(100% * 0.5 - 30px);
 }
