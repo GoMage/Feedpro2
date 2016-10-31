@@ -14,7 +14,7 @@ $_attributes = $block->getProductAttributes();
 $_operators  = $block->getOperators();
 ?>
 <div class="field">
-    <div class="control" style="float:none;width:100%;overflow:auto;">
+    <div class="control" style="float:none;width:100%;">
         <table class="admin__control-table feed-conditions-values">
             <thead>
             <tr>
@@ -54,7 +54,7 @@ $_operators  = $block->getOperators();
             </table>
         </td>
         <td class="col-action">
-            <span class="actions-select">
+            <span class="actions-select _active">
                 <a data-role="title"><?php echo __("Select") ?></a>
                 <div data-role="content">
                     <button title="<?php echo __("Delete") ?>" type="button" class="action- scalable delete delete-row">

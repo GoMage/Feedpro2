@@ -55,6 +55,89 @@ div.admin__field[data-ui-id="gomage-feed-attribute-tab-condition-fieldset-elemen
 .admin__scope-old .form-inline div.admin__field[data-ui-id="gomage-feed-attribute-tab-condition-fieldset-element-form-field-default-value"] .label.admin__field-label span:after{
   top: .7rem;
 }
+.feed-conditions-values td.col-action{
+  vertical-align: middle;
+}
+.feed-conditions-values table td.col-action > button.delete{
+  width: 22px;
+  height: 22px;
+  display: inline-block;
+  background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACwAAAAsCAYAAAAehFoBAAADV0lEQVR42tWZzW7TQBDHfaRSC63oFQkKPFHbAwi4kEOPUAkhcQPaV4ACjfoEUatE6qESidQYJQdE8wC9QYISqXUSaEMSJcP+zaxYjB17483XSCPF9s7MT3Z2dnbHsmJIKpVaEfpY6AeheaFloXWhxFrne3i2y2NXrHGKCLgo9KnQEwVMV0/Yx+IoQeeFbgttyMDpdJoKhQKdnp5SrVajy8tL6nQ6JAW/cQ/PMAZjYaOAN9jnvGnYVf60bqB8Pk/lcpl6vR7pCmxga9u2Cg7fqyZArwhNSsfZbJbOzs7IlMBXLpdTwd8hZpz/6jEcHRwcuJ+03++TaYFP+EYMhsYEXdKFvS4n1eHhIdXrdRq1IAZiMXQJDDp/gyIMj46O6OLigsYliIWYDA2GuSjAb+WbxQwftyCm8qaTUbIB7e/vk+M4NClBbDAw9FoQ7FWh3zEIk2DSAgYGroLNDxgJ3E0zo8gGw2QPJeVt+6UwtwYIy7P9nw1qvn9BztYjapeOtUFgA1v4gK+wPK3UJIsq8CYeYPUJk+abZ1RdvfFH12/Sr0+ZyLAYCxtpD19hoqyIT1RgN+diyQydEK/u/wXWgPbCQp2X90LtwCQLJgl7SxYyUWqD9pfsf4HDoP1gcQ1fUWoPpWBaAXACF8ViMfKnbdnpyNBBsPARVcDGwAmLC2vtVBYF2gSsJ8XtWlxsuDWrrgyCNgULARsD2wD+iothl+EgaFOwssZg4G+W3EGoOwUj0IZg5c6FgZuWLJ7jSiB0TFgpknMmgWfuLzFLk64MYNt0WsP9Qc9ipLWi8YVDBTIFrSwcewDeMLU0+4GYgFaW5g0A3zFR/AwCCIIeovi5q19ebj0c6m35QcOXdnkZt4DX+bRe6DgFfOQtUu+HQ82d5+7baX/+qL9FEjbO6weuD/gaJOfn5/5bpJnbhCrb/OqUbvOvBZ1NrE3LQYpyOLgedvqzMzNHVQw8N1OHgQy9zEeekzxuXdY9I16S+72pP9D2nBXvyeIZacZkywB51ljLwCd7VNSmTKVSGbopA1tPU6YSeKwaA3rB2/bKZDJuJSXbXq1W65+dS7fbde/JthfGwsan7bUwyn7dEjcFSzEai6WRNxYHtG4TvAmwud/W8LzBMj9L8tjbcWL+BrkWT7+E2ZFOAAAAAElFTkSuQmCC);
+  background-size: 22px;
+  vertical-align: middle;
+  border: 0;
+  text-align: left;
+  text-indent: -999em;
+  overflow: hidden;
+  padding: 0;
+}
+.feed-conditions-values .actions-select{
+  position: relative;
+}
+.feed-conditions-values .actions-select a[data-role="title"]{
+  position: relative;
+  color: #007bdb;
+  font-size: 1.3rem;
+  padding: 0 3rem 0 0;
+  text-decoration: none;
+}
+.feed-conditions-values .actions-select a[data-role="title"]:after{
+  border-style: solid;
+  border-width: 0.5rem 0.4rem 0;
+  content: "";
+  height: 0;
+  position: absolute;
+  transition: all 0.2s linear 0s;
+  width: 0;
+  border-color: #007bdb transparent transparent;
+  margin: 0.6rem 0 0 0.7rem;
+  right: auto;
+  top: 1px;
+}
+.feed-conditions-values .actions-select._active a[data-role="title"]:after{
+  -webkit-transform: rotate(180deg);
+  -moz-transform   : rotate(180deg);
+  -ms-transform    : rotate(180deg);
+  -o-transform     : rotate(180deg);
+  transform        : rotate(180deg);
+}
+.feed-conditions-values .actions-select [data-role="content"]{
+  display: none;
+  position: absolute;
+  left: 0;
+  top: 100%;
+  min-width: 10rem;
+  background-color: #fff;
+  border: 1px solid #007bdb;
+  border-radius: 1px;
+  box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.5);
+  margin: 2px 0 0;
+}
+.feed-conditions-values .actions-select [data-role="content"] button{
+  display: block;
+  border: 0;
+  width: 100%;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing   : border-box;
+  box-sizing        : border-box;
+  font-weight: 400;
+  font-size: 1.3rem;
+  text-align: left;
+  line-height: 1.36;
+  background: none;
+  color: #41362f;
+  padding: 0.6875em 1em;
+}
+.feed-conditions-values .actions-select [data-role="content"] button span{
+  white-space: nowrap;
+  text-align: left;
+}
+.feed-conditions-values .actions-select [data-role="content"] button:hover{
+  background: #e3e3e3;
+}
+.feed-conditions-values .actions-select._active [data-role="content"]{
+  display: block;
+}
 
 
 /* Fields Mapping tab
