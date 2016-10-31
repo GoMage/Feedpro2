@@ -90,8 +90,8 @@ class Ftp extends \Magento\Backend\Block\Widget\Form\Generic implements \Magento
             'select',
             [
                 'name'   => 'ftp_protocol',
-                'label'  => __('Enabled'),
-                'title'  => __('Enabled'),
+                'label'  => __('Protocol'),
+                'title'  => __('Protocol'),
                 'values' => $this->_protocol->toOptionArray(),
             ]
         );
