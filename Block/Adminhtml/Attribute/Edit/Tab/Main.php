@@ -16,7 +16,6 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
         /* @var $model \GoMage\Feed\Model\Attribute */
         $model = $this->_coreRegistry->registry('current_attribute');
 
-
         /** @var \Magento\Framework\Data\Form $form */
         $form = $this->_formFactory->create();
 

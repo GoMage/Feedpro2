@@ -92,8 +92,8 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
 
         if ($model->getId()) {
             $fieldset->addField('id', 'hidden', ['name' => 'id']);
-            $fieldset->addField('type', 'hidden', ['name' => 'type']);
         }
+        $fieldset->addField('type', 'hidden', ['name' => 'type']);
 
         $fieldset->addField(
             'name',

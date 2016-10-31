@@ -57,9 +57,7 @@ class Edit extends FeedController
 
         $resultPage = $this->createPage();
         $resultPage->getConfig()->getTitle()->prepend(__('Manage Feeds'));
-        $resultPage->getConfig()->getTitle()->prepend($id ?  __("Edit Feed '%1'", $model->getName()) : __('New Feed'));
-        $resultPage->getLayout()->getBlock('gomage.feed.edit')
-            ->setData('action', $this->getUrl('gomage_feed/feed/save'));
+        $resultPage->getConfig()->getTitle()->prepend($id ? __("Edit Feed '%1'", $model->getName()) : __('New Feed'));
         $resultPage->addBreadcrumb(
             $id ? __('Edit Feed') : __('New Feed'),
             $id ? __('Edit Feed') : __('New Feed')

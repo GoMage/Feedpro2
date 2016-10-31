@@ -57,9 +57,7 @@ class Edit extends AttributeController
 
         $resultPage = $this->createPage();
         $resultPage->getConfig()->getTitle()->prepend(__('Manage Dynamic Attributes'));
-        $resultPage->getConfig()->getTitle()->prepend($id ?  __("Edit Dynamic Attribute '%1'", $model->getName()) : __('New Dynamic Attribute'));
-        $resultPage->getLayout()->getBlock('gomage.feed.attribute.edit')
-            ->setData('action', $this->getUrl('gomage_feed/attribute/save'));
+        $resultPage->getConfig()->getTitle()->prepend($id ? __("Edit Dynamic Attribute '%1'", $model->getName()) : __('New Dynamic Attribute'));
         $resultPage->addBreadcrumb(
             $id ? __('Edit Dynamic Attribute') : __('New Dynamic Attribute'),
             $id ? __('Edit Dynamic Attribute') : __('New Dynamic Attribute')

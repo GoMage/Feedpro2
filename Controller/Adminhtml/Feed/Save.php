@@ -20,33 +20,35 @@ class Save extends FeedController
         $data = $this->getRequest()->getPostValue();
         if ($this->getRequest()->isPost() && $data) {
             try {
+                /** @var \GoMage\Feed\Model\Feed $model */
                 $model = $this->_objectManager->create('GoMage\Feed\Model\Feed');
-                $id    = $this->getRequest()->getPost('id');
-                if ($id) {
+
+                if ($id = $this->getRequest()->getPost('id')) {
                     $model->load($id);
+                } elseif ($this->getRequest()->getPost('switch_type')) {
+                    return $this->_proceedToEdit($data);
                 }
 
-                if (isset($data['content']) && $data['content']) {
+                if (isset($data['content']) && is_array($data['content'])) {
                     $data['content'] = $this->_prepareData($data['content']);
                     $data['content'] = $this->_objectManager->get('Magento\Framework\Json\Helper\Data')
                         ->jsonEncode($data['content']);
                 }
 
-                if (isset($data['filter']) && $data['filter']) {
-                    $data['filter'] = $this->_prepareData($data['filter']);
-                    $data['filter'] = $this->_objectManager->get('Magento\Framework\Json\Helper\Data')
-                        ->jsonEncode($data['filter']);
+                if (isset($data['rule'])) {
+                    $data['conditions'] = $data['rule']['conditions'];
+                    unset($data['rule']);
                 }
 
-                $model->addData($data);
+                $model->loadPost($data);
                 $model->save();
                 $this->messageManager->addSuccess(__('You saved the feed.'));
             } catch (LocalizedException $e) {
                 $this->messageManager->addError($e->getMessage());
-                return $this->proceedToEdit($data);
+                return $this->_proceedToEdit($data);
             } catch (\Exception $e) {
                 $this->messageManager->addException($e, __('Something went wrong while saving the feed.'));
-                return $this->proceedToEdit($data);
+                return $this->_proceedToEdit($data);
             }
         }
 
@@ -75,7 +77,7 @@ class Save extends FeedController
      * @param array $data
      * @return \Magento\Backend\Model\View\Result\Redirect
      */
-    private function proceedToEdit($data)
+    protected function _proceedToEdit($data)
     {
         $this->_getSession()->setPageData($data);
         /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */

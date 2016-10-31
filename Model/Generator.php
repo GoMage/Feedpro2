@@ -74,7 +74,7 @@ class Generator implements GeneratorInterface
         $this->_feed = $feed;
 
         $rows   = $this->_getRows();
-        $reader = $this->_getReader($this->_getAttributes($rows), $this->_getFilters(), $this->_feed->getStoreId());
+        $reader = $this->_getReader($this->_getAttributes($rows), $feed->getConditions(), $this->_feed->getStoreId());
         $writer = $this->_getWriter($this->_feed->getFullFileName());
 
         $page  = 1;
@@ -97,16 +97,16 @@ class Generator implements GeneratorInterface
 
     /**
      * @param  int $storeId
-     * @param  array $filters
+     * @param  $conditions
      * @param  array $attributes
      * @return \GoMage\Feed\Model\Reader\ReaderInterface
      */
-    protected function _getReader($attributes = [], $filters = [], $storeId = 0)
+    protected function _getReader($attributes = [], $conditions, $storeId = 0)
     {
         return $this->_readerFactory->create('GoMage\Feed\Model\Reader\Collection',
             [
                 'attributes' => $attributes,
-                'filters'    => $filters,
+                'conditions' => $conditions,
                 'storeId'    => $storeId,
             ]
         );

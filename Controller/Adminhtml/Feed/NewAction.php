@@ -14,6 +14,6 @@ class NewAction extends FeedController
     {
         /** @var \Magento\Backend\Model\View\Result\Forward $resultForward */
         $resultForward = $this->resultFactory->create(ResultFactory::TYPE_FORWARD);
-        return $resultForward->forward('edit');
+        return $resultForward->forward('type');
     }
 }

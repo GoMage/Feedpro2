@@ -28,9 +28,14 @@ class Collection implements ReaderInterface
     protected $_attributes;
 
     /**
-     * @var array
+     * @var \Magento\Rule\Model\Condition\Combine
      */
-    protected $_filters;
+    protected $_conditions;
+
+    /**
+     * @var \Magento\Rule\Model\Condition\Sql\Builder
+     */
+    protected $_builder;
 
     /**
      * @var int
@@ -42,13 +47,15 @@ class Collection implements ReaderInterface
         \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory,
         \Magento\Catalog\Model\Product\Visibility $catalogProductVisibility,
         $attributes = [],
-        $filters = [],
+        \Magento\Rule\Model\Condition\Combine $conditions,
+        \Magento\Rule\Model\Condition\Sql\Builder $builder,
         $storeId = 0
     ) {
         $this->_productCollectionFactory = $productCollectionFactory;
         $this->_catalogProductVisibility = $catalogProductVisibility;
         $this->_attributes               = $attributes;
-        $this->_filters                  = $filters;
+        $this->_conditions               = $conditions;
+        $this->_builder                  = $builder;
         $this->_storeId                  = $storeId;
     }
 
@@ -83,22 +90,16 @@ class Collection implements ReaderInterface
                 $this->_collection->setStoreId($this->_storeId);
             }
 
-            // TODO: hard code
+            //TODO: add Visibility param
             $this->_collection->setVisibility($this->_catalogProductVisibility->getVisibleInSiteIds());
-            $ids = [];
-            foreach ($this->_filters as $filter) {
-                $ids[] = intval($filter['value']);
-            }
-            if (count($ids)) {
-                $this->_collection->addAttributeToFilter('brand', ['in' => $ids]);
-            }
-            //TODO: end hard code
+
+            $this->_conditions->collectValidatedAttributes($this->_collection);
+            $this->_builder->attachConditionToCollection($this->_collection, $this->_conditions);
 
             $this->_collection->addFieldToSelect($this->_attributes)
                 ->addAttributeToSort(self::SORT_ATTRIBUTE);
         }
         return $this->_collection->clear();
     }
-
 
 }

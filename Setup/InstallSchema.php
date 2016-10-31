@@ -127,18 +127,11 @@ class InstallSchema implements InstallSchemaInterface
                 'Feed content'
             )
             ->addColumn(
-                'filter_type',
-                \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
-                null,
-                ['unsigned' => true, 'default' => '0', 'nullable' => false],
-                'Filter Type'
-            )
-            ->addColumn(
-                'filter',
+                'conditions_serialized',
                 \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
                 null,
                 [],
-                'Feed filter'
+                'Feed Conditions'
             )
             ->addColumn(
                 'generated_at',
