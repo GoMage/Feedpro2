@@ -4,11 +4,13 @@
 define([
     'jquery',
     'mage/template',
+    'mage/collapsible',
     'GoMage_Feed/js/attribute/conditions',
     'GoMage_Feed/js/attribute/value',
+    'collapsible',
     'jquery/ui',
     'prototype'
-], function (jQuery, mageTemplate, Conditions, Value) {
+], function (jQuery, mageTemplate, collapsible, Conditions, Value) {
     'use strict';
 
     return function (config) {
@@ -17,6 +19,8 @@ define([
             template: mageTemplate('#row-template'),
             count: 0,
             index: 0,
+            conditions: [],
+            values: [],
             init: function () {
                 config.rowsData.forEach(function (data) {
                     this.add(data);
@@ -34,7 +38,7 @@ define([
                 });
                 Element.insert(this.container, element);
 
-                Conditions({
+                this.conditions[this.index] = Conditions({
                     url: config.url,
                     row_id: this.index,
                     conditionsData: (typeof data.conditions == 'undefined') ? [] : data.conditions
@@ -47,7 +51,9 @@ define([
                 if (typeof data.value != 'undefined') {
                     _data.value = data.value;
                 }
-                Value(_data);
+                this.values[this.index] = Value(_data);
+
+                jQuery(this.container).find('.actions-select').collapsible({ "active": false, "animate": 200, "collapsible": true});
 
                 this.count++;
                 this.index++;
@@ -66,16 +72,42 @@ define([
                 var element = $(Event.findElement(event, 'select'));
                 if (element) {
                     var row_id = element.readAttribute('data-row-id');
-                    Value({
+                    this.values[row_id] = Value({
                         row_id: row_id,
                         type: element.getValue()
                     });
+                }
+            },
+            addCondition: function (event) {
+                var element = $(Event.findElement(event, 'button'));
+                if (element) {
+                    var row_id = element.readAttribute('data-row-id');
+                    this.conditions[row_id].add({
+                            row_id: row_id
+                        }
+                    );
+                }
+            },
+            addValue: function (event) {
+                var element = $(Event.findElement(event, 'button'));
+                if (element) {
+                    var row_id = element.readAttribute('data-row-id');
+                    if ((typeof this.values[row_id] != 'undefined')) {
+                        if (typeof this.values[row_id].object != 'undefined') {
+                            this.values[row_id].object.add({
+                                    row_id: row_id
+                                }
+                            );
+                        }
+                    }
                 }
             },
             bindActions: function () {
                 Event.observe('add_new_row_button', 'click', this.add.bind(Rows, {}));
                 this.container.on('click', '.delete-row', this.remove.bind(this));
                 this.container.on('change', '.type-select', this.changeType.bind(this));
+                this.container.on('click', '.add-condition', this.addCondition.bind(this));
+                this.container.on('click', '.add-value', this.addValue.bind(this));
             }
         };
         Rows.init();

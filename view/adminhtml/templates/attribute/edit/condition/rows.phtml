@@ -19,8 +19,8 @@ $_operators  = $block->getOperators();
             <thead>
             <tr>
                 <th class="col-condition"><?php echo __('Condition') ?></th>
-                <th class="col-value"><?php echo __('Value') ?></th>
                 <th class="col-type"><?php echo __('Type') ?></th>
+                <th class="col-value"><?php echo __('Value') ?></th>
                 <th class="col-action"><?php echo __('Action') ?></th>
             </tr>
             </thead>
@@ -40,11 +40,6 @@ $_operators  = $block->getOperators();
                 <tbody id="conditions-container-<%- data.row_id %>"></tbody>
             </table>
         </td>
-        <td class="col-value">
-            <table>
-                <tbody id="values-container-<%- data.row_id %>"></tbody>
-            </table>
-        </td>
         <td class="col-type">
             <select class="select type-select admin__control-select" data-row-id="<%- data.row_id %>"
                     name="<?php echo $_htmlName ?>[<%- data.row_id %>][type]">
@@ -53,25 +48,33 @@ $_operators  = $block->getOperators();
                 <?php endforeach ?>
             </select>
         </td>
+        <td class="col-value">
+            <table>
+                <tbody id="values-container-<%- data.row_id %>"></tbody>
+            </table>
+        </td>
         <td class="col-action">
-            <button title="<?php echo __("Delete") ?>" type="button" class="action- scalable delete delete-row">
-                <span><?php echo __("Delete") ?></span>
-            </button>
+            <span class="actions-select">
+                <a data-role="title"><?php echo __("Select") ?></a>
+                <div data-role="content">
+                    <button title="<?php echo __("Delete") ?>" type="button" class="action- scalable delete delete-row">
+                        <span><?php echo __("Delete") ?></span>
+                    </button>
+                    <button title="<?php echo __("Add Condition") ?>" type="button" class="action- scalable add add-condition"
+                            data-row-id="<%- data.row_id %>">
+                        <span><?php echo __("Add Condition") ?></span>
+                    </button>
+                    <button title="<?php echo __("Add Value") ?>" type="button" class="action- scalable add add-value"
+                            data-row-id="<%- data.row_id %>">
+                        <span><?php echo __("Add Value") ?></span>
+                    </button>
+                </div>
+            </span>
         </td>
     </tr>
 </script>
 
 <script id="condition-template" type="text/x-magento-template">
-    <% if (data.condition_id == 0) { %>
-    <tr>
-        <td class="col-action">
-            <button title="<?php echo __("Add Condition") ?>" type="button" class="action- scalable add add-condition"
-                    data-row-id="<%- data.row_id %>">
-                <span><?php echo __("Add Condition") ?></span>
-            </button>
-        </td>
-    </tr>
-    <% } %>
     <tr>
         <td class="col-attribute">
             <select class="select attribute-select admin__control-select"
@@ -152,16 +155,6 @@ $_operators  = $block->getOperators();
 </script>
 
 <script id="attribute-value-template" type="text/x-magento-template">
-    <% if (data.value_id == 0) { %>
-    <tr>
-        <td class="col-action">
-            <button title="<?php echo __("Add") ?>" type="button" class="action- scalable add add-value"
-                    data-row-id="<%- data.row_id %>">
-                <span><?php echo __("Add") ?></span>
-            </button>
-        </td>
-    </tr>
-    <% } %>
     <tr>
         <td class="col-value">
             <input name="<?php echo $_htmlName ?>[<%- data.row_id %>][value][<%- data.value_id %>][prefix]"

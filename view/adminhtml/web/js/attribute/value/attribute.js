@@ -26,6 +26,7 @@ define([
                     });
                 }
                 this.bindActions();
+                return this;
             },
             add: function (data) {
                 var element;
@@ -47,21 +48,11 @@ define([
                     this.count--;
                 }
             },
-            addValue: function (event) {
-                var element = $(Event.findElement(event, 'button'));
-                if (element) {
-                    var row_id = element.readAttribute('data-row-id');
-                    this.add({
-                        row_id: row_id
-                    });
-                }
-            },
             bindActions: function () {
                 container.on('click', '.delete-value', this.remove.bind(this));
-                container.on('click', '.add-value', this.addValue.bind(this));
             }
         };
 
-        Attribute.init();
+        return Attribute.init();
     };
 });

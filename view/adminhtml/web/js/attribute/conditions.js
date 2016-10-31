@@ -106,18 +106,7 @@ define([
                     select.attr('disabled', 'disabled').hide();
                 }
             },
-            addCondition: function (event) {
-                var element = $(Event.findElement(event, 'button'));
-                if (element) {
-                    var row_id = element.readAttribute('data-row-id');
-                    this.add({
-                            row_id: row_id
-                        }
-                    );
-                }
-            },
             bindActions: function () {
-                this.container.on('click', '.add-condition', this.addCondition.bind(this));
                 this.container.on('click', '.delete-condition', this.remove.bind(this));
                 this.container.on('change', '.attribute-select', this.changeAttribute.bind(this));
             }
