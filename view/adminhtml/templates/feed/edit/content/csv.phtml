@@ -1,0 +1,201 @@
+<?php
+
+// @codingStandardsIgnoreFile
+
+/* @var $block \GoMage\Feed\Block\Adminhtml\Feed\Edit\Tab\Content\Csv */
+?>
+<?php
+$element            = $block->getElement();
+$_htmlId            = $element->getHtmlId();
+$_htmlName          = $element->getName();
+$_types             = $block->getBaseTypes();
+$_extendedTypes     = $block->getExtendedTypes();
+$_outputs           = $block->getOutputs();
+$_attributes        = $block->getProductAttributes();
+$_dynamicAttributes = $block->getDynamicAttributes();
+?>
+
+<div id="rows-container"></div>
+<div class="fm-actions">
+    <?php echo $block->getAddButtonHtml() ?>
+</div>
+
+<script id="row-template" type="text/x-magento-template">
+    <div class="fm-block">
+        <div class="fm-block-title">
+            <div class="draggable-handle" title="Sort"></div>
+            <div class="fm-block-title-right">
+                <button type="button" class="action-default delete-row"><span><?php echo __('Delete') ?></span></button>
+                <button type="button" class="action-default edit-row"><span><?php echo __('Edit') ?></span></button>
+                <button type="button" class="action-default close-row primary"><span><?php echo __('Close') ?></span></button>
+            </div>
+            <div class="fm-block-title-left">
+                <div class="fm-block-title-text"><% if (typeof data.name != 'undefined' && data.name){ %><%- data.name
+                    %><% } else { %><?php echo __('New Field') ?><% } %>
+                </div>
+                <div class="fm-block-title-sub">
+                    <div class="fm-block-title-sub-item"><strong>Type:</strong> Static Value</div>
+                    <div class="fm-block-title-sub-item"><strong>Value:</strong> Active From</div>
+                    <div class="fm-block-title-sub-sep"></div>
+                    <div class="fm-block-title-sub-item"><strong>Prefix Type:</strong> Attribute</div>
+                    <div class="fm-block-title-sub-item"><strong>Prefix Value</strong>: Active Form</div>
+                    <div class="fm-block-title-sub-sep"></div>
+                    <div class="fm-block-title-sub-item"><strong>Suffix Type:</strong> Suffix Type long text here</div>
+                </div>
+            </div>
+        </div>
+        <div class="fm-block-content">
+            <fieldset class="admin__fieldset fm-block-content-line">
+                <div class="admin__field required _required">
+                    <label class="admin__field-label"><span><?php echo __('Field Name') ?></span></label>
+
+                    <div class="admin__field-control">
+                        <input class="admin__control-text required-entry" type="text"
+                               name="<?php echo $_htmlName ?>[<%- data.row_id %>][name]" value="<%- data.name %>"/>
+                    </div>
+                </div>
+                <div class="admin__field required _required">
+                    <label class="admin__field-label"><span><?php echo __('Type') ?></span></label>
+
+                    <div class="admin__field-control">
+                        <select class="admin__control-select type-select required-entry"
+                                name="<?php echo $_htmlName ?>[<%- data.row_id %>][type]"
+                                data-value="<?php echo $_htmlName ?>[<%- data.row_id %>][value]">
+                            <?php foreach ($_extendedTypes as $_type): ?>
+                                <option value="<?php echo $_type['value'] ?>" <% if (typeof data.type != 'undefined' && data.type == <?php echo $_type['value'] ?>) { %> selected="selected" <% } %>><?php echo $_type['label'] ?></option>
+                            <?php endforeach ?>
+                        </select>
+                    </div>
+                </div>
+                <div class="admin__field required _required">
+                    <label class="admin__field-label"><span><?php echo __('Value') ?></span></label>
+
+                    <div class="admin__field-control">
+                        <select class="admin__control-select"
+                                name="<?php echo $_htmlName ?>[<%- data.row_id %>][value]"
+                        </select>
+                        <input type="text" class="admin__control-text"
+                               name="<?php echo $_htmlName ?>[<%- data.row_id %>][value]" value="<%- data.value %>"/>
+                    </div>
+                </div>
+            </fieldset>
+            <fieldset class="admin__fieldset fm-block-content-line">
+                <div class="admin__field">
+                    <label class="admin__field-label"><span><?php echo __('Output Types') ?></span></label>
+
+                    <div class="admin__field-control">
+                        <select class="admin__control-multiselect"
+                                name="<?php echo $_htmlName ?>[<%- data.row_id %>][output]" multiple="multiple">
+                            <?php foreach ($_outputs as $_output): ?>
+                                <option value="<?php echo $_output['value'] ?>" <% if (typeof data.output != 'undefined' && data.output == <?php echo $_output['value'] ?>) { %> selected="selected" <% } %>><?php echo $_output['label'] ?></option>
+                            <?php endforeach ?>
+                        </select>
+                    </div>
+                </div>
+                <div class="admin__field">
+                    <label class="admin__field-label"><span><?php echo __('Symbols Limit') ?></span></label>
+
+                    <div class="admin__field-control">
+                        <input class="admin__control-text validate-number" type="text"
+                               name="<?php echo $_htmlName ?>[<%- data.row_id %>][limit]" value="<%- data.limit %>"/>
+                    </div>
+                </div>
+            </fieldset>
+
+            <fieldset class="admin__fieldset fm-block-content-line">
+                <div class="admin__field">
+                    <label class="admin__field-label"><span>Prefix</span></label>
+
+                    <div class="admin__field-control">
+                        <div class="admin__actions-switch" data-role="switcher">
+                            <input class="admin__actions-switch-checkbox" type="checkbox" checked="checked"/>
+                            <label class="admin__actions-switch-label">
+                                <span class="admin__actions-switch-text">On</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="admin__field">
+                    <label class="admin__field-label"><span><?php echo __('Prefix Type') ?></span></label>
+
+                    <div class="admin__field-control">
+                        <select class="admin__control-select type-select"
+                                name="<?php echo $_htmlName ?>[<%- data.row_id %>][prefix_type]"
+                                data-value="<?php echo $_htmlName ?>[<%- data.row_id %>][prefix_value]">
+                            <?php foreach ($_types as $_type): ?>
+                                <option value="<?php echo $_type['value'] ?>" <% if (typeof data.prefix_type != 'undefined' && data.prefix_type == <?php echo $_type['value'] ?>) { %> selected="selected" <% } %>><?php echo $_type['label'] ?></option>
+                            <?php endforeach ?>
+                        </select>
+                    </div>
+                </div>
+                <div class="admin__field">
+                    <label class="admin__field-label"><span><?php echo __('Prefix Value') ?></span></label>
+
+                    <div class="admin__field-control">
+                        <select class="admin__control-select"
+                                name="<?php echo $_htmlName ?>[<%- data.row_id %>][prefix_value]"
+                        </select>
+                        <input type="text" class="admin__control-text"
+                               name="<?php echo $_htmlName ?>[<%- data.row_id %>][prefix_value]"
+                               value="<%- data.prefix_value %>"/>
+                    </div>
+                </div>
+            </fieldset>
+
+            <fieldset class="admin__fieldset fm-block-content-line">
+                <div class="admin__field">
+                    <label class="admin__field-label"><span>Suffix</span></label>
+
+                    <div class="admin__field-control">
+                        <div class="admin__actions-switch" data-role="switcher">
+                            <input class="admin__actions-switch-checkbox" type="checkbox"/>
+                            <label class="admin__actions-switch-label">
+                                <span class="admin__actions-switch-text">Off</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="admin__field">
+                    <label class="admin__field-label"><span><?php echo __('Suffix Type') ?></span></label>
+
+                    <div class="admin__field-control">
+                        <select class="admin__control-select type-select"
+                                name="<?php echo $_htmlName ?>[<%- data.row_id %>][suffix_type]"
+                                data-value="<?php echo $_htmlName ?>[<%- data.row_id %>][suffix_value]">
+                            <?php foreach ($_types as $_type): ?>
+                                <option value="<?php echo $_type['value'] ?>" <% if (typeof data.suffix_type != 'undefined' && data.suffix_type == <?php echo $_type['value'] ?>) { %> selected="selected" <% } %>><?php echo $_type['label'] ?></option>
+                            <?php endforeach ?>
+                        </select>
+                    </div>
+                </div>
+                <div class="admin__field">
+                    <label class="admin__field-label"><span><?php echo __('Suffix Value') ?></span></label>
+
+                    <div class="admin__field-control">
+                        <select class="admin__control-select"
+                                name="<?php echo $_htmlName ?>[<%- data.row_id %>][suffix_value]"
+                        </select>
+                        <input type="text" class="admin__control-text"
+                               name="<?php echo $_htmlName ?>[<%- data.row_id %>][suffix_value]"
+                               value="<%- data.suffix_value %>"/>
+                    </div>
+                </div>
+            </fieldset>
+        </div>
+    </div>
+</script>
+
+<script type="text/x-magento-init">
+    {
+        "*": {
+            "GoMage_Feed/js/feed/rows": {
+                "rowsData": <?php /* @noEscape */ echo $block->getValue(); ?>,
+                "attributes": <?php /* @noEscape */ echo json_encode($_attributes); ?>,
+                "dynamicAttributes": <?php /* @noEscape */ echo json_encode($_dynamicAttributes); ?>
+            }
+        }
+    }
+
+
+</script>

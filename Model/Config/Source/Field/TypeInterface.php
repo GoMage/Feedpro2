@@ -1,8 +1,8 @@
 <?php
 
-namespace GoMage\Feed\Model\Config\Source\Mapping;
+namespace GoMage\Feed\Model\Config\Source\Field;
 
-use  \Magento\Framework\Option\ArrayInterface;
+use Magento\Framework\Option\ArrayInterface;
 
 interface TypeInterface extends ArrayInterface
 {
@@ -14,4 +14,5 @@ interface TypeInterface extends ArrayInterface
     const ATTRIBUTE_SET = 5;
     const PERCENT = 6;
     const CONFIGURABLE_VALUES = 7;
+    const DYNAMIC_ATTRIBUTE = 8;
 }

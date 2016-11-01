@@ -1,6 +1,6 @@
 <?php
 
-namespace GoMage\Feed\Model\Config\Source\Mapping;
+namespace GoMage\Feed\Model\Config\Source;
 
 use GoMage\Feed\Model\Output\OutputInterface;
 

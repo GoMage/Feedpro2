@@ -17,7 +17,7 @@ class AttributeSet implements MapperInterface
 
         foreach ($value as $data) {
             $field = $objectManager->create('GoMage\Feed\Model\Attribute\Field', [
-                    'type'   => \GoMage\Feed\Model\Config\Source\Mapping\TypeInterface::ATTRIBUTE,
+                    'type'   => \GoMage\Feed\Model\Config\Source\Field\TypeInterface::ATTRIBUTE,
                     'value'  => $data['code'],
                     'prefix' => $data['prefix']
                 ]

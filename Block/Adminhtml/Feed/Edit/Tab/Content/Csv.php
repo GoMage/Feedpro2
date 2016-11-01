@@ -5,12 +5,12 @@ namespace GoMage\Feed\Block\Adminhtml\Feed\Edit\Tab\Content;
 use Magento\Backend\Block\Widget;
 use Magento\Framework\Data\Form\Element\Renderer\RendererInterface;
 
-class Mapping extends Widget implements RendererInterface
+class Csv extends Widget implements RendererInterface
 {
     /**
      * @var string
      */
-    protected $_template = 'feed/edit/content/mapping.phtml';
+    protected $_template = 'feed/edit/content/csv.phtml';
 
     /**
      * Form element instance
@@ -37,17 +37,17 @@ class Mapping extends Widget implements RendererInterface
     protected $_jsonHelper;
 
     /**
-     * @var \GoMage\Feed\Model\Config\Source\Mapping\Type
+     * @var \GoMage\Feed\Model\Config\Source\Field\BaseType
      */
-    protected $_type;
+    protected $_baseType;
 
     /**
-     * @var \GoMage\Feed\Model\Config\Source\Mapping\ExtendedType
+     * @var \GoMage\Feed\Model\Config\Source\Field\ExtendedType
      */
     protected $_extendedType;
 
     /**
-     * @var \GoMage\Feed\Model\Config\Source\Mapping\Output
+     * @var \GoMage\Feed\Model\Config\Source\Output
      */
     protected $_output;
 
@@ -57,16 +57,16 @@ class Mapping extends Widget implements RendererInterface
         \Magento\Framework\Registry $registry,
         \GoMage\Feed\Helper\Data $helper,
         \Magento\Framework\Json\Helper\Data $jsonHelper,
-        \GoMage\Feed\Model\Config\Source\Mapping\Type $type,
-        \GoMage\Feed\Model\Config\Source\Mapping\ExtendedType $extendedType,
-        \GoMage\Feed\Model\Config\Source\Mapping\Output $output,
+        \GoMage\Feed\Model\Config\Source\Field\BaseType $type,
+        \GoMage\Feed\Model\Config\Source\Field\ExtendedType $extendedType,
+        \GoMage\Feed\Model\Config\Source\Output $output,
         array $data = []
     ) {
 
         $this->_coreRegistry = $registry;
         $this->_helper       = $helper;
         $this->_jsonHelper   = $jsonHelper;
-        $this->_type         = $type;
+        $this->_baseType     = $type;
         $this->_extendedType = $extendedType;
         $this->_output       = $output;
 
@@ -118,11 +118,9 @@ class Mapping extends Widget implements RendererInterface
     }
 
     /**
-     * Prepare feed content values
-     *
-     * @return array
+     * @return string
      */
-    public function getValues()
+    public function getValue()
     {
         $values = [];
         $data   = $this->getElement()->getValue();
@@ -130,13 +128,10 @@ class Mapping extends Widget implements RendererInterface
         if ($data) {
             $items = $this->_jsonHelper->jsonDecode($data);
             if (is_array($items)) {
-                $items = $this->_sortValues($items);
-                foreach ($items as $item) {
-                    $values[] = new \Magento\Framework\DataObject($item);
-                }
+                $values = $this->_sortValues($items);
             }
         }
-        return $values;
+        return $this->_jsonHelper->jsonEncode($values);
     }
 
     /**
@@ -172,9 +167,9 @@ class Mapping extends Widget implements RendererInterface
         $button = $this->getLayout()->createBlock(
             'Magento\Backend\Block\Widget\Button'
         )->setData(
-            ['label' => __('Add New Row'), 'onclick' => 'return mappingControl.addItem()', 'class' => 'add']
+            ['label' => __('Add New Row'), 'id' => 'add_new_row_button', 'class' => 'add']
         );
-        $button->setName('add_feed_mapping_item_button');
+        $button->setName('add_new_row_button');
 
         $this->setChild('add_button', $button);
         return parent::_prepareLayout();
@@ -183,15 +178,15 @@ class Mapping extends Widget implements RendererInterface
     /**
      * @return array
      */
-    public function getType()
+    public function getBaseTypes()
     {
-        return $this->_type->toOptionArray();
+        return $this->_baseType->toOptionArray();
     }
 
     /**
      * @return array
      */
-    public function getExtendedType()
+    public function getExtendedTypes()
     {
         return $this->_extendedType->toOptionArray();
     }
@@ -199,7 +194,7 @@ class Mapping extends Widget implements RendererInterface
     /**
      * @return array
      */
-    public function getOutput()
+    public function getOutputs()
     {
         return $this->_output->toOptionArray();
     }
@@ -209,7 +204,15 @@ class Mapping extends Widget implements RendererInterface
      */
     public function getProductAttributes()
     {
-        return $this->_helper->getProductAttributes(true);
+        return $this->_helper->getProductAttributes();
+    }
+
+    /**
+     * @return array
+     */
+    public function getDynamicAttributes()
+    {
+        return $this->_helper->getDynamicAttributes();
     }
 
 }

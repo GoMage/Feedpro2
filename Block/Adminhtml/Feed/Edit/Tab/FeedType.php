@@ -4,11 +4,11 @@ namespace GoMage\Feed\Block\Adminhtml\Feed\Edit\Tab;
 
 use GoMage\Feed\Model\Feed;
 
-class Type extends \Magento\Backend\Block\Widget\Form\Generic implements \Magento\Backend\Block\Widget\Tab\TabInterface
+class FeedType extends \Magento\Backend\Block\Widget\Form\Generic implements \Magento\Backend\Block\Widget\Tab\TabInterface
 {
 
     /**
-     * @var \GoMage\Feed\Model\Config\Source\Type
+     * @var \GoMage\Feed\Model\Config\Source\FeedType
      */
     protected $_type;
 
@@ -16,10 +16,9 @@ class Type extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Framework\Registry $registry,
         \Magento\Framework\Data\FormFactory $formFactory,
-        \GoMage\Feed\Model\Config\Source\Type $type,
+        \GoMage\Feed\Model\Config\Source\FeedType $type,
         array $data = []
     ) {
-
         $this->_type = $type;
         parent::__construct($context, $registry, $formFactory, $data);
     }

@@ -9,6 +9,9 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     protected $_attributeCollectionFactory;
 
+    /**
+     * @var \GoMage\Feed\Model\ResourceModel\Attribute\Collection
+     */
     protected $_dynamicAttributeCollection;
 
     public function __construct(
@@ -21,9 +24,9 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         $this->_dynamicAttributeCollection = $dynamicAttributeCollection;
     }
 
-    public function getProductAttributes($addDynamicAttributes = false)
+    public function getProductAttributes()
     {
-        $attributes = $this->_attributeCollectionFactory->create()->getItems();
+        $attributes = $this->_attributeCollectionFactory->create()->addVisibleFilter()->getItems();
 
         $attributes = array_map(function ($attribute) {
             return [
@@ -47,10 +50,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
             'label' => __('Product Url')
         ];
 
-        if ($addDynamicAttributes) {
-            $attributes = array_merge($attributes, $this->_getDynamicAttributes());
-        }
-
         usort($attributes, function ($a, $b) {
             return strcmp($a['label'], $b['label']);
         }
@@ -62,16 +61,21 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * @return array
      */
-    protected function _getDynamicAttributes()
+    public function getDynamicAttributes()
     {
         $attributes = $this->_dynamicAttributeCollection->load()->getItems();
 
         $attributes = array_map(function (\GoMage\Feed\Model\Attribute $attribute) {
             return [
-                'value' => $attribute->getAttributeCode(),
-                'label' => '* ' . $attribute->getName()
+                'value' => $attribute->getCode(),
+                'label' => $attribute->getName()
             ];
         }, $attributes
+        );
+
+        usort($attributes, function ($a, $b) {
+            return strcmp($a['label'], $b['label']);
+        }
         );
 
         return $attributes;

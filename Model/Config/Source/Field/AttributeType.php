@@ -1,6 +1,6 @@
 <?php
 
-namespace GoMage\Feed\Model\Config\Source\Mapping;
+namespace GoMage\Feed\Model\Config\Source\Field;
 
 class AttributeType implements TypeInterface
 {

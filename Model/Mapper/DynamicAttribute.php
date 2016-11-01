@@ -23,7 +23,7 @@ class DynamicAttribute implements MapperInterface
         $attribute = $objectManager->get('GoMage\Feed\Model\Attribute')->load($value, 'code');
 
         $this->_default = $objectManager->create('GoMage\Feed\Model\Feed\Field', [
-                'type'  => \GoMage\Feed\Model\Config\Source\Mapping\TypeInterface::ATTRIBUTE,
+                'type'  => \GoMage\Feed\Model\Config\Source\Field\TypeInterface::ATTRIBUTE,
                 'value' => $attribute->getDefaultValue()
             ]
         );

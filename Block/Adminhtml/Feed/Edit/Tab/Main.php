@@ -144,8 +144,8 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
             'select',
             [
                 'name'   => 'file_ext',
-                'label'  => __('File Name Extension'),
-                'title'  => __('File Name Extension'),
+                'label'  => __('File Extension'),
+                'title'  => __('File Extension'),
                 'values' => $model->getType() == Feed::XML_TYPE ? $this->_xml->toOptionArray() : $this->_csv->toOptionArray(),
             ]
         );

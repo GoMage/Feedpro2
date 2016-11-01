@@ -28,7 +28,7 @@ class Condition
         $this->_operator = $operatorFactory->get($conditionData->getOperator());
         $this->_field    = $objectManager->create('GoMage\Feed\Model\Feed\Field',
             [
-                'type'  => \GoMage\Feed\Model\Config\Source\Mapping\TypeInterface::ATTRIBUTE,
+                'type'  => \GoMage\Feed\Model\Config\Source\Field\TypeInterface::ATTRIBUTE,
                 'value' => $conditionData->getCode()
             ]
         );

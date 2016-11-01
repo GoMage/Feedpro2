@@ -176,27 +176,6 @@ class InstallSchema implements InstallSchemaInterface
                 'Feed delimiter'
             )
             ->addColumn(
-                'delimiter_prefix',
-                \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-                32,
-                [],
-                'Feed delimiter prefix'
-            )
-            ->addColumn(
-                'delimiter_suffix',
-                \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-                32,
-                [],
-                'Feed delimiter suffix'
-            )
-            ->addColumn(
-                'is_remove_lb',
-                \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
-                null,
-                ['unsigned' => true, 'default' => '0', 'nullable' => false],
-                'Remove line break symbols'
-            )
-            ->addColumn(
                 'is_ftp',
                 \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
                 null,

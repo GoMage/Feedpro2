@@ -2,8 +2,8 @@
 
 namespace GoMage\Feed\Model\Writer;
 
-use GoMage\Feed\Model\Config\Source\Enclosure;
-use GoMage\Feed\Model\Config\Source\Delimiter;
+use GoMage\Feed\Model\Config\Source\Csv\Enclosure;
+use GoMage\Feed\Model\Config\Source\Csv\Delimiter;
 
 class Csv extends AbstractWriter
 {

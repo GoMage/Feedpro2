@@ -1,6 +1,6 @@
 <?php
 
-namespace GoMage\Feed\Model\Config\Source;
+namespace GoMage\Feed\Model\Config\Source\Csv;
 
 class Delimiter implements \Magento\Framework\Option\ArrayInterface
 {

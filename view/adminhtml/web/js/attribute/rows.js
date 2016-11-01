@@ -7,7 +7,6 @@ define([
     'mage/collapsible',
     'GoMage_Feed/js/attribute/conditions',
     'GoMage_Feed/js/attribute/value',
-    'collapsible',
     'jquery/ui',
     'prototype'
 ], function (jQuery, mageTemplate, collapsible, Conditions, Value) {

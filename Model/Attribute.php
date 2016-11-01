@@ -11,7 +11,7 @@ namespace GoMage\Feed\Model;
  * @method string getName()
  * @method string getCode()
  */
-class Attribute extends \Magento\Framework\Model\AbstractModel implements AttributeInterface
+class Attribute extends \Magento\Framework\Model\AbstractModel
 {
     /**
      * Init model
@@ -21,13 +21,5 @@ class Attribute extends \Magento\Framework\Model\AbstractModel implements Attrib
     protected function _construct()
     {
         $this->_init('GoMage\Feed\Model\ResourceModel\Attribute');
-    }
-
-    /**
-     * @return string
-     */
-    public function getAttributeCode()
-    {
-        return AttributeInterface::PREFIX . $this->getCode();
     }
 }

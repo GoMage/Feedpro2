@@ -1,8 +1,8 @@
 <?php
 
-namespace GoMage\Feed\Model\Config\Source\Mapping;
+namespace GoMage\Feed\Model\Config\Source\Field;
 
-class Type implements TypeInterface
+class BaseType implements TypeInterface
 {
 
     /**
@@ -14,7 +14,8 @@ class Type implements TypeInterface
             ['value' => self::ATTRIBUTE, 'label' => __('Attribute')],
             ['value' => self::PARENT_ATTRIBUTE, 'label' => __('Parent Attribute')],
             ['value' => self::STATIC_VALUE, 'label' => __('Static Value')],
+            ['value' => self::DYNAMIC_ATTRIBUTE, 'label' => __('Dynamic Attribute')],
         ];
     }
-    
+
 }

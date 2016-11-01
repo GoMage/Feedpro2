@@ -4,7 +4,7 @@ namespace GoMage\Feed\Model\Config\Source;
 
 use GoMage\Feed\Model\FeedInterface;
 
-class Type implements \Magento\Framework\Option\ArrayInterface
+class FeedType implements \Magento\Framework\Option\ArrayInterface
 {
 
     /**

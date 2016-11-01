@@ -4,8 +4,8 @@ namespace GoMage\Feed\Block\Adminhtml\Feed\Edit\Tab;
 
 use Magento\Config\Model\Config\Source\Yesno;
 use GoMage\Feed\Model\Feed;
-use GoMage\Feed\Model\Config\Source\Delimiter;
-use GoMage\Feed\Model\Config\Source\Enclosure;
+use GoMage\Feed\Model\Config\Source\Csv\Delimiter;
+use GoMage\Feed\Model\Config\Source\Csv\Enclosure;
 
 class Content extends \Magento\Backend\Block\Widget\Form\Generic implements \Magento\Backend\Block\Widget\Tab\TabInterface
 {
@@ -117,38 +117,6 @@ class Content extends \Magento\Backend\Block\Widget\Form\Generic implements \Mag
                 ]
             );
 
-            $fieldset->addField(
-                'delimiter_prefix',
-                'text',
-                [
-                    'name'  => 'delimiter_prefix',
-                    'label' => __('Prefix Delimiter'),
-                    'title' => __('Prefix Delimiter'),
-                ]
-            );
-
-            $fieldset->addField(
-                'delimiter_suffix',
-                'text',
-                [
-                    'name'  => 'delimiter_suffix',
-                    'label' => __('Suffix Delimiter'),
-                    'title' => __('Suffix Delimiter'),
-                ]
-            );
-
-            $fieldset->addField(
-                'is_remove_lb',
-                'select',
-                [
-                    'name'   => 'is_remove_lb',
-                    'label'  => __('Remove line break symbols'),
-                    'title'  => __('Remove line break symbols'),
-                    'note'   => __('This option allows to remove line break symbols from a data feed.'),
-                    'values' => $this->_yesNo->toOptionArray(),
-                ]
-            );
-
             $isAdditionHeader = $fieldset->addField(
                 'is_addition_header',
                 'select',
@@ -172,7 +140,6 @@ class Content extends \Magento\Backend\Block\Widget\Form\Generic implements \Mag
                 ]
             );
 
-
             $fieldset = $form->addFieldset(
                 'mapping_fieldset',
                 ['legend' => __('Fields Mapping')]
@@ -185,7 +152,7 @@ class Content extends \Magento\Backend\Block\Widget\Form\Generic implements \Mag
             );
 
             $renderer = $this->getLayout()->createBlock(
-                'GoMage\Feed\Block\Adminhtml\Feed\Edit\Tab\Content\Mapping'
+                'GoMage\Feed\Block\Adminhtml\Feed\Edit\Tab\Content\Csv'
             );
             $field->setRenderer($renderer);
 

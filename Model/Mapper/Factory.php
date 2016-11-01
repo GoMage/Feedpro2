@@ -2,8 +2,7 @@
 
 namespace GoMage\Feed\Model\Mapper;
 
-use GoMage\Feed\Model\Config\Source\Mapping\TypeInterface;
-use GoMage\Feed\Model\AttributeInterface;
+use GoMage\Feed\Model\Config\Source\Field\TypeInterface;
 
 class Factory
 {
@@ -43,12 +42,7 @@ class Factory
         if (!$className) {
             switch ($type) {
                 case TypeInterface::ATTRIBUTE:
-                    if (strpos($value, AttributeInterface::PREFIX) === 0) {
-                        $value     = str_replace(AttributeInterface::PREFIX, '', $value);
-                        $className = 'GoMage\Feed\Model\Mapper\DynamicAttribute';
-                    } else {
-                        $className = 'GoMage\Feed\Model\Mapper\Attribute';
-                    }
+                    $className = 'GoMage\Feed\Model\Mapper\Attribute';
                     break;
                 case TypeInterface::STATIC_VALUE:
                     $className = 'GoMage\Feed\Model\Mapper\StaticValue';
@@ -61,6 +55,9 @@ class Factory
                     break;
                 case TypeInterface::CONFIGURABLE_VALUES:
                     $className = 'GoMage\Feed\Model\Mapper\ConfigurableValue';
+                    break;
+                case TypeInterface::DYNAMIC_ATTRIBUTE:
+                    $className = 'GoMage\Feed\Model\Mapper\DynamicAttribute';
                     break;
             }
         }

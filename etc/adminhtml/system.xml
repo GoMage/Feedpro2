@@ -12,23 +12,19 @@
             <group id="server" translate="label" type="text" sortOrder="10" showInDefault="1"
                    showInWebsite="1" showInStore="1">
                 <label>Server Configurations</label>
-                <field id="generate" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Generate Function</label>
-                    <source_model>GoMage\Feed\Model\Config\Source\Generate</source_model>
-                </field>
-                <field id="memory_limit" translate="label comment" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="memory_limit" translate="label comment" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Memory Limit, Mb</label>
                     <frontend_class>validate-number</frontend_class>
                 </field>
-                <field id="upload_max_filesize" translate="label comment" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="upload_max_filesize" translate="label comment" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Max Upload File Size, Mb</label>
                     <frontend_class>validate-number</frontend_class>
                 </field>
-                <field id="post_max_size" translate="label comment" type="text" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="post_max_size" translate="label comment" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Max Post Size, Mb</label>
                     <frontend_class>validate-number</frontend_class>
                 </field>
-                <field id="time_limit" translate="label comment" type="text" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="time_limit" translate="label comment" type="text" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Execution time, seconds</label>
                     <comment>If set to zero, no time limit is imposed.</comment>
                     <frontend_class>validate-number</frontend_class>

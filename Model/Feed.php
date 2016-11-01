@@ -5,6 +5,7 @@ namespace GoMage\Feed\Model;
  * Class Feed
  *
  * @method string getContent()
+ * @method string getType()
  */
 class Feed extends \Magento\Rule\Model\AbstractModel implements FeedInterface
 {
@@ -12,6 +13,11 @@ class Feed extends \Magento\Rule\Model\AbstractModel implements FeedInterface
      * @var \Magento\CatalogRule\Model\Rule\Condition\CombineFactory
      */
     protected $_combineFactory;
+
+    /**
+     * @var \Magento\CatalogRule\Model\Rule\Action\CollectionFactory
+     */
+    protected $_actionCollectionFactory;
 
     public function __construct(
         \Magento\Framework\Model\Context $context,

@@ -37,7 +37,7 @@ class Rows extends Widget implements RendererInterface
     protected $_jsonHelper;
 
     /**
-     * @var \GoMage\Feed\Model\Config\Source\Mapping\AttributeType
+     * @var \GoMage\Feed\Model\Config\Source\Field\AttributeType
      */
     protected $_type;
 
@@ -51,7 +51,7 @@ class Rows extends Widget implements RendererInterface
         \Magento\Framework\Registry $registry,
         \GoMage\Feed\Helper\Data $helper,
         \Magento\Framework\Json\Helper\Data $jsonHelper,
-        \GoMage\Feed\Model\Config\Source\Mapping\AttributeType $type,
+        \GoMage\Feed\Model\Config\Source\Field\AttributeType $type,
         \GoMage\Feed\Model\Config\Source\Operator $operator,
         array $data = []
     ) {
@@ -112,7 +112,7 @@ class Rows extends Widget implements RendererInterface
      */
     public function getValue()
     {
-        $data   = $this->getElement()->getValue();
+        $data = $this->getElement()->getValue();
         if ($data) {
             $items = $this->_jsonHelper->jsonDecode($data);
             if (is_array($items)) {
@@ -146,7 +146,7 @@ class Rows extends Widget implements RendererInterface
         )->setData(
             ['label' => __('Add New Value'), 'id' => 'add_new_row_button', 'class' => 'add']
         );
-        $button->setName('add_attribute_row_button');
+        $button->setName('add_new_row_button');
 
         $this->setChild('add_button', $button);
         return parent::_prepareLayout();

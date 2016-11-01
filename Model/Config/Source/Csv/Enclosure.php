@@ -1,6 +1,6 @@
 <?php
 
-namespace GoMage\Feed\Model\Config\Source;
+namespace GoMage\Feed\Model\Config\Source\Csv;
 
 class Enclosure implements \Magento\Framework\Option\ArrayInterface
 {
