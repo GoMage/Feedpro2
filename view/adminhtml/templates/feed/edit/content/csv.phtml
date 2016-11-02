@@ -15,34 +15,40 @@ $_attributes        = $block->getProductAttributes();
 $_dynamicAttributes = $block->getDynamicAttributes();
 ?>
 
-<div id="rows-container"></div>
+<div id="rows-container" data-role="rows-container"></div>
 <div class="fm-actions">
     <?php echo $block->getAddButtonHtml() ?>
 </div>
 
+<script id="title-template" type="text/x-magento-template">
+    <div class="fm-block-title-text"><%- data.name %></div>
+    <div class="fm-block-title-sub">
+        <div class="fm-block-title-sub-item"><strong><?php echo __('Type') ?>:</strong> <%- data.type %></div>
+        <div class="fm-block-title-sub-item"><strong><?php echo __('Value') ?>:</strong> <%- data.value %></div>
+        <% if (data.prefix_value){ %>
+            <div class="fm-block-title-sub-sep"></div>
+            <div class="fm-block-title-sub-item"><strong><?php echo __('Prefix Type') ?>:</strong> <%- data.prefix_type %></div>
+            <div class="fm-block-title-sub-item"><strong><?php echo __('Prefix Value') ?>:</strong> <%- data.prefix_value %></div>
+        <% } %>
+        <% if (data.suffix_value){ %>
+            <div class="fm-block-title-sub-sep"></div>
+            <div class="fm-block-title-sub-item"><strong><?php echo __('Suffix Type') ?>:</strong> <%- data.suffix_type %></div>
+            <div class="fm-block-title-sub-item"><strong><?php echo __('Suffix Value') ?>:</strong> <%- data.suffix_value %></div>
+        <% } %>
+    </div>
+</script>
+
 <script id="row-template" type="text/x-magento-template">
-    <div class="fm-block">
+    <div class="fm-block" data-row-id="<%- data.row_id %>">
         <div class="fm-block-title">
-            <div class="draggable-handle" title="Sort"></div>
+            <div data-role="draggable-handle" class="draggable-handle" title="<?php echo __('Sort') ?>"></div>
+            <input data-role="order" type="hidden" name="<?php echo $_htmlName ?>[<%- data.row_id %>][order]"  value="<%- data.row_id %>" />
             <div class="fm-block-title-right">
                 <button type="button" class="action-default delete-row"><span><?php echo __('Delete') ?></span></button>
                 <button type="button" class="action-default edit-row"><span><?php echo __('Edit') ?></span></button>
                 <button type="button" class="action-default close-row primary"><span><?php echo __('Close') ?></span></button>
             </div>
-            <div class="fm-block-title-left">
-                <div class="fm-block-title-text"><% if (typeof data.name != 'undefined' && data.name){ %><%- data.name
-                    %><% } else { %><?php echo __('New Field') ?><% } %>
-                </div>
-                <div class="fm-block-title-sub">
-                    <div class="fm-block-title-sub-item"><strong>Type:</strong> Static Value</div>
-                    <div class="fm-block-title-sub-item"><strong>Value:</strong> Active From</div>
-                    <div class="fm-block-title-sub-sep"></div>
-                    <div class="fm-block-title-sub-item"><strong>Prefix Type:</strong> Attribute</div>
-                    <div class="fm-block-title-sub-item"><strong>Prefix Value</strong>: Active Form</div>
-                    <div class="fm-block-title-sub-sep"></div>
-                    <div class="fm-block-title-sub-item"><strong>Suffix Type:</strong> Suffix Type long text here</div>
-                </div>
-            </div>
+            <div class="fm-block-title-left" id="title-container-<%- data.row_id %>"></div>
         </div>
         <div class="fm-block-content">
             <fieldset class="admin__fieldset fm-block-content-line">
@@ -104,18 +110,6 @@ $_dynamicAttributes = $block->getDynamicAttributes();
 
             <fieldset class="admin__fieldset fm-block-content-line">
                 <div class="admin__field">
-                    <label class="admin__field-label"><span>Prefix</span></label>
-
-                    <div class="admin__field-control">
-                        <div class="admin__actions-switch" data-role="switcher">
-                            <input class="admin__actions-switch-checkbox" type="checkbox" checked="checked"/>
-                            <label class="admin__actions-switch-label">
-                                <span class="admin__actions-switch-text">On</span>
-                            </label>
-                        </div>
-                    </div>
-                </div>
-                <div class="admin__field">
                     <label class="admin__field-label"><span><?php echo __('Prefix Type') ?></span></label>
 
                     <div class="admin__field-control">
@@ -143,19 +137,6 @@ $_dynamicAttributes = $block->getDynamicAttributes();
             </fieldset>
 
             <fieldset class="admin__fieldset fm-block-content-line">
-                <div class="admin__field">
-                    <label class="admin__field-label"><span>Suffix</span></label>
-
-                    <div class="admin__field-control">
-                        <div class="admin__actions-switch" data-role="switcher">
-                            <input class="admin__actions-switch-checkbox" type="checkbox"/>
-                            <label class="admin__actions-switch-label">
-                                <span class="admin__actions-switch-text">Off</span>
-                            </label>
-                        </div>
-                    </div>
-                </div>
-
                 <div class="admin__field">
                     <label class="admin__field-label"><span><?php echo __('Suffix Type') ?></span></label>
 
@@ -192,10 +173,9 @@ $_dynamicAttributes = $block->getDynamicAttributes();
             "GoMage_Feed/js/feed/rows": {
                 "rowsData": <?php /* @noEscape */ echo $block->getValue(); ?>,
                 "attributes": <?php /* @noEscape */ echo json_encode($_attributes); ?>,
-                "dynamicAttributes": <?php /* @noEscape */ echo json_encode($_dynamicAttributes); ?>
+                "dynamicAttributes": <?php /* @noEscape */ echo json_encode($_dynamicAttributes); ?>,
+                "htmlName": "<?php echo $_htmlName ?>"
             }
         }
     }
-
-
 </script>
