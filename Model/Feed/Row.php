@@ -2,8 +2,6 @@
 
 namespace GoMage\Feed\Model\Feed;
 
-use GoMage\Feed\Model\Output\OutputInterface;
-
 class Row
 {
 
@@ -18,9 +16,9 @@ class Row
     protected $_limit;
 
     /**
-     * @var OutputInterface
+     * @var \GoMage\Feed\Model\Collection
      */
-    protected $_output;
+    protected $_outputs;
 
     /**
      * @var \GoMage\Feed\Model\Collection
@@ -36,9 +34,14 @@ class Row
         $this->_name  = $rowData->getName();
         $this->_limit = intval($rowData->getLimit());
 
-        $this->_output = $outputFactory->get(intval($rowData->getOutput()));
-        $this->_fields = $objectManager->create('GoMage\Feed\Model\Collection');
+        $this->_outputs = $objectManager->create('GoMage\Feed\Model\Collection');
+        foreach ($rowData->getOutput() as $value) {
+            /** @var \GoMage\Feed\Model\Output\OutputInterface $output */
+            $output = $outputFactory->get(intval($value));
+            $this->_outputs->add($output);
+        }
 
+        $this->_fields = $objectManager->create('GoMage\Feed\Model\Collection');
         foreach ($rowData->getFields() as $data) {
             /** @var \GoMage\Feed\Model\Feed\Field $field */
             $field = $objectManager->create('GoMage\Feed\Model\Feed\Field', $data);
@@ -74,7 +77,10 @@ class Row
      */
     protected function format($value)
     {
-        $value = $this->_output->format($value);
+        foreach ($this->_outputs as $output) {
+            /** @var \GoMage\Feed\Model\Output\OutputInterface $output */
+            $value = $output->format($value);
+        }
         if ($this->_limit) {
             return substr($value, 0, $this->_limit);
         }

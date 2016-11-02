@@ -13,7 +13,7 @@ class Output implements \Magento\Framework\Option\ArrayInterface
     public function toOptionArray()
     {
         return [
-            ['value' => OutputInterface::DEFAULTS, 'label' => __('Default')],
+            ['value' => OutputInterface::NONE, 'label' => __('None')],
             ['value' => OutputInterface::INTEGER, 'label' => __('Integer')],
             ['value' => OutputInterface::FLOATS, 'label' => __('Float')],
             ['value' => OutputInterface::STRIP_TAGS, 'label' => __('Strip Tags')],
@@ -21,6 +21,7 @@ class Output implements \Magento\Framework\Option\ArrayInterface
             ['value' => OutputInterface::SPECIAL_DECODE, 'label' => __('Decode special chars')],
             ['value' => OutputInterface::DELETE_SPACE, 'label' => __('Delete Space')],
             ['value' => OutputInterface::BIG_TO_SMALL, 'label' => __('Big to small')],
+            ['value' => OutputInterface::REMOVE_LINE_BREAK, 'label' => __('Remove line break symbols')],
         ];
     }
 

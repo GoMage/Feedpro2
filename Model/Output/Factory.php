@@ -13,14 +13,15 @@ class Factory
      * @var array
      */
     protected $_outputs = [
-        OutputInterface::DEFAULTS       => 'GoMage\Feed\Model\Output\Defaults',
-        OutputInterface::INTEGER        => 'GoMage\Feed\Model\Output\Integer',
-        OutputInterface::FLOATS         => 'GoMage\Feed\Model\Output\Floats',
-        OutputInterface::STRIP_TAGS     => 'GoMage\Feed\Model\Output\StripTags',
-        OutputInterface::SPECIAL_ENCODE => 'GoMage\Feed\Model\Output\SpecialEncode',
-        OutputInterface::SPECIAL_DECODE => 'GoMage\Feed\Model\Output\SpecialDecode',
-        OutputInterface::DELETE_SPACE   => 'GoMage\Feed\Model\Output\DeleteSpace',
-        OutputInterface::BIG_TO_SMALL   => 'GoMage\Feed\Model\Output\BigToSmall',
+        OutputInterface::NONE              => 'GoMage\Feed\Model\Output\None',
+        OutputInterface::INTEGER           => 'GoMage\Feed\Model\Output\Integer',
+        OutputInterface::FLOATS            => 'GoMage\Feed\Model\Output\Floats',
+        OutputInterface::STRIP_TAGS        => 'GoMage\Feed\Model\Output\StripTags',
+        OutputInterface::SPECIAL_ENCODE    => 'GoMage\Feed\Model\Output\SpecialEncode',
+        OutputInterface::SPECIAL_DECODE    => 'GoMage\Feed\Model\Output\SpecialDecode',
+        OutputInterface::DELETE_SPACE      => 'GoMage\Feed\Model\Output\DeleteSpace',
+        OutputInterface::BIG_TO_SMALL      => 'GoMage\Feed\Model\Output\BigToSmall',
+        OutputInterface::REMOVE_LINE_BREAK => 'GoMage\Feed\Model\Output\RemoveLineBreak',
     ];
 
     /**

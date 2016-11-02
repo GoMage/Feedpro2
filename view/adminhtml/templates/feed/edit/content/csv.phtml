@@ -91,9 +91,9 @@ $_dynamicAttributes = $block->getDynamicAttributes();
 
                     <div class="admin__field-control">
                         <select class="admin__control-multiselect"
-                                name="<?php echo $_htmlName ?>[<%- data.row_id %>][output]" multiple="multiple">
+                                name="<?php echo $_htmlName ?>[<%- data.row_id %>][output][]" multiple="multiple">
                             <?php foreach ($_outputs as $_output): ?>
-                                <option value="<?php echo $_output['value'] ?>" <% if (typeof data.output != 'undefined' && data.output == <?php echo $_output['value'] ?>) { %> selected="selected" <% } %>><?php echo $_output['label'] ?></option>
+                                <option value="<?php echo $_output['value'] ?>" <% if (data.output.indexOf('<?php echo $_output['value'] ?>') >= 0) { %> selected="selected" <% } %>><?php echo $_output['label'] ?></option>
                             <?php endforeach ?>
                         </select>
                     </div>

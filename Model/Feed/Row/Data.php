@@ -14,8 +14,8 @@ use Magento\Framework\Validator\Exception as ValidatorException;
  * @method string getValue()
  * @method string getSuffixType()
  * @method string getSuffixValue()
- * @method string getOutput()
  * @method string getLimit()
+ * @method array getOutput()
  */
 class Data extends \Magento\Framework\DataObject
 {
@@ -55,4 +55,5 @@ class Data extends \Magento\Framework\DataObject
 
         return $data;
     }
+
 }

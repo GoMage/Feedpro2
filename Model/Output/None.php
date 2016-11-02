@@ -2,7 +2,7 @@
 namespace GoMage\Feed\Model\Output;
 
 
-class Defaults implements OutputInterface
+class None implements OutputInterface
 {
     /**
      * @param  $value

@@ -28,6 +28,7 @@ define([
             add: function (data) {
                 var element;
                 data.row_id = this.index;
+                data.output = (typeof data.output == 'undefined') ? [] : data.output;
                 element = this.template({
                     data: data
                 });
@@ -106,25 +107,19 @@ define([
                     element,
                     container = $('title-container-' + row_id);
 
-                data.name = jQuery("input[name='" + config.htmlName + "[" + row_id + "][name]'").val();
+                data.name = this.getTitleValue(row_id, 'name');
                 if (!data.name) {
                     data.name = translate('New Row');
                 }
 
-                data.type = jQuery("select[name='" + config.htmlName + "[" + row_id + "][type]'").find('option:selected').text();
-                data.value = jQuery("select[name='" + config.htmlName + "[" + row_id + "][value]'").is(':disabled') ?
-                    jQuery("input[name='" + config.htmlName + "[" + row_id + "][value]'").val() :
-                    jQuery("select[name='" + config.htmlName + "[" + row_id + "][value]'").find('option:selected').text();
+                data.type = this.getTitleValue(row_id, 'type');
+                data.value = this.getTitleValue(row_id, 'value');
 
-                data.prefix_type = jQuery("select[name='" + config.htmlName + "[" + row_id + "][prefix_type]'").find('option:selected').text();
-                data.prefix_value = jQuery("select[name='" + config.htmlName + "[" + row_id + "][prefix_value]'").is(':disabled') ?
-                    jQuery("input[name='" + config.htmlName + "[" + row_id + "][prefix_value]'").val() :
-                    jQuery("select[name='" + config.htmlName + "[" + row_id + "][prefix_value]'").find('option:selected').text();
+                data.prefix_type = this.getTitleValue(row_id, 'prefix_type');
+                data.prefix_value = this.getTitleValue(row_id, 'prefix_value');
 
-                data.suffix_type = jQuery("select[name='" + config.htmlName + "[" + row_id + "][suffix_type]'").find('option:selected').text();
-                data.suffix_value = jQuery("select[name='" + config.htmlName + "[" + row_id + "][suffix_value]'").is(':disabled') ?
-                    jQuery("input[name='" + config.htmlName + "[" + row_id + "][suffix_value]'").val() :
-                    jQuery("select[name='" + config.htmlName + "[" + row_id + "][suffix_value]'").find('option:selected').text();
+                data.suffix_type = this.getTitleValue(row_id, 'suffix_type');
+                data.suffix_value = this.getTitleValue(row_id, 'suffix_value');
 
                 element = this.titleTemplate({
                     data: data
@@ -133,11 +128,21 @@ define([
                 container.innerHTML = '';
                 Element.insert(container, element);
             },
+            getTitleValue: function (row_id, name) {
+                var input = jQuery("input[name='" + config.htmlName + "[" + row_id + "][" + name + "]'"),
+                    select = jQuery("select[name='" + config.htmlName + "[" + row_id + "][" + name + "]'");
+                if (!select.length || select.is(':disabled')) {
+                    return input.val();
+                }
+                if (select.val()) {
+                    return select.find('option:selected').text();
+                }
+                return '';
+            },
             bindActions: function () {
                 Event.observe('add_new_row_button', 'click', this.add.bind(Rows, {}));
                 this.container.on('click', '.delete-row', this.remove.bind(this));
                 this.container.on('click', '.edit-row, .close-row', this.toggleEdit.bind(this));
-
                 this.container.on('change', '.type-select', this.changeType.bind(this));
             }
         };
