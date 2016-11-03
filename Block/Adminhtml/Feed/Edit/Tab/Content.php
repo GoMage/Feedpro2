@@ -71,7 +71,7 @@ class Content extends \Magento\Backend\Block\Widget\Form\Generic implements \Mag
             ['legend' => __('Content Settings')]
         );
 
-        if ($model->getType() == Feed::XML_TYPE) {
+        if ($model->getType() == \GoMage\Feed\Model\Config\Source\FeedType::XML_TYPE) {
             $fieldset->addField(
                 'content',
                 'textarea',
@@ -85,13 +85,13 @@ class Content extends \Magento\Backend\Block\Widget\Form\Generic implements \Mag
         } else {
 
             $fieldset->addField(
-                'is_header',
+                'delimiter',
                 'select',
                 [
-                    'name'   => 'is_header',
-                    'label'  => __('Show Header'),
-                    'title'  => __('Show Header'),
-                    'values' => $this->_yesNo->toOptionArray(),
+                    'name'   => 'delimiter',
+                    'label'  => __('Delimiter'),
+                    'title'  => __('Delimiter'),
+                    'values' => $this->_delimiter->toOptionArray(),
                 ]
             );
 
@@ -107,13 +107,13 @@ class Content extends \Magento\Backend\Block\Widget\Form\Generic implements \Mag
             );
 
             $fieldset->addField(
-                'delimiter',
+                'is_header',
                 'select',
                 [
-                    'name'   => 'delimiter',
-                    'label'  => __('Delimiter'),
-                    'title'  => __('Delimiter'),
-                    'values' => $this->_delimiter->toOptionArray(),
+                    'name'   => 'is_header',
+                    'label'  => __('Show Header'),
+                    'title'  => __('Show Header'),
+                    'values' => $this->_yesNo->toOptionArray(),
                 ]
             );
 
@@ -176,8 +176,6 @@ class Content extends \Magento\Backend\Block\Widget\Form\Generic implements \Mag
         $form->setValues($model->getData());
         $this->setForm($form);
 
-        $this->_eventManager->dispatch('gomage_feed_tab_content_prepare_form', ['form' => $form]);
-
         return parent::_prepareForm();
     }
 
@@ -217,14 +215,4 @@ class Content extends \Magento\Backend\Block\Widget\Form\Generic implements \Mag
         return false;
     }
 
-    /**
-     * Check permission for passed action
-     *
-     * @param string $resourceId
-     * @return bool
-     */
-    protected function _isAllowedAction($resourceId)
-    {
-        return $this->_authorization->isAllowed($resourceId);
-    }
 }

@@ -13,12 +13,11 @@ class Save extends AttributeController
      * Save attribute
      *
      * @return \Magento\Backend\Model\View\Result\Redirect
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function execute()
     {
         $data = $this->getRequest()->getPostValue();
-        if ($this->getRequest()->isPost() && $data) {
+        if ($data) {
             try {
                 /** @var \GoMage\Feed\Model\Attribute $model */
                 $model = $this->_objectManager->create('GoMage\Feed\Model\Attribute');
@@ -36,10 +35,13 @@ class Save extends AttributeController
                 $this->messageManager->addSuccess(__('You saved the attribute.'));
             } catch (LocalizedException $e) {
                 $this->messageManager->addError($e->getMessage());
-                return $this->proceedToEdit($data);
+                return $this->_proceedToEdit($data);
             } catch (\Exception $e) {
                 $this->messageManager->addException($e, __('Something went wrong while saving the attribute.'));
-                return $this->proceedToEdit($data);
+                return $this->_proceedToEdit($data);
+            }
+            if ($id) {
+                $this->_proceedToEdit($data);
             }
         }
 
@@ -68,7 +70,7 @@ class Save extends AttributeController
      * @param array $data
      * @return \Magento\Backend\Model\View\Result\Redirect
      */
-    private function proceedToEdit($data)
+    private function _proceedToEdit($data)
     {
         $this->_getSession()->setPageData($data);
         /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */

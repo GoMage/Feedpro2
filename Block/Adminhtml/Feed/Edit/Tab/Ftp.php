@@ -163,8 +163,6 @@ class Ftp extends \Magento\Backend\Block\Widget\Form\Generic implements \Magento
         $form->setValues($model->getData());
         $this->setForm($form);
 
-        $this->_eventManager->dispatch('gomage_feed_tab_ftp_prepare_form', ['form' => $form]);
-
         return parent::_prepareForm();
     }
 
@@ -204,14 +202,4 @@ class Ftp extends \Magento\Backend\Block\Widget\Form\Generic implements \Magento
         return false;
     }
 
-    /**
-     * Check permission for passed action
-     *
-     * @param string $resourceId
-     * @return bool
-     */
-    protected function _isAllowedAction($resourceId)
-    {
-        return $this->_authorization->isAllowed($resourceId);
-    }
 }

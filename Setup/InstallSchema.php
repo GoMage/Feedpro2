@@ -99,7 +99,7 @@ class InstallSchema implements InstallSchemaInterface
                 'Feed type'
             )
             ->addColumn(
-                'is_active',
+                'status',
                 \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
                 null,
                 ['unsigned' => true, 'default' => '0', 'nullable' => false],

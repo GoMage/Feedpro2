@@ -41,31 +41,36 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
         parent::_construct();
 
         if ($model && $model->getId()) {
-            $this->buttonList->add(
-                'save_and_continue_edit',
-                [
-                    'class'          => 'save',
-                    'label'          => __('Save and Continue Edit'),
-                    'data_attribute' => [
-                        'mage-init' => ['button' => ['event' => 'saveAndContinueEdit', 'target' => '#edit_form']],
-                    ]
-                ],
-                10
-            );
 
-            $url = $this->getUrl('gomage_feed/feed/generate', [
-                    'id'                                                  => $model->getId(),
-                    \Magento\Store\Api\StoreResolverInterface::PARAM_NAME => $model->getStoreId()]
-            );
-            $this->buttonList->add(
-                'generate',
-                [
-                    'label'   => __('Generate'),
-                    'onclick' => 'setLocation(\'' . $url . '\')',
-                    'class'   => 'generate'
-                ],
-                5
-            );
+            if ($model->getStatus() == \GoMage\Feed\Model\Config\Source\Status::IN_PROGRESS) {
+                $url = $this->getUrl('gomage_feed/feed/stop', [
+                        'id' => $model->getId()
+                    ]
+                );
+                $this->buttonList->add(
+                    'stop',
+                    [
+                        'label'   => __('Stop Generate'),
+                        'onclick' => 'setLocation(\'' . $url . '\')',
+                        'class'   => 'stop'
+                    ],
+                    5
+                );
+            } else {
+                $url = $this->getUrl('gomage_feed/feed/generate', [
+                        'id'                                                  => $model->getId(),
+                        \Magento\Store\Api\StoreResolverInterface::PARAM_NAME => $model->getStoreId()]
+                );
+                $this->buttonList->add(
+                    'generate',
+                    [
+                        'label'   => __('Generate'),
+                        'onclick' => 'setLocation(\'' . $url . '\')',
+                        'class'   => 'generate'
+                    ],
+                    5
+                );
+            }
         }
 
         if (!$model->getType()) {

@@ -20,11 +20,6 @@ class GenerateCommand extends Command
     protected $_appState;
 
     /**
-     * @var \GoMage\Feed\Model\Feed
-     */
-    protected $_feed;
-
-    /**
      * @var  \GoMage\Feed\Model\Generator
      */
     protected $_generator;
@@ -32,12 +27,10 @@ class GenerateCommand extends Command
 
     public function __construct(
         AppState $appState,
-        \GoMage\Feed\Model\Generator $generator,
-        \GoMage\Feed\Model\Feed $feed
+        \GoMage\Feed\Model\Generator $generator
     ) {
         $this->_appState  = $appState;
         $this->_generator = $generator;
-        $this->_feed      = $feed;
         parent::__construct();
     }
 
@@ -62,15 +55,10 @@ class GenerateCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $this->_appState->setAreaCode('catalog');
-
         $feedId = $input->getArgument(self::INPUT_KEY_FEED_ID);
 
         try {
-            $this->_feed->load($feedId);
-            $this->_generator->generate($this->_feed);
-            $this->_feed->setData('generated_at', date('Y-m-j H:i:s', time()));
-            $this->_feed->save();
-
+            $this->_generator->generate($feedId);
         } catch (\Exception $e) {
             $output->writeln("<error>{$e->getMessage()}</error>");
             return \Magento\Framework\Console\Cli::RETURN_FAILURE;

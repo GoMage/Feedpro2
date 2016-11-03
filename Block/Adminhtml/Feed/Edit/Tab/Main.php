@@ -6,7 +6,6 @@ use GoMage\Feed\Model\Feed;
 use GoMage\Feed\Model\Config\Source\Extension\Csv;
 use GoMage\Feed\Model\Config\Source\Extension\Xml;
 use Magento\Store\Model\System\Store;
-use Magento\Framework\App\Filesystem\DirectoryList;
 
 class Main extends \Magento\Backend\Block\Widget\Form\Generic implements \Magento\Backend\Block\Widget\Tab\TabInterface
 {
@@ -27,29 +26,10 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
     protected $_systemStore;
 
     /**
-     * @var \Magento\Framework\Filesystem
+     * @var \GoMage\Feed\Helper\Data
      */
-    protected $_filesystem;
+    protected $_helper;
 
-    /**
-     * Store manager
-     *
-     * @var \Magento\Store\Model\StoreManagerInterface
-     */
-    protected $_storeManager;
-
-
-    /**
-     * Main constructor.
-     *
-     * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Framework\Data\FormFactory $formFactory
-     * @param Csv $csv
-     * @param Xml $xml
-     * @param Store $systemStore
-     * @param array $data
-     */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Framework\Registry $registry,
@@ -57,14 +37,13 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
         Csv $csv,
         Xml $xml,
         Store $systemStore,
+        \GoMage\Feed\Helper\Data $helper,
         array $data = []
     ) {
-        $this->_xml          = $xml;
-        $this->_csv          = $csv;
-        $this->_systemStore  = $systemStore;
-        $this->_filesystem   = $context->getFilesystem();
-        $this->_storeManager = $context->getStoreManager();
-
+        $this->_xml         = $xml;
+        $this->_csv         = $csv;
+        $this->_systemStore = $systemStore;
+        $this->_helper      = $helper;
         parent::__construct($context, $registry, $formFactory, $data);
     }
 
@@ -107,26 +86,16 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
             ]
         );
 
-        $url       = false;
-        $directory = $this->_filesystem->getDirectoryRead(DirectoryList::MEDIA);
-        $path      = \GoMage\Feed\Model\Writer\WriterInterface::DIRECTORY . '/' . $model->getFullFileName();
-        if ($directory->isExist($path)) {
-            $url = $this->_storeManager->getStore($model->getStoreId())->getBaseUrl(
-                    \Magento\Framework\UrlInterface::URL_TYPE_MEDIA
-                ) . $path;
-        }
-
-        if ($model->getId() && $url) {
-            $fieldset->addField(
-                'comments',
-                'note',
-                [
-                    'label' => __('Access Url'),
-                    'title' => __('Access Url'),
-                    'text'  => $url ? '<a href="' . $url . '" target="_blank">' . $url . '</a>' : '',
-                ]
-            );
-        }
+        $url = $this->_helper->getAccessUrl($model->getFullFileName(), $model->getStoreId());
+        $fieldset->addField(
+            'comments',
+            'note',
+            [
+                'label' => __('Access Url'),
+                'title' => __('Access Url'),
+                'text'  => $url ? '<a href="' . $url . '" target="_blank">' . $url . '</a>' : '',
+            ]
+        );
 
         $fieldset->addField(
             'filename',
@@ -146,7 +115,7 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
                 'name'   => 'file_ext',
                 'label'  => __('File Extension'),
                 'title'  => __('File Extension'),
-                'values' => $model->getType() == Feed::XML_TYPE ? $this->_xml->toOptionArray() : $this->_csv->toOptionArray(),
+                'values' => $model->getType() == \GoMage\Feed\Model\Config\Source\FeedType::XML_TYPE ? $this->_xml->toOptionArray() : $this->_csv->toOptionArray(),
             ]
         );
 
@@ -198,8 +167,6 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
         $form->setValues($model->getData());
         $this->setForm($form);
 
-        $this->_eventManager->dispatch('gomage_feed_tab_main_prepare_form', ['form' => $form]);
-
         return parent::_prepareForm();
     }
 
@@ -237,16 +204,5 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
     public function isHidden()
     {
         return false;
-    }
-
-    /**
-     * Check permission for passed action
-     *
-     * @param string $resourceId
-     * @return bool
-     */
-    protected function _isAllowedAction($resourceId)
-    {
-        return $this->_authorization->isAllowed($resourceId);
     }
 }

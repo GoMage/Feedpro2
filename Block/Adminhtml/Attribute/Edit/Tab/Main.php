@@ -55,8 +55,6 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
             ]
         );
 
-        $this->_eventManager->dispatch('gomage_feed_attribute_tab_main_prepare_form', ['form' => $form]);
-
         $form->setValues($model->getData());
         $this->setForm($form);
 
@@ -99,14 +97,4 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
         return false;
     }
 
-    /**
-     * Check permission for passed action
-     *
-     * @param string $resourceId
-     * @return bool
-     */
-    protected function _isAllowedAction($resourceId)
-    {
-        return $this->_authorization->isAllowed($resourceId);
-    }
 }

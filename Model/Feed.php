@@ -6,8 +6,9 @@ namespace GoMage\Feed\Model;
  *
  * @method string getContent()
  * @method string getType()
+ * @method int getLimit()
  */
-class Feed extends \Magento\Rule\Model\AbstractModel implements FeedInterface
+class Feed extends \Magento\Rule\Model\AbstractModel
 {
     /**
      * @var \Magento\CatalogRule\Model\Rule\Condition\CombineFactory
@@ -130,6 +131,16 @@ class Feed extends \Magento\Rule\Model\AbstractModel implements FeedInterface
     public function getActionsInstance()
     {
         return $this->_actionCollectionFactory->create();
+    }
+
+    /**
+     * @param  int $status
+     * @return $this
+     */
+    public function setStatus($status)
+    {
+        $this->setData('status', $status)->save();
+        return $this;
     }
 
 }

@@ -81,4 +81,14 @@ class Collection implements \Iterator
         );
     }
 
+    public function getAttributes()
+    {
+        $attributes = [];
+        /** @var \GoMage\Feed\Model\Feed\Row $row */
+        foreach ($this->_items as $row) {
+            $attributes = array_merge($attributes, $row->getUsedAttributes());
+        }
+        return array_unique($attributes);
+    }
+
 }

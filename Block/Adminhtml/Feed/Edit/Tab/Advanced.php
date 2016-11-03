@@ -78,12 +78,10 @@ class Advanced extends \Magento\Backend\Block\Widget\Form\Generic implements \Ma
             ]
         );
 
-        //is_out_of_stock
+        //TODO: is_out_of_stock
 
         $form->setValues($model->getData());
         $this->setForm($form);
-
-        $this->_eventManager->dispatch('gomage_feed_tab_advanced_prepare_form', ['form' => $form]);
 
         return parent::_prepareForm();
     }
@@ -124,14 +122,4 @@ class Advanced extends \Magento\Backend\Block\Widget\Form\Generic implements \Ma
         return false;
     }
 
-    /**
-     * Check permission for passed action
-     *
-     * @param string $resourceId
-     * @return bool
-     */
-    protected function _isAllowedAction($resourceId)
-    {
-        return $this->_authorization->isAllowed($resourceId);
-    }
 }

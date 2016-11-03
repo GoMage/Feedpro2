@@ -19,4 +19,28 @@
             <argument name="logger" xsi:type="object">GoMage\Feed\Model\Logger\Logger</argument>
         </arguments>
     </type>
+    <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
+        <arguments>
+            <argument name="collections" xsi:type="array">
+                <item name="gomage_feed_feed_listing_data_source" xsi:type="string">GoMage\Feed\Model\ResourceModel\Feed\Grid\Collection</item>
+                <item name="gomage_feed_attribute_listing_data_source" xsi:type="string">GoMage\Feed\Model\ResourceModel\Attribute\Grid\Collection</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="GoMage\Feed\Model\ResourceModel\Feed\Grid\Collection">
+        <arguments>
+            <argument name="mainTable" xsi:type="string">gomage_feed</argument>
+            <argument name="eventPrefix" xsi:type="string">gomage_feed_grid_collection</argument>
+            <argument name="eventObject" xsi:type="string">gomage_feed_grid_collection</argument>
+            <argument name="resourceModel" xsi:type="string">"GoMage\Feed\Model\ResourceModel\Feed</argument>
+        </arguments>
+    </type>
+    <type name="GoMage\Feed\Model\ResourceModel\Attribute\Grid\Collection">
+        <arguments>
+            <argument name="mainTable" xsi:type="string">gomage_feed_attribute</argument>
+            <argument name="eventPrefix" xsi:type="string">gomage_feed_attribute_grid_collection</argument>
+            <argument name="eventObject" xsi:type="string">gomage_feed_attribute_grid_collection</argument>
+            <argument name="resourceModel" xsi:type="string">GoMage\Feed\Model\ResourceModel\Attribute</argument>
+        </arguments>
+    </type>
 </config>

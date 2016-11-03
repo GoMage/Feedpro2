@@ -13,17 +13,18 @@ class Save extends FeedController
      * Save feed
      *
      * @return \Magento\Backend\Model\View\Result\Redirect
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function execute()
     {
         $data = $this->getRequest()->getPostValue();
-        if ($this->getRequest()->isPost() && $data) {
+
+        if ($data) {
             try {
                 /** @var \GoMage\Feed\Model\Feed $model */
                 $model = $this->_objectManager->create('GoMage\Feed\Model\Feed');
+                $id    = $this->getRequest()->getPost('id');
 
-                if ($id = $this->getRequest()->getPost('id')) {
+                if ($id) {
                     $model->load($id);
                 } elseif ($this->getRequest()->getPost('switch_type')) {
                     return $this->_proceedToEdit($data);
@@ -49,6 +50,9 @@ class Save extends FeedController
             } catch (\Exception $e) {
                 $this->messageManager->addException($e, __('Something went wrong while saving the feed.'));
                 return $this->_proceedToEdit($data);
+            }
+            if ($id) {
+                $this->_proceedToEdit($data);
             }
         }
 

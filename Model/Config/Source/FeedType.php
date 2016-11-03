@@ -2,10 +2,11 @@
 
 namespace GoMage\Feed\Model\Config\Source;
 
-use GoMage\Feed\Model\FeedInterface;
-
 class FeedType implements \Magento\Framework\Option\ArrayInterface
 {
+
+    const CSV_TYPE = 'csv';
+    const XML_TYPE = 'xml';
 
     /**
      * @return array
@@ -13,8 +14,8 @@ class FeedType implements \Magento\Framework\Option\ArrayInterface
     public function toOptionArray()
     {
         return [
-            ['value' => FeedInterface::CSV_TYPE, 'label' => __('CSV')],
-            ['value' => FeedInterface::XML_TYPE, 'label' => __('XML')],
+            ['value' => self::CSV_TYPE, 'label' => __('CSV')],
+            ['value' => self::XML_TYPE, 'label' => __('XML')],
         ];
     }
 

@@ -82,17 +82,6 @@ class Conditions extends \Magento\Backend\Block\Widget\Form\Generic implements \
     }
 
     /**
-     * Check permission for passed action
-     *
-     * @param string $resourceId
-     * @return bool
-     */
-    protected function _isAllowedAction($resourceId)
-    {
-        return $this->_authorization->isAllowed($resourceId);
-    }
-
-    /**
      * @return Form
      */
     protected function _prepareForm()
