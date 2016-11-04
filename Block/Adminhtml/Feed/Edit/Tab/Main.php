@@ -86,7 +86,7 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
             ]
         );
 
-        $url = $this->_helper->getAccessUrl($model->getFullFileName(), $model->getStoreId());
+        $url = $this->_helper->getFeedUrl($model->getFullFileName(), $model->getStoreId());
         $fieldset->addField(
             'comments',
             'note',

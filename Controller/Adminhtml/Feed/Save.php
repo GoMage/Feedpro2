@@ -52,7 +52,7 @@ class Save extends FeedController
                 return $this->_proceedToEdit($data);
             }
             if ($id) {
-                $this->_proceedToEdit($data);
+                return $this->_proceedToEdit($data);
             }
         }
 

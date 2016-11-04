@@ -102,15 +102,28 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param  int $storeId
      * @return string
      */
-    public function getAccessUrl($fileName = '', $storeId = 0)
+    public function getFeedUrl($fileName = '', $storeId = 0)
     {
         if ($fileName && $storeId) {
-            $path = \GoMage\Feed\Model\Writer\WriterInterface::DIRECTORY . '/' . $fileName;
-            if ($this->_directory->isExist($path)) {
+            $path = $this->getFeedPath($fileName);
+            if ($path) {
                 return $this->_storeManager->getStore($storeId)->getBaseUrl(
                     \Magento\Framework\UrlInterface::URL_TYPE_MEDIA
                 ) . $path;
             }
+        }
+        return '';
+    }
+
+    /**
+     * @param  string $fileName
+     * @return string
+     */
+    public function getFeedPath($fileName, $absolute = false)
+    {
+        $path = \GoMage\Feed\Model\Writer\WriterInterface::DIRECTORY . '/' . $fileName;
+        if ($this->_directory->isExist($path)) {
+            return $absolute ? $this->_directory->getAbsolutePath($path) : $path;
         }
         return '';
     }

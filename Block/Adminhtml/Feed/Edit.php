@@ -50,7 +50,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
                 $this->buttonList->add(
                     'stop',
                     [
-                        'label'   => __('Stop Generate'),
+                        'label'   => __('Stop Generation'),
                         'onclick' => 'setLocation(\'' . $url . '\')',
                         'class'   => 'stop'
                     ],

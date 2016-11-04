@@ -4,6 +4,7 @@
         <arguments>
             <argument name="commands" xsi:type="array">
                 <item name="generateFeed" xsi:type="object">GoMage\Feed\Console\Command\GenerateCommand</item>
+                <item name="uploadFeed" xsi:type="object">GoMage\Feed\Console\Command\UploadCommand</item>
             </argument>
         </arguments>
     </type>

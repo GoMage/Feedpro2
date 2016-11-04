@@ -5,7 +5,7 @@ namespace GoMage\Feed\Block\Adminhtml\Feed\Edit\Tab;
 use GoMage\Feed\Model\Feed;
 use Magento\Config\Model\Config\Source\Yesno;
 use Magento\Config\Model\Config\Source\Enabledisable;
-use GoMage\Feed\Model\Config\Source\Ftp\Protocol;
+use GoMage\Feed\Model\Config\Source\Protocol;
 
 class Ftp extends \Magento\Backend\Block\Widget\Form\Generic implements \Magento\Backend\Block\Widget\Tab\TabInterface
 {

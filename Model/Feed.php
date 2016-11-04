@@ -7,6 +7,7 @@ namespace GoMage\Feed\Model;
  * @method string getContent()
  * @method string getType()
  * @method int getLimit()
+ * @method int getStatus()
  */
 class Feed extends \Magento\Rule\Model\AbstractModel
 {

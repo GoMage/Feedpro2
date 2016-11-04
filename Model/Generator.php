@@ -8,7 +8,7 @@ class Generator
 {
 
     /**
-     * @var Feed
+     * @var \GoMage\Feed\Model\Feed
      */
     protected $_feed;
 
@@ -67,6 +67,16 @@ class Generator
      */
     protected $_scopeConfig;
 
+    /**
+     * @var float
+     */
+    protected $_time;
+
+    /**
+     * @var \Magento\Framework\Stdlib\DateTime\DateTime
+     */
+    protected $_dateTime;
+
     public function __construct(
         \Magento\Framework\ObjectManagerInterface $objectManager,
         \GoMage\Feed\Model\Reader\Factory $readerFactory,
@@ -74,7 +84,8 @@ class Generator
         \Magento\Framework\App\Filesystem\DirectoryList $_directoryList,
         LoggerInterface $logger,
         \Magento\Framework\Json\Helper\Data $jsonHelper,
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Framework\Stdlib\DateTime\DateTime $date
     ) {
         $this->_objectManager = $objectManager;
         $this->_readerFactory = $readerFactory;
@@ -83,6 +94,7 @@ class Generator
         $this->_logger        = $logger;
         $this->_jsonHelper    = $jsonHelper;
         $this->_scopeConfig   = $scopeConfig;
+        $this->_dateTime      = $date;
     }
 
     /**
@@ -92,16 +104,17 @@ class Generator
     public function generate($feedId)
     {
         try {
-            $this->_init($feedId);
+            $this->_feed = $this->_objectManager->create('GoMage\Feed\Model\Feed')->load($feedId);
+            $this->_start();
 
             $page  = 1;
             $limit = $this->_feed->getLimit();
 
-            while ($items = $this->_reader->read($page, $limit)) {
+            while ($items = $this->_getReader()->read($page, $limit)) {
                 $this->log(__('Page - %1', $page));
                 foreach ($items as $item) {
-                    $data = $this->_rows->calc($item);
-                    $this->_writer->write($data);
+                    $data = $this->_getRows()->calc($item);
+                    $this->_getWriter()->write($data);
                 }
                 $page++;
             }
@@ -114,12 +127,15 @@ class Generator
         }
     }
 
-    /**
-     * @param int $feedId
-     */
-    protected function _init($feedId)
+    protected function _start()
     {
+        $this->_time = microtime(true);
         $this->log(__('Start generation'));
+
+        if ($this->_feed->getStatus() == \GoMage\Feed\Model\Config\Source\Status::IN_PROGRESS) {
+            throw new \Exception(__('Feed already in progress'));
+        }
+        $this->_feed->setStatus(\GoMage\Feed\Model\Config\Source\Status::IN_PROGRESS);
 
         if ($memoryLimit = $this->_scopeConfig->getValue('gomage_feed/server/memory_limit')) {
             ini_set("memory_limit", $memoryLimit . "M");
@@ -132,61 +148,77 @@ class Generator
         }
         $timeLimit = $this->_scopeConfig->getValue('gomage_feed/server/time_limit');
         set_time_limit(intval($timeLimit));
-
-        $this->_feed = $this->_objectManager->create('GoMage\Feed\Model\Feed')->load($feedId);
-        $this->_feed->setStatus(\GoMage\Feed\Model\Config\Source\Status::IN_PROGRESS);
-
-        exit();
-        $this->_initRows();
-        $this->_initReader();
-        $this->_initWriter();
     }
 
     protected function _finish()
     {
         $this->_feed->setStatus(\GoMage\Feed\Model\Config\Source\Status::COMPLETED);
-        $this->_feed->setData('generated_at', date('Y-m-j H:i:s', time()))->save();
+        $this->_time = microtime(true) - $this->_time;
+        $this->_time = max([$this->_time, 1]);
+        $this->_feed->setData('generation_time', $this->_dateTime->gmtDate('H:i:s', $this->_time))
+            ->setData('generated_at', $this->_dateTime->gmtDate('Y-m-j H:i:s'))
+            ->save();
         $this->log(__('Finish'));
     }
 
-    protected function _initReader()
+    /**
+     * @return \GoMage\Feed\Model\Reader\ReaderInterface
+     */
+    protected function _getReader()
     {
-        $this->_reader = $this->_readerFactory->create('GoMage\Feed\Model\Reader\Collection',
-            [
-                'attributes' => $this->_rows->getAttributes(),
-                'conditions' => $this->_feed->getConditions(),
-                'storeId'    => $this->_feed->getStoreId(),
-            ]
-        );
-    }
-
-    protected function _initWriter()
-    {
-        $this->_writer = $this->_writerFactory->create('GoMage\Feed\Model\Writer\Csv',
-            [
-                'fileName'  => $this->_feed->getFullFileName(),
-                'delimiter' => $this->_feed->getDelimiter(),
-                'enclosure' => $this->_feed->getEnclosure(),
-                'isHeader'  => boolval($this->_feed->getIsHeader())
-            ]
-        );
-    }
-
-    protected function _initRows()
-    {
-        /** @var \GoMage\Feed\Model\Feed\Row\Collection $rows */
-        $this->_rows = $this->_objectManager->create('GoMage\Feed\Model\Feed\Row\Collection');
-        $content     = $this->_jsonHelper->jsonDecode($this->_feed->getContent());
-        foreach ($content as $data) {
-
-            /** @var \GoMage\Feed\Model\Feed\Row\Data $rowData */
-            $rowData = $this->_objectManager->create('GoMage\Feed\Model\Feed\Row\Data', ['data' => $data]);
-
-            /** @var \GoMage\Feed\Model\Feed\Row $row */
-            $row = $this->_objectManager->create('GoMage\Feed\Model\Feed\Row', ['rowData' => $rowData]);
-
-            $this->_rows->add($row);
+        if (is_null($this->_reader)) {
+            $this->_reader = $this->_readerFactory->create('GoMage\Feed\Model\Reader\Collection',
+                [
+                    'attributes' => $this->_getRows()->getAttributes(),
+                    'conditions' => $this->_feed->getConditions(),
+                    'storeId'    => $this->_feed->getStoreId(),
+                ]
+            );
         }
+        return $this->_reader;
+    }
+
+    /**
+     * @return \GoMage\Feed\Model\Writer\WriterInterface
+     */
+    protected function _getWriter()
+    {
+        if (is_null($this->_writer)) {
+            $this->_writer = $this->_writerFactory->create('GoMage\Feed\Model\Writer\Csv',
+                [
+                    'fileName'  => $this->_feed->getFullFileName(),
+                    'delimiter' => $this->_feed->getDelimiter(),
+                    'enclosure' => $this->_feed->getEnclosure(),
+                    'isHeader'  => boolval($this->_feed->getIsHeader())
+                ]
+            );
+        }
+        return $this->_writer;
+    }
+
+    /**
+     * @return \GoMage\Feed\Model\Feed\Row\Collection
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    protected function _getRows()
+    {
+        if (is_null($this->_rows)) {
+            /** @var \GoMage\Feed\Model\Feed\Row\Collection $rows */
+            $this->_rows = $this->_objectManager->create('GoMage\Feed\Model\Feed\Row\Collection');
+            $content     = $this->_jsonHelper->jsonDecode($this->_feed->getContent());
+            foreach ($content as $data) {
+
+                /** @var \GoMage\Feed\Model\Feed\Row\Data $rowData */
+                $rowData = $this->_objectManager->create('GoMage\Feed\Model\Feed\Row\Data', ['data' => $data]);
+
+                /** @var \GoMage\Feed\Model\Feed\Row $row */
+                $row = $this->_objectManager->create('GoMage\Feed\Model\Feed\Row', ['rowData' => $rowData]);
+
+                $this->_rows->add($row);
+            }
+        }
+
+        return $this->_rows;
     }
 
     /**

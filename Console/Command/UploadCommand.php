@@ -9,7 +9,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Output\OutputInterface;
 use Magento\Framework\App\State as AppState;
 
-class GenerateCommand extends Command
+class UploadCommand extends Command
 {
 
     const INPUT_KEY_FEED_ID = 'feed_id';
@@ -20,17 +20,17 @@ class GenerateCommand extends Command
     protected $_appState;
 
     /**
-     * @var \GoMage\Feed\Model\Generator
+     * @var \GoMage\Feed\Model\Uploader
      */
-    protected $_generator;
+    protected $_uploader;
 
 
     public function __construct(
         AppState $appState,
-        \GoMage\Feed\Model\Generator $generator
+        \GoMage\Feed\Model\Uploader $uploader
     ) {
-        $this->_appState  = $appState;
-        $this->_generator = $generator;
+        $this->_appState = $appState;
+        $this->_uploader = $uploader;
         parent::__construct();
     }
 
@@ -39,8 +39,8 @@ class GenerateCommand extends Command
      */
     protected function configure()
     {
-        $this->setName('gomage:feed:generate');
-        $this->setDescription('Generate Feed');
+        $this->setName('gomage:feed:upload');
+        $this->setDescription('Upload feed file');
 
         $this->addArgument(
             self::INPUT_KEY_FEED_ID,
@@ -58,13 +58,13 @@ class GenerateCommand extends Command
         $feedId = $input->getArgument(self::INPUT_KEY_FEED_ID);
 
         try {
-            $this->_generator->generate($feedId);
+            $this->_uploader->upload($feedId);
         } catch (\Exception $e) {
             $output->writeln("<error>{$e->getMessage()}</error>");
             return \Magento\Framework\Console\Cli::RETURN_FAILURE;
         }
 
-        $output->writeln("<info>Feed has been successfully generated.</info>");
+        $output->writeln("<info>Feed has been successfully uploaded.</info>");
     }
 
 }
