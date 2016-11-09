@@ -9,7 +9,7 @@
         </referenceContainer>
         <referenceContainer name="left">
             <block class="GoMage\Feed\Block\Adminhtml\Feed\Edit\Tabs" name="gomage_feed_edit_tabs">
-                <block class="GoMage\Feed\Block\Adminhtml\Feed\Edit\Tab\Type" name="gomage_feed_tab_type"/>
+                <block class="GoMage\Feed\Block\Adminhtml\Feed\Edit\Tab\FeedType" name="gomage_feed_tab_type"/>
                 <action method="addTab">
                     <argument name="name" xsi:type="string">main_section</argument>
                     <argument name="block" xsi:type="string">gomage_feed_tab_type</argument>

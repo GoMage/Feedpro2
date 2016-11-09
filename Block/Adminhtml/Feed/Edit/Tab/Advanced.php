@@ -21,24 +21,44 @@ class Advanced extends \Magento\Backend\Block\Widget\Form\Generic implements \Ma
     protected $_enableDisable;
 
     /**
-     * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Framework\Data\FormFactory $formFactory
-     * @param Yesno $yesNo
-     * @param Enabledisable $enableDisable
-     * @param array $data
+     * @var \GoMage\Feed\Model\Config\Source\Visibility
      */
+    protected $_visibility;
+
+    /**
+     * @var \Magento\Config\Model\Config\Source\Locale\Weekdays
+     */
+    protected $_weekdays;
+
+    /**
+     * @var \GoMage\Feed\Model\Config\Source\DateTime\Hour
+     */
+    protected $_hour;
+
+    /**
+     * @var \GoMage\Feed\Model\Config\Source\DateTime\Interval
+     */
+    protected $_interval;
+
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Framework\Registry $registry,
         \Magento\Framework\Data\FormFactory $formFactory,
         Yesno $yesNo,
         Enabledisable $enableDisable,
+        \GoMage\Feed\Model\Config\Source\Visibility $visibility,
+        \Magento\Config\Model\Config\Source\Locale\Weekdays $weekdays,
+        \GoMage\Feed\Model\Config\Source\DateTime\Hour $hour,
+        \GoMage\Feed\Model\Config\Source\DateTime\Interval $interval,
         array $data = []
     ) {
 
         $this->_yesNo         = $yesNo;
         $this->_enableDisable = $enableDisable;
+        $this->_visibility    = $visibility;
+        $this->_weekdays      = $weekdays;
+        $this->_hour          = $hour;
+        $this->_interval      = $interval;
 
         parent::__construct($context, $registry, $formFactory, $data);
     }
@@ -61,7 +81,7 @@ class Advanced extends \Magento\Backend\Block\Widget\Form\Generic implements \Ma
         $form->setHtmlIdPrefix('feed_');
 
         $fieldset = $form->addFieldset(
-            'advanced_fieldset',
+            'file_creation_fieldset',
             ['legend' => __('File Creation Settings')]
         );
 
@@ -78,7 +98,158 @@ class Advanced extends \Magento\Backend\Block\Widget\Form\Generic implements \Ma
             ]
         );
 
-        //TODO: is_out_of_stock
+        $fieldset->addField(
+            'is_out_of_stock',
+            'select',
+            [
+                'name'   => 'is_out_of_stock',
+                'label'  => __('Export Out of Stock Products'),
+                'title'  => __('Export Out of Stock Products'),
+                'values' => $this->_yesNo->toOptionArray(),
+            ]
+        );
+
+        $fieldset->addField(
+            'is_disabled',
+            'select',
+            [
+                'name'   => 'is_disabled',
+                'label'  => __('Export Disabled Products'),
+                'title'  => __('Export Disabled Products'),
+                'values' => $this->_yesNo->toOptionArray(),
+            ]
+        );
+
+        $fieldset->addField(
+            'visibility',
+            'select',
+            [
+                'name'   => 'visibility',
+                'label'  => __('Products Visibility'),
+                'title'  => __('Products Visibility'),
+                'values' => $this->_visibility->toOptionArray(),
+            ]
+        );
+
+        $fieldset = $form->addFieldset(
+            'auto_generate_fieldset',
+            ['legend' => __('Auto-generate Settings')]
+        );
+
+        $fieldset->addField(
+            'is_generate',
+            'select',
+            [
+                'name'   => 'is_generate',
+                'label'  => __('Status'),
+                'title'  => __('Status'),
+                'values' => $this->_enableDisable->toOptionArray(),
+            ]
+        );
+
+        $fieldset->addField(
+            'generate_day',
+            'multiselect',
+            [
+                'name'   => 'generate_day[]',
+                'label'  => __('Available Days'),
+                'title'  => __('Available Days'),
+                'values' => $this->_weekdays->toOptionArray(),
+            ]
+        );
+
+        $fieldset->addField(
+            'generate_hour',
+            'select',
+            [
+                'name'   => 'generate_hour',
+                'label'  => __('Active From, hour'),
+                'title'  => __('Active From, hour'),
+                'values' => $this->_hour->toOptionArray(),
+            ]
+        );
+
+        $fieldset->addField(
+            'generate_hour_to',
+            'select',
+            [
+                'name'   => 'generate_hour_to',
+                'label'  => __('Active To, hour'),
+                'title'  => __('Active To, hour'),
+                'values' => $this->_hour->toOptionArray(),
+            ]
+        );
+
+        $fieldset->addField(
+            'generate_interval',
+            'select',
+            [
+                'name'   => 'generate_interval',
+                'label'  => __('Interval, hours'),
+                'title'  => __('Interval, hours'),
+                'values' => $this->_interval->toOptionArray(),
+            ]
+        );
+
+        $fieldset = $form->addFieldset(
+            'auto_upload_fieldset',
+            ['legend' => __('Auto-upload Settings')]
+        );
+
+        $fieldset->addField(
+            'is_upload',
+            'select',
+            [
+                'name'   => 'is_upload',
+                'label'  => __('Status'),
+                'title'  => __('Status'),
+                'values' => $this->_enableDisable->toOptionArray(),
+            ]
+        );
+
+        $fieldset->addField(
+            'upload_day',
+            'multiselect',
+            [
+                'name'   => 'upload_day[]',
+                'label'  => __('Available Days'),
+                'title'  => __('Available Days'),
+                'values' => $this->_weekdays->toOptionArray(),
+            ]
+        );
+
+        $fieldset->addField(
+            'upload_hour',
+            'select',
+            [
+                'name'   => 'upload_hour',
+                'label'  => __('Active From, hour'),
+                'title'  => __('Active From, hour'),
+                'values' => $this->_hour->toOptionArray(),
+            ]
+        );
+
+        $fieldset->addField(
+            'upload_hour_to',
+            'select',
+            [
+                'name'   => 'upload_hour_to',
+                'label'  => __('Active To, hour'),
+                'title'  => __('Active To, hour'),
+                'values' => $this->_hour->toOptionArray(),
+            ]
+        );
+
+        $fieldset->addField(
+            'upload_interval',
+            'select',
+            [
+                'name'   => 'upload_interval',
+                'label'  => __('Interval, hours'),
+                'title'  => __('Interval, hours'),
+                'values' => $this->_interval->toOptionArray(),
+            ]
+        );
 
         $form->setValues($model->getData());
         $this->setForm($form);

@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Cron:etc/crontab.xsd">
+    <group id="gomage_feed">
+        <job name="gomage_feed_generate" instance="GoMage\Feed\Cron\Generate" method="execute">
+            <schedule>01 * * * *</schedule>
+        </job>
+        <job name="gomage_feed_upload" instance="GoMage\Feed\Cron\Upload" method="execute">
+            <schedule>01 * * * *</schedule>
+        </job>
+    </group>
+</config>

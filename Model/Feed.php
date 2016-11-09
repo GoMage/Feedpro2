@@ -8,6 +8,10 @@ namespace GoMage\Feed\Model;
  * @method string getType()
  * @method int getLimit()
  * @method int getStatus()
+ * @method int getStoreId()
+ * @method int getVisibility()
+ * @method int getIsOutOfStock()
+ * @method int getIsDisabled()
  */
 class Feed extends \Magento\Rule\Model\AbstractModel
 {

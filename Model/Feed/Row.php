@@ -37,7 +37,7 @@ class Row
         $this->_outputs = $objectManager->create('GoMage\Feed\Model\Collection');
         foreach ($rowData->getOutput() as $value) {
             /** @var \GoMage\Feed\Model\Output\OutputInterface $output */
-            $output = $outputFactory->get(intval($value));
+            $output = $outputFactory->get($value);
             $this->_outputs->add($output);
         }
 

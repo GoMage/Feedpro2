@@ -34,13 +34,16 @@ class Csv extends AbstractWriter
         $fileName,
         $delimiter = Delimiter::COMMA,
         $enclosure = Enclosure::DOUBLE_QUOTE,
-        $isHeader = true
+        $isHeader = true,
+        $additionHeader = ''
     ) {
+        parent::__construct($filesystem, $fileName);
         $this->_delimiter = $delimiterModel->getSymbol($delimiter);
         $this->_enclosure = $enclosureModel->getSymbol($enclosure);
         $this->_isHeader  = $isHeader;
-
-        parent::__construct($filesystem, $fileName);
+        if ($additionHeader) {
+            $this->_fileHandler->write($additionHeader);
+        }
     }
 
     /**

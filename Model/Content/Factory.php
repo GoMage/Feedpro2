@@ -1,14 +1,14 @@
 <?php
 
-namespace GoMage\Feed\Model\Writer;
+namespace GoMage\Feed\Model\Content;
 
 use GoMage\Feed\Model\Config\Source\FeedType;
 
 class Factory
 {
-    protected $_writers = [
-        FeedType::CSV_TYPE => 'GoMage\Feed\Model\Writer\Csv',
-        FeedType::XML_TYPE => 'GoMage\Feed\Model\Writer\Xml'
+    protected $_contents = [
+        FeedType::CSV_TYPE => 'GoMage\Feed\Model\Content\Csv',
+        FeedType::XML_TYPE => 'GoMage\Feed\Model\Content\Xml'
     ];
 
     /**
@@ -24,15 +24,15 @@ class Factory
     /**
      * @param string $type
      * @param array $arguments
-     * @return \GoMage\Feed\Model\Writer\WriterInterface
+     * @return \GoMage\Feed\Model\Content\ContentInterface
      * @throws \Exception
      */
     public function create($type, array $arguments = [])
     {
-        if (!isset($this->_writers[$type])) {
-            throw new \Exception(__('Undefined writer.'));
+        if (!isset($this->_contents[$type])) {
+            throw new \Exception(__('Undefined content type.'));
         }
-        return $this->_objectManager->create($this->_writers[$type], $arguments);
+        return $this->_objectManager->create($this->_contents[$type], $arguments);
     }
 
 }

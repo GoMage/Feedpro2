@@ -3,15 +3,15 @@ namespace GoMage\Feed\Model\Output;
 
 interface OutputInterface
 {
-    const NONE = 0;
-    const INTEGER = 1;
-    const FLOATS = 2;
-    const STRIP_TAGS = 3;
-    const SPECIAL_ENCODE = 4;
-    const SPECIAL_DECODE = 5;
-    const DELETE_SPACE = 6;
-    const BIG_TO_SMALL = 7;
-    const REMOVE_LINE_BREAK = 8;
+    const NONE = '';
+    const INTEGER = 'integer';
+    const FLOATS = 'float';
+    const STRIP_TAGS = 'strip_tags';
+    const SPECIAL_ENCODE = 'special_encode';
+    const SPECIAL_DECODE = 'special_decode';
+    const DELETE_SPACE = 'delete_space';
+    const BIG_TO_SMALL = 'big_to_small';
+    const REMOVE_LINE_BREAK = 'remove_lb';
 
     /**
      * @param  $value

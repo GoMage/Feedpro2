@@ -25,8 +25,7 @@ class ConfigurableValue implements MapperInterface
      * @var \Magento\Catalog\Api\Data\ProductAttributeInterface
      */
     protected $_attribute;
-
-
+    
     public function __construct(
         $value,
         \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable $configurable,

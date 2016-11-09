@@ -162,6 +162,20 @@ class InstallSchema implements InstallSchemaInterface
                 'Show feed header'
             )
             ->addColumn(
+                'is_addition_header',
+                \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
+                null,
+                ['unsigned' => true, 'default' => '0', 'nullable' => false],
+                'Is Addition header'
+            )
+            ->addColumn(
+                'addition_header',
+                \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+                null,
+                [],
+                'Addition header'
+            )
+            ->addColumn(
                 'enclosure',
                 \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
                 null,
@@ -239,34 +253,6 @@ class InstallSchema implements InstallSchemaInterface
                 'Limit'
             )
             ->addColumn(
-                'upload_day',
-                \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-                32,
-                [],
-                'Upload days'
-            )
-            ->addColumn(
-                'upload_hour',
-                \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
-                null,
-                ['unsigned' => true],
-                'Upload hour'
-            )
-            ->addColumn(
-                'upload_hour_to',
-                \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
-                null,
-                ['unsigned' => true],
-                'Upload hour to'
-            )
-            ->addColumn(
-                'upload_interval',
-                \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
-                null,
-                ['unsigned' => true],
-                'Upload interval'
-            )
-            ->addColumn(
                 'is_out_of_stock',
                 \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
                 null,
@@ -281,46 +267,11 @@ class InstallSchema implements InstallSchemaInterface
                 'Export Disabled Products'
             )
             ->addColumn(
-                'restart_cron',
-                \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
-                null,
-                ['unsigned' => true],
-                'Restart Cron'
-            )
-            ->addColumn(
                 'visibility',
                 \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
                 null,
-                ['unsigned' => true],
+                ['unsigned' => true, 'default' => '0', 'nullable' => false],
                 'Products Visibility'
-            )
-            ->addColumn(
-                'is_addition_header',
-                \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
-                null,
-                ['unsigned' => true, 'default' => '0', 'nullable' => false],
-                'Is Addition header'
-            )
-            ->addColumn(
-                'addition_header',
-                \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-                null,
-                [],
-                'Addition header'
-            )
-            ->addColumn(
-                'is_upload',
-                \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
-                null,
-                ['unsigned' => true, 'default' => '0', 'nullable' => false],
-                'Upload Status'
-            )
-            ->addColumn(
-                'cron_uploaded_at',
-                \Magento\Framework\DB\Ddl\Table::TYPE_TIMESTAMP,
-                null,
-                [],
-                'Cron uploaded at'
             )
             ->addColumn(
                 'is_generate',
@@ -358,11 +309,53 @@ class InstallSchema implements InstallSchemaInterface
                 'Generate interval'
             )
             ->addColumn(
-                'generation_time',
+                'cron_generated_at',
                 \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
                 50,
                 [],
-                'Generate time'
+                'Cron generated at'
+            )
+            ->addColumn(
+                'is_upload',
+                \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
+                null,
+                ['unsigned' => true, 'default' => '0', 'nullable' => false],
+                'Upload Status'
+            )
+            ->addColumn(
+                'upload_day',
+                \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+                32,
+                [],
+                'Upload days'
+            )
+            ->addColumn(
+                'upload_hour',
+                \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
+                null,
+                ['unsigned' => true],
+                'Upload hour'
+            )
+            ->addColumn(
+                'upload_hour_to',
+                \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
+                null,
+                ['unsigned' => true],
+                'Upload hour to'
+            )
+            ->addColumn(
+                'upload_interval',
+                \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
+                null,
+                ['unsigned' => true],
+                'Upload interval'
+            )
+            ->addColumn(
+                'cron_uploaded_at',
+                \Magento\Framework\DB\Ddl\Table::TYPE_TIMESTAMP,
+                null,
+                [],
+                'Cron uploaded at'
             )
             ->addIndex(
                 $installer->getIdxName('gomage_feed', ['store_id']),

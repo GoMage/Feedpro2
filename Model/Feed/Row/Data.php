@@ -36,6 +36,12 @@ class Data extends \Magento\Framework\DataObject
         if (!isset($data['name']) || !$data['name']) {
             throw new ValidatorException(__('Name is required field.'));
         }
+        if (!isset($data['output'])) {
+            $data['output'] = [];
+        }
+        if (is_string($data['output'])) {
+            $data['output'] = explode(',', $data['output']);
+        }
         return $data;
     }
 

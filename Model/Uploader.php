@@ -27,6 +27,7 @@ class Uploader
      */
     protected $_protocolFactory;
 
+
     public function __construct(
         \Magento\Framework\ObjectManagerInterface $objectManager,
         \Magento\Framework\Stdlib\DateTime\DateTime $date,
@@ -38,7 +39,6 @@ class Uploader
         $this->_helper          = $helper;
         $this->_protocolFactory = $protocolFactory;
     }
-
 
     public function upload($feedId)
     {
@@ -68,7 +68,7 @@ class Uploader
         }
 
         if (!$feed->getIsFtp()) {
-            throw new \Exception(__('FTP Uploading are disabled.'));
+            throw new \Exception(__('FTP Uploading is disabled for this feed.'));
         }
 
         if (!$this->_helper->getFeedPath($feed->getFullFileName(), true)) {

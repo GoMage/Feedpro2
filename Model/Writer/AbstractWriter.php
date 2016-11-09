@@ -27,6 +27,7 @@ abstract class AbstractWriter implements WriterInterface
 
         $directoryHandle    = $filesystem->getDirectoryWrite(DirectoryList::MEDIA);
         $this->_fileHandler = $directoryHandle->openFile($filePath, 'w');
+        $this->_fileHandler->flush();
     }
 
     /**

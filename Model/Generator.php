@@ -43,11 +43,6 @@ class Generator
     protected $_writerFactory;
 
     /**
-     * @var \Magento\Framework\App\Filesystem\DirectoryList
-     */
-    protected $_directoryList;
-
-    /**
      * @var LoggerInterface
      */
     protected $_logger;
@@ -56,11 +51,6 @@ class Generator
      * @var \GoMage\Feed\Model\Logger\Handler
      */
     protected $_logHandler;
-
-    /**
-     * @var \Magento\Framework\Json\Helper\Data
-     */
-    protected $_jsonHelper;
 
     /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
@@ -77,24 +67,33 @@ class Generator
      */
     protected $_dateTime;
 
+    /**
+     * @var \GoMage\Feed\Model\Content\Factory
+     */
+    protected $_contentFactory;
+
+    /**
+     * @var \GoMage\Feed\Model\Content\ContentInterface
+     */
+    protected $_content;
+
+
     public function __construct(
         \Magento\Framework\ObjectManagerInterface $objectManager,
         \GoMage\Feed\Model\Reader\Factory $readerFactory,
         \GoMage\Feed\Model\Writer\Factory $writerFactory,
-        \Magento\Framework\App\Filesystem\DirectoryList $_directoryList,
         LoggerInterface $logger,
-        \Magento\Framework\Json\Helper\Data $jsonHelper,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\Framework\Stdlib\DateTime\DateTime $date
+        \Magento\Framework\Stdlib\DateTime\DateTime $dateTime,
+        \GoMage\Feed\Model\Content\Factory $contentFactory
     ) {
-        $this->_objectManager = $objectManager;
-        $this->_readerFactory = $readerFactory;
-        $this->_writerFactory = $writerFactory;
-        $this->_directoryList = $_directoryList;
-        $this->_logger        = $logger;
-        $this->_jsonHelper    = $jsonHelper;
-        $this->_scopeConfig   = $scopeConfig;
-        $this->_dateTime      = $date;
+        $this->_objectManager  = $objectManager;
+        $this->_readerFactory  = $readerFactory;
+        $this->_writerFactory  = $writerFactory;
+        $this->_logger         = $logger;
+        $this->_scopeConfig    = $scopeConfig;
+        $this->_dateTime       = $dateTime;
+        $this->_contentFactory = $contentFactory;
     }
 
     /**
@@ -167,11 +166,19 @@ class Generator
     protected function _getReader()
     {
         if (is_null($this->_reader)) {
-            $this->_reader = $this->_readerFactory->create('GoMage\Feed\Model\Reader\Collection',
-                [
-                    'attributes' => $this->_getRows()->getAttributes(),
-                    'conditions' => $this->_feed->getConditions(),
-                    'storeId'    => $this->_feed->getStoreId(),
+            $params        = $this->_objectManager->create('GoMage\Feed\Model\Reader\Params', [
+                    'data' => [
+                        'attributes'      => $this->_getRows()->getAttributes(),
+                        'conditions'      => $this->_feed->getConditions(),
+                        'store_id'        => $this->_feed->getStoreId(),
+                        'visibility'      => $this->_feed->getVisibility(),
+                        'is_out_of_stock' => $this->_feed->getIsOutOfStock(),
+                        'is_disabled'     => $this->_feed->getIsDisabled(),
+                    ]
+                ]
+            );
+            $this->_reader = $this->_readerFactory->create('GoMage\Feed\Model\Reader\Collection', [
+                    'params' => $params
                 ]
             );
         }
@@ -184,14 +191,24 @@ class Generator
     protected function _getWriter()
     {
         if (is_null($this->_writer)) {
-            $this->_writer = $this->_writerFactory->create('GoMage\Feed\Model\Writer\Csv',
-                [
-                    'fileName'  => $this->_feed->getFullFileName(),
-                    'delimiter' => $this->_feed->getDelimiter(),
-                    'enclosure' => $this->_feed->getEnclosure(),
-                    'isHeader'  => boolval($this->_feed->getIsHeader())
-                ]
-            );
+            $arguments = [
+                'fileName' => $this->_feed->getFullFileName(),
+            ];
+
+            if ($this->_feed->getType() == \GoMage\Feed\Model\Config\Source\FeedType::CSV_TYPE) {
+                $arguments = array_merge($arguments,
+                    [
+                        'delimiter'      => $this->_feed->getDelimiter(),
+                        'enclosure'      => $this->_feed->getEnclosure(),
+                        'isHeader'       => boolval($this->_feed->getIsHeader()),
+                        'additionHeader' => $this->_feed->getIsAdditionHeader() ? $this->_feed->getAdditionHeader() : ''
+                    ]
+                );
+            } else {
+                $arguments['content'] = $this->_getContent();
+            }
+
+            $this->_writer = $this->_writerFactory->create($this->_feed->getType(), $arguments);
         }
         return $this->_writer;
     }
@@ -203,22 +220,24 @@ class Generator
     protected function _getRows()
     {
         if (is_null($this->_rows)) {
-            /** @var \GoMage\Feed\Model\Feed\Row\Collection $rows */
-            $this->_rows = $this->_objectManager->create('GoMage\Feed\Model\Feed\Row\Collection');
-            $content     = $this->_jsonHelper->jsonDecode($this->_feed->getContent());
-            foreach ($content as $data) {
-
-                /** @var \GoMage\Feed\Model\Feed\Row\Data $rowData */
-                $rowData = $this->_objectManager->create('GoMage\Feed\Model\Feed\Row\Data', ['data' => $data]);
-
-                /** @var \GoMage\Feed\Model\Feed\Row $row */
-                $row = $this->_objectManager->create('GoMage\Feed\Model\Feed\Row', ['rowData' => $rowData]);
-
-                $this->_rows->add($row);
-            }
+            $this->_rows = $this->_getContent()->getRows();
         }
-
         return $this->_rows;
+    }
+
+    /**
+     * @return \GoMage\Feed\Model\Content\ContentInterface
+     */
+    protected function _getContent()
+    {
+        if (is_null($this->_content)) {
+            $this->_content = $this->_contentFactory->create($this->_feed->getType(),
+                [
+                    'content' => $this->_feed->getContent()
+                ]
+            );
+        }
+        return $this->_content;
     }
 
     /**

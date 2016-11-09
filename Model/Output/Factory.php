@@ -33,12 +33,12 @@ class Factory
     }
 
     /**
-     * @param int $output
+     * @param  string $output
      * @return \GoMage\Feed\Model\Output\OutputInterface
      */
     public function get($output)
     {
-        return $this->_objectManager->get($this->_outputs[intval($output)]);
+        return $this->_objectManager->get($this->_outputs[$output]);
     }
 
 }

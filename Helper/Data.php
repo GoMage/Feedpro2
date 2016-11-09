@@ -26,18 +26,26 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     protected $_directory;
 
+    /**
+     * @var \Magento\Framework\Stdlib\DateTime\DateTime
+     */
+    protected $_dateTime;
+
+
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
         \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory $attributeCollectionFactory,
         \GoMage\Feed\Model\ResourceModel\Attribute\Collection $dynamicAttributeCollection,
         \Magento\Framework\Filesystem $filesystem,
-        \Magento\Store\Model\StoreManagerInterface $storeManager
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\Stdlib\DateTime\DateTime $dateTime
     ) {
         parent::__construct($context);
         $this->_attributeCollectionFactory = $attributeCollectionFactory;
         $this->_dynamicAttributeCollection = $dynamicAttributeCollection;
         $this->_directory                  = $filesystem->getDirectoryRead(DirectoryList::MEDIA);
         $this->_storeManager               = $storeManager;
+        $this->_dateTime                   = $dateTime;
     }
 
     public function getProductAttributes()
@@ -126,6 +134,62 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
             return $absolute ? $this->_directory->getAbsolutePath($path) : $path;
         }
         return '';
+    }
+
+    /**
+     * @param int $interval
+     * @param int $hourFrom
+     * @param int $hourTo
+     * @param string $lastRun
+     * @return bool
+     */
+    public function needRunCron($interval, $hourFrom, $hourTo, $lastRun)
+    {
+        $current = $this->_dateTime->gmtDate('G');
+        $lastRun = $this->_dateTime->gmtTimestamp($lastRun);
+
+        switch ($interval) {
+            case 12:
+            case 24:
+                if ($hourFrom != $current) {
+                    return false;
+                }
+                if (($lastRun + $interval * 60 * 60) > $this->_dateTime->gmtTimestamp()) {
+                    return false;
+                }
+                break;
+            default:
+                if (!$hourTo) {
+                    $hourTo = 24;
+                }
+
+                $hours = array();
+                if ($hourFrom > $hourTo) {
+                    for ($i = $hourFrom; $i <= 23; $i++) {
+                        $hours[] = $i;
+                    }
+                    for ($i = 0; $i <= $hourTo; $i++) {
+                        $hours[] = $i;
+                    }
+                } else {
+                    for ($i = $hourFrom; $i <= $hourTo; $i++) {
+                        if ($i == 24) {
+                            $hours[] = 0;
+                        } else {
+                            $hours[] = $i;
+                        }
+                    }
+                }
+                if (!in_array($current, $hours)) {
+                    return false;
+                }
+
+                if (($lastRun + $interval * 60 * 60) > $this->_dateTime->gmtTimestamp()) {
+                    return false;
+                }
+        }
+
+        return true;
     }
 
 }

@@ -42,6 +42,10 @@ class Factory
         if (!$className) {
             switch ($type) {
                 case TypeInterface::ATTRIBUTE:
+                    //TODO: create parent mapper
+                case TypeInterface::PARENT_ATTRIBUTE:
+                case TypeInterface::EMPTY_PARENT_ATTRIBUTE:
+                case TypeInterface::EMPTY_CHILD_ATTRIBUTE:
                     $className = 'GoMage\Feed\Model\Mapper\Attribute';
                     break;
                 case TypeInterface::STATIC_VALUE:
