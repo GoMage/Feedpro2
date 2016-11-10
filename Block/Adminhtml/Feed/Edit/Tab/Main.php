@@ -119,6 +119,13 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
             ]
         );
 
+        if (!$model->getFileExt()) {
+            $fileExt = $model->getType() == \GoMage\Feed\Model\Config\Source\FeedType::XML_TYPE ?
+                \GoMage\Feed\Model\Config\Source\Extension\Xml::XML :
+                \GoMage\Feed\Model\Config\Source\Extension\Csv::CSV;
+            $model->setFileExt($fileExt);
+        }
+
         $field    = $fieldset->addField(
             'store_id',
             'select',

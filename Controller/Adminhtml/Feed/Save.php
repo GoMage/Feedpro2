@@ -41,6 +41,14 @@ class Save extends FeedController
                     unset($data['rule']);
                 }
 
+                if (isset($data['generate_day']) && is_array($data['generate_day'])) {
+                    $data['generate_day'] = implode(',', $data['generate_day']);
+                }
+
+                if (isset($data['upload_day']) && is_array($data['upload_day'])) {
+                    $data['upload_day'] = implode(',', $data['upload_day']);
+                }
+
                 $model->loadPost($data);
                 $model->save();
                 $this->messageManager->addSuccess(__('You saved the feed.'));
