@@ -44,4 +44,14 @@
             <argument name="resourceModel" xsi:type="string">GoMage\Feed\Model\ResourceModel\Attribute</argument>
         </arguments>
     </type>
+    <virtualType name="GoMage\Feed\Ui\Component\DataProvider\Feed" type="Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider">
+        <arguments>
+            <argument name="collection" xsi:type="object" shared="false">GoMage\Feed\Model\ResourceModel\Feed</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="GoMage\Feed\Ui\Component\DataProvider\Attribute" type="Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider">
+        <arguments>
+            <argument name="collection" xsi:type="object" shared="false">GoMage\Feed\Model\ResourceModel\Attribute</argument>
+        </arguments>
+    </virtualType>
 </config>
