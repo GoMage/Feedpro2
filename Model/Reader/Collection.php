@@ -32,17 +32,24 @@ class Collection implements ReaderInterface
      */
     protected $_builder;
 
+    /**
+     * @var \Magento\CatalogInventory\Helper\Stock
+     */
+    protected $_stockFilter;
+
 
     public function __construct(
         \GoMage\Feed\Model\Reader\Params $params,
         \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory,
         \GoMage\Feed\Model\Config\Source\Visibility $visibility,
-        \Magento\Rule\Model\Condition\Sql\Builder $builder
+        \Magento\Rule\Model\Condition\Sql\Builder $builder,
+        \Magento\CatalogInventory\Helper\Stock $stockFilter
     ) {
         $this->_params                   = $params;
         $this->_productCollectionFactory = $productCollectionFactory;
         $this->_visibility               = $visibility;
         $this->_builder                  = $builder;
+        $this->_stockFilter              = $stockFilter;
     }
 
 
@@ -54,6 +61,7 @@ class Collection implements ReaderInterface
     public function read($page, $limit)
     {
         $collection = $this->_getCollection();
+
         $collection->setPage($page, $limit);
         if (!$collection->count()) {
             return false;
@@ -76,7 +84,18 @@ class Collection implements ReaderInterface
                 $this->_collection->setStoreId($this->_params->getStoreId());
             }
 
-            $this->_collection->setVisibility($this->_visibility->getProductVisibility($this->_params->getVisibility()));
+            $visibility = $this->_visibility->getProductVisibility($this->_params->getVisibility());
+            if (is_array($visibility) && !empty($visibility)) {
+                $this->_collection->addAttributeToFilter('visibility', ['in' => $visibility]);
+            }
+
+            if (!$this->_params->getIsDisabled()) {
+                $this->_collection->addAttributeToFilter('status', ['eq' => 1]);
+            }
+
+            if (!$this->_params->getIsOutOfStock()) {
+                $this->_stockFilter->addInStockFilterToCollection($this->_collection);
+            }
 
             $this->_params->getConditions()->collectValidatedAttributes($this->_collection);
             $this->_builder->attachConditionToCollection($this->_collection, $this->_params->getConditions());
