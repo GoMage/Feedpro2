@@ -114,8 +114,16 @@ $_operators  = $block->getOperators();
             <input name="<?php echo $_htmlName ?>[<%- data.row_id %>][value]"
                    value="<%- data.value %>" class="input-text admin__control-text" type="text"/>
         </td>
-        <td>&nbsp;</td>
-        <td class="col-action"><span class="delete-ph"></span></td>
+        <td>
+          <select class="select admin__control-select feed-ph">
+            <option>Placeholder</option>
+          </select>
+        </td>
+        <td class="col-action">
+            <button title="<?php echo __("Delete") ?>" type="button" class="delete feed-ph">
+                <span><?php echo __("Delete") ?></span>
+            </button>        
+        </td>
     </tr>
 </script>
 
@@ -134,7 +142,11 @@ $_operators  = $block->getOperators();
                 <?php endforeach ?>
             </select>
         </td>
-        <td class="col-action"><span class="delete-ph"></span></td>
+        <td class="col-action">
+            <button title="<?php echo __("Delete") ?>" type="button" class="delete feed-ph">
+                <span><?php echo __("Delete") ?></span>
+            </button>        
+        </td>
     </tr>
 </script>
 
@@ -153,7 +165,11 @@ $_operators  = $block->getOperators();
                 <?php endforeach ?>
             </select>
         </td>
-        <td class="col-action"><span class="delete-ph"></span></td>
+        <td class="col-action">
+            <button title="<?php echo __("Delete") ?>" type="button" class="delete feed-ph">
+                <span><?php echo __("Delete") ?></span>
+            </button>        
+        </td>
     </tr>
 </script>
 

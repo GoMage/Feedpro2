@@ -36,6 +36,9 @@
 
 /* Conditions and Values tab
 -------------------------------------------------- */
+.feed-ph{
+  visibility: hidden;
+}
 .delete-ph{
   display: inline-block;
   width: 22px;
