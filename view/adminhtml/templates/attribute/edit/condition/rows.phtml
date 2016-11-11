@@ -53,7 +53,7 @@ $_operators  = $block->getOperators();
             </table>
         </td>
         <td class="col-action">
-            <span class="actions-select _active">
+            <span class="actions-select">
                 <a data-role="title"><?php echo __("Select") ?></a>
                 <div data-role="content">
                     <button title="<?php echo __("Delete") ?>" type="button" class="action- scalable delete delete-row">
@@ -114,6 +114,8 @@ $_operators  = $block->getOperators();
             <input name="<?php echo $_htmlName ?>[<%- data.row_id %>][value]"
                    value="<%- data.value %>" class="input-text admin__control-text" type="text"/>
         </td>
+        <td>&nbsp;</td>
+        <td class="col-action"><span class="delete-ph"></span></td>
     </tr>
 </script>
 
@@ -132,6 +134,7 @@ $_operators  = $block->getOperators();
                 <?php endforeach ?>
             </select>
         </td>
+        <td class="col-action"><span class="delete-ph"></span></td>
     </tr>
 </script>
 
@@ -150,6 +153,7 @@ $_operators  = $block->getOperators();
                 <?php endforeach ?>
             </select>
         </td>
+        <td class="col-action"><span class="delete-ph"></span></td>
     </tr>
 </script>
 
