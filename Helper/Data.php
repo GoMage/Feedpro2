@@ -181,7 +181,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     public function needRunCron($interval, $hourFrom, $hourTo, $lastRun)
     {
         $current = $this->_dateTime->gmtDate('G');
-        $lastRun = $this->_dateTime->gmtTimestamp($lastRun);
+        $lastRun = $lastRun ? $this->_dateTime->gmtTimestamp($lastRun) : 0;
 
         switch ($interval) {
             case 12:
