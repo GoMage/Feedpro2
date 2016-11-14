@@ -51,7 +51,9 @@ class Generate
             if (!$feed->getData('is_generate')) {
                 continue;
             }
-            if ($this->_dateTime->gmtDate('d.m.Y:H') == $this->_dateTime->gmtDate('d.m.Y:H', $feed->getData('cron_generated_at'))) {
+            if ($feed->getData('cron_generated_at') &&
+                ($this->_dateTime->gmtDate('d.m.Y:H') == $this->_dateTime->gmtDate('d.m.Y:H', $feed->getData('cron_generated_at')))
+            ) {
                 continue;
             }
             if (!$this->_helper->needRunCron($feed->getData('generate_interval'),
