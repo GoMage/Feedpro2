@@ -4,7 +4,7 @@
         <tab id="gomage" translate="label" sortOrder="1000">
             <label>GoMage</label>
         </tab>
-        <section id="gomage_feed" translate="label" type="text" sortOrder="10" showInDefault="1">
+        <section id="gomage_feed" translate="label" type="text" sortOrder="100" showInDefault="1">
             <label>Feed Pro</label>
             <tab>gomage</tab>
             <resource>GoMage_Feed::config_feed</resource>
@@ -69,9 +69,25 @@
                     <label>Send Email Copy To</label>
                     <comment>Comma-separated.</comment>
                 </field>
-                <field id="copy_method" translate="label comment" type="select" sortOrder="70">
+                <field id="copy_method" translate="label comment" type="select" sortOrder="70" showInDefault="1">
                     <label>Send Email Copy Method</label>
                     <source_model>Magento\Config\Model\Config\Source\Email\Method</source_model>
+                </field>
+            </group>
+        </section>
+        <section id="gomage_settings" translate="label" type="text" sortOrder="1000" showInDefault="1">
+            <label>Activation</label>
+            <tab>gomage</tab>
+            <resource>GoMage_Feed::settings_feed</resource>
+            <group id="feed" translate="label" type="text" sortOrder="10" showInDefault="1">
+                <label>GoMage Feed Pro v.1.0</label>
+                <field id="key" translate="label comment" type="text" sortOrder="10" showInDefault="1">
+                    <label>Activation Key</label>
+                </field>
+                <field id="websites" translate="label comment" type="checkbox" sortOrder="20" showInDefault="1">
+                    <label>Select Websites</label>
+                    <source_model>Magento\Config\Model\Config\Source\Website</source_model>
+                    <frontend_model>GoMage\Feed\Block\Adminhtml\Form\Element\Website</frontend_model>
                 </field>
             </group>
         </section>

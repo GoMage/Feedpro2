@@ -5,7 +5,6 @@ namespace GoMage\Feed\Block\Adminhtml\Feed\Edit\Tab;
 use GoMage\Feed\Model\Feed;
 use GoMage\Feed\Model\Config\Source\Extension\Csv;
 use GoMage\Feed\Model\Config\Source\Extension\Xml;
-use Magento\Store\Model\System\Store;
 
 class Main extends \Magento\Backend\Block\Widget\Form\Generic implements \Magento\Backend\Block\Widget\Tab\TabInterface
 {
@@ -21,14 +20,10 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
     protected $_xml;
 
     /**
-     * @var Store
-     */
-    protected $_systemStore;
-
-    /**
      * @var \GoMage\Feed\Helper\Data
      */
     protected $_helper;
+
 
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -36,14 +31,12 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
         \Magento\Framework\Data\FormFactory $formFactory,
         Csv $csv,
         Xml $xml,
-        Store $systemStore,
         \GoMage\Feed\Helper\Data $helper,
         array $data = []
     ) {
-        $this->_xml         = $xml;
-        $this->_csv         = $csv;
-        $this->_systemStore = $systemStore;
-        $this->_helper      = $helper;
+        $this->_xml    = $xml;
+        $this->_csv    = $csv;
+        $this->_helper = $helper;
         parent::__construct($context, $registry, $formFactory, $data);
     }
 
@@ -134,7 +127,7 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
                 'label'    => __('Store View'),
                 'title'    => __('Store View'),
                 'required' => true,
-                'values'   => $this->_systemStore->getStoreValuesForForm(),
+                'values'   => $this->_helper->getStoreOptionArray(),
             ]
         );
         $renderer = $this->getLayout()->createBlock(
