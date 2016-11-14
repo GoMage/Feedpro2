@@ -53,7 +53,7 @@ $_operators  = $block->getOperators();
             </table>
         </td>
         <td class="col-action">
-            <span class="actions-select _active">
+            <span class="actions-select">
                 <a data-role="title"><?php echo __("Select") ?></a>
                 <div data-role="content">
                     <button title="<?php echo __("Delete") ?>" type="button" class="action- scalable delete delete-row">
@@ -114,6 +114,16 @@ $_operators  = $block->getOperators();
             <input name="<?php echo $_htmlName ?>[<%- data.row_id %>][value]"
                    value="<%- data.value %>" class="input-text admin__control-text" type="text"/>
         </td>
+        <td>
+          <select class="select admin__control-select feed-ph">
+            <option>Placeholder</option>
+          </select>
+        </td>
+        <td class="col-action">
+            <button title="<?php echo __("Delete") ?>" type="button" class="delete feed-ph">
+                <span><?php echo __("Delete") ?></span>
+            </button>        
+        </td>
     </tr>
 </script>
 
@@ -132,6 +142,11 @@ $_operators  = $block->getOperators();
                 <?php endforeach ?>
             </select>
         </td>
+        <td class="col-action">
+            <button title="<?php echo __("Delete") ?>" type="button" class="delete feed-ph">
+                <span><?php echo __("Delete") ?></span>
+            </button>        
+        </td>
     </tr>
 </script>
 
@@ -149,6 +164,11 @@ $_operators  = $block->getOperators();
                     <option value="<?php echo $_attribute['value'] ?>" <% if (typeof data.code != 'undefined' && data.code == '<?php echo $_attribute['value'] ?>') { %> selected="selected" <% } %>><?php echo $_attribute['label'] ?></option>
                 <?php endforeach ?>
             </select>
+        </td>
+        <td class="col-action">
+            <button title="<?php echo __("Delete") ?>" type="button" class="delete feed-ph">
+                <span><?php echo __("Delete") ?></span>
+            </button>        
         </td>
     </tr>
 </script>
