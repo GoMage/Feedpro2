@@ -92,6 +92,7 @@ class Feed extends \Magento\Rule\Model\AbstractModel
             if (!empty($conditions)) {
                 $conditions = unserialize($conditions);
                 if (is_array($conditions) && !empty($conditions)) {
+                    $this->_resetConditions();
                     $this->_conditions->loadArray($conditions);
                 }
             }
