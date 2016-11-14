@@ -141,13 +141,6 @@ class InstallSchema implements InstallSchemaInterface
                 'Generated at'
             )
             ->addColumn(
-                'cron_started_at',
-                \Magento\Framework\DB\Ddl\Table::TYPE_TIMESTAMP,
-                null,
-                [],
-                'Cron started at'
-            )
-            ->addColumn(
                 'uploaded_at',
                 \Magento\Framework\DB\Ddl\Table::TYPE_TIMESTAMP,
                 null,

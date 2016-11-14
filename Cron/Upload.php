@@ -54,7 +54,7 @@ class Upload
             if ($this->_dateTime->gmtDate('d.m.Y:H') == $this->_dateTime->gmtDate('d.m.Y:H', $feed->getData('cron_uploaded_at'))) {
                 continue;
             }
-            if ($this->_helper->needRunCron($feed->getData('upload_interval'),
+            if (!$this->_helper->needRunCron($feed->getData('upload_interval'),
                 $feed->getData('upload_hour'),
                 $feed->getData('upload_hour_to'),
                 $feed->getData('cron_uploaded_at')
