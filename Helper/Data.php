@@ -396,6 +396,9 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         return $this->_moduleList->getOne($this->_getModuleName())['setup_version'];
     }
 
+    /**
+     * @return array
+     */
     public function getStoreOptionArray()
     {
         $options   = [];
