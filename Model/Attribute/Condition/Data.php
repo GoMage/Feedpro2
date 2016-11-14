@@ -30,7 +30,7 @@ class Data extends \Magento\Framework\DataObject
         if (!isset($data['code']) || !$data['code']) {
             throw new ValidatorException(__('Condition code is required.'));
         }
-        if (!isset($data['operator']) || !$data['operator']) {
+        if (!isset($data['operator'])) {
             throw new ValidatorException(__('Condition operator is required.'));
         }
         return $data;
