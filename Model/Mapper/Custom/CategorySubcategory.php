@@ -1,10 +1,9 @@
 <?php
-namespace GoMage\Feed\Model\Mapper\Attribute;
+namespace GoMage\Feed\Model\Mapper\Custom;
 
-use GoMage\Feed\Model\Mapper\MapperInterface;
 use Magento\Catalog\Api\CategoryRepositoryInterface;
 
-class CategorySubcategory implements MapperInterface
+class CategorySubcategory implements CustomMapperInterface
 {
 
     /**
@@ -51,4 +50,13 @@ class CategorySubcategory implements MapperInterface
     {
         return [];
     }
+
+    /**
+     * @return string
+     */
+    public static function getLabel()
+    {
+        return __('Category > SubCategory');
+    }
+
 }

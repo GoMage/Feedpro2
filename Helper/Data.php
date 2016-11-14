@@ -52,6 +52,11 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     protected $_encryptor;
 
     /**
+     * @var \GoMage\Feed\Model\Mapper\Factory
+     */
+    protected $_mapperFactory;
+
+    /**
      * @var \Magento\Framework\ObjectManagerInterface
      */
     protected $_objectManager;
@@ -68,6 +73,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         \Magento\Framework\Module\ModuleListInterface $moduleList,
         \Magento\Framework\Json\Helper\Data $jsonHelper,
         \Magento\Framework\Encryption\EncryptorInterface $encryptor,
+        \GoMage\Feed\Model\Mapper\Factory $mapperFactory,
         \Magento\Framework\ObjectManagerInterface $objectManager
     ) {
         parent::__construct($context);
@@ -80,6 +86,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         $this->_moduleList                 = $moduleList;
         $this->_jsonHelper                 = $jsonHelper;
         $this->_encryptor                  = $encryptor;
+        $this->_mapperFactory              = $mapperFactory;
         $this->_objectManager              = $objectManager;
     }
 
@@ -95,19 +102,12 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         }, $attributes
         );
 
-        //TODO: hard code
-        $attributes[] = [
-            'value' => 'id',
-            'label' => __('Product Id')
-        ];
-        $attributes[] = [
-            'value' => 'category_subcategory',
-            'label' => __('Category > SubCategory')
-        ];
-        $attributes[] = [
-            'value' => 'product_url',
-            'label' => __('Product Url')
-        ];
+        foreach ($this->_mapperFactory->getCustomMappers() as $value => $class) {
+            $attributes[] = [
+                'value' => $value,
+                'label' => $class::getLabel()
+            ];
+        }
 
         usort($attributes, function ($a, $b) {
             return strcmp($a['label'], $b['label']);

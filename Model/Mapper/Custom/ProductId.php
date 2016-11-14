@@ -1,9 +1,8 @@
 <?php
-namespace GoMage\Feed\Model\Mapper\Attribute;
+namespace GoMage\Feed\Model\Mapper\Custom;
 
-use GoMage\Feed\Model\Mapper\MapperInterface;
 
-class ProductUrl implements MapperInterface
+class ProductId implements CustomMapperInterface
 {
 
     /**
@@ -12,7 +11,7 @@ class ProductUrl implements MapperInterface
      */
     public function map(\Magento\Framework\DataObject $object)
     {
-        return $object->getProductUrl();
+        return $object->getId();
     }
 
     /**
@@ -21,6 +20,14 @@ class ProductUrl implements MapperInterface
     public function getUsedAttributes()
     {
         return [];
+    }
+
+    /**
+     * @return string
+     */
+    public static function getLabel()
+    {
+        return __('Product Id');
     }
 
 }

@@ -14,20 +14,15 @@ class Factory
     /**
      * @var array
      */
-    protected $_customMappers = [
-        TypeInterface::ATTRIBUTE => [
-            'category_subcategory' => 'GoMage\Feed\Model\Mapper\Attribute\CategorySubcategory',
-            'id'                   => 'GoMage\Feed\Model\Mapper\Attribute\ProductId',
-            'product_url'          => 'GoMage\Feed\Model\Mapper\Attribute\ProductUrl',
-        ]
-    ];
+    protected $_customMappers;
 
-    /**
-     * @param \Magento\Framework\ObjectManagerInterface $objectManager
-     */
-    public function __construct(\Magento\Framework\ObjectManagerInterface $objectManager)
-    {
+
+    public function __construct(
+        \Magento\Framework\ObjectManagerInterface $objectManager,
+        $customMappers = []
+    ) {
         $this->_objectManager = $objectManager;
+        $this->_customMappers = $customMappers;
     }
 
     /**
@@ -37,16 +32,21 @@ class Factory
      */
     public function create($type, $value)
     {
-        $className = $this->_getCustomMapper($type, $value);
+        $className = $this->_getCustomMapper($value);
 
         if (!$className) {
             switch ($type) {
                 case TypeInterface::ATTRIBUTE:
-                    //TODO: create parent mapper
-                case TypeInterface::PARENT_ATTRIBUTE:
-                case TypeInterface::EMPTY_PARENT_ATTRIBUTE:
-                case TypeInterface::EMPTY_CHILD_ATTRIBUTE:
                     $className = 'GoMage\Feed\Model\Mapper\Attribute';
+                    break;
+                case TypeInterface::PARENT_ATTRIBUTE:
+                    $className = 'GoMage\Feed\Model\Mapper\ParentAttribute';
+                    break;
+                case TypeInterface::EMPTY_PARENT_ATTRIBUTE:
+                    $className = 'GoMage\Feed\Model\Mapper\EmptyParentAttribute';
+                    break;
+                case TypeInterface::EMPTY_CHILD_ATTRIBUTE:
+                    $className = 'GoMage\Feed\Model\Mapper\EmptyChildAttribute';
                     break;
                 case TypeInterface::STATIC_VALUE:
                     $className = 'GoMage\Feed\Model\Mapper\StaticValue';
@@ -70,16 +70,23 @@ class Factory
     }
 
     /**
-     * @param  string $type
      * @param  string $value
-     * @return string
+     * @return bool
      */
-    protected function _getCustomMapper($type, $value)
+    protected function _getCustomMapper($value)
     {
-        if (isset($this->_customMappers[$type][$value])) {
-            return $this->_customMappers[$type][$value];
+        if (isset($this->_customMappers[$value])) {
+            return $this->_customMappers[$value];
         }
         return false;
+    }
+
+    /**
+     * @return array
+     */
+    public function getCustomMappers()
+    {
+        return $this->_customMappers;
     }
 
 }

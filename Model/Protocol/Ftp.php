@@ -15,8 +15,15 @@ class Ftp extends AbstractProtocol
         }
 
         $this->_connection = ftp_connect($this->_params->getHost(), $this->_params->getPort());
-        ftp_login($this->_connection, $this->_params->getUser(), $this->_params->getPassword());
-        ftp_pasv($this->_connection, $this->_params->getPassiveMode());
+        if (!$this->_connection) {
+            throw new \Exception('Invalid FTP/FTPS access (Host Name or Port).');
+        }
+        if (!ftp_login($this->_connection, $this->_params->getUser(), $this->_params->getPassword())) {
+            throw new \Exception('Invalid FTP/FTPS access (User Name or Password).');
+        }
+        if (!ftp_pasv($this->_connection, $this->_params->getPassiveMode())) {
+            throw new \Exception('Invalid FTP/FTPS access (Passive/Active Mode).');
+        }
     }
 
     /**

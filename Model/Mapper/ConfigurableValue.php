@@ -1,8 +1,6 @@
 <?php
 namespace GoMage\Feed\Model\Mapper;
 
-use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
-
 class ConfigurableValue implements MapperInterface
 {
 
@@ -29,7 +27,7 @@ class ConfigurableValue implements MapperInterface
     public function __construct(
         $value,
         \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable $configurable,
-        ProductAttributeRepositoryInterface $attributeRepository
+        \Magento\Catalog\Api\ProductAttributeRepositoryInterface $attributeRepository
     ) {
         $this->_prefix       = $value['prefix'];
         $this->_code         = $value['code'];

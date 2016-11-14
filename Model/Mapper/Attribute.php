@@ -1,8 +1,6 @@
 <?php
 namespace GoMage\Feed\Model\Mapper;
 
-use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
-
 class Attribute implements MapperInterface
 {
 
@@ -19,7 +17,7 @@ class Attribute implements MapperInterface
 
     public function __construct(
         $value,
-        ProductAttributeRepositoryInterface $attributeRepository
+        \Magento\Catalog\Api\ProductAttributeRepositoryInterface $attributeRepository
     ) {
         $this->_code      = $value;
         $this->_attribute = $attributeRepository->get($this->_code);

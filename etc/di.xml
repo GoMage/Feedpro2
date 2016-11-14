@@ -54,4 +54,13 @@
             <argument name="collection" xsi:type="object" shared="false">GoMage\Feed\Model\ResourceModel\Attribute</argument>
         </arguments>
     </virtualType>
+    <type name="GoMage\Feed\Model\Mapper\Factory">
+        <arguments>
+            <argument name="customMappers" xsi:type="array">
+                <item name="id" xsi:type="string">GoMage\Feed\Model\Mapper\Custom\ProductId</item>
+                <item name="product_url" xsi:type="string">GoMage\Feed\Model\Mapper\Custom\ProductUrl</item>
+                <item name="category_subcategory" xsi:type="string">GoMage\Feed\Model\Mapper\Custom\CategorySubcategory</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

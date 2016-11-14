@@ -1,8 +1,6 @@
 <?php
 namespace GoMage\Feed\Model\Mapper;
 
-use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
-
 class AttributePercent extends Attribute implements MapperInterface
 {
 
@@ -13,7 +11,7 @@ class AttributePercent extends Attribute implements MapperInterface
 
     public function __construct(
         $value,
-        ProductAttributeRepositoryInterface $attributeRepository
+        \Magento\Catalog\Api\ProductAttributeRepositoryInterface $attributeRepository
     ) {
         $this->_percent = floatval($value['percent']);
         parent::__construct($value['code'], $attributeRepository);

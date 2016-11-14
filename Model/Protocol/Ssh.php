@@ -15,7 +15,12 @@ class Ssh extends AbstractProtocol
         }
 
         $this->_connection = ssh2_connect($this->_params->getHost(), $this->_params->getPort());
-        ssh2_auth_password($this->_connection, $this->_params->getUser(), $this->_params->getPassword());
+        if (!$this->_connection) {
+            throw new \Exception('Invalid SFTP/SSH access (Host Name or Port).');
+        }
+        if (!ssh2_auth_password($this->_connection, $this->_params->getUser(), $this->_params->getPassword())) {
+            throw new \Exception('Invalid SFTP/SSH access (User Name or Password).');
+        }
     }
 
     /**
