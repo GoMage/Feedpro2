@@ -1,5 +1,19 @@
 <?php
 
+/**
+ * GoMage.com
+ *
+ * GoMage Feed Pro M2
+ *
+ * @category     Extension
+ * @copyright    Copyright (c) 2010-2016 GoMage.com (https://www.gomage.com)
+ * @author       GoMage.com
+ * @license      https://www.gomage.com/licensing  Single domain license
+ * @terms of use https://www.gomage.com/terms-of-use
+ * @version      Release: 1.0.0
+ * @since        Class available since Release 1.0.0
+ */
+
 namespace GoMage\Feed\Model\Config\Source\DateTime;
 
 class Interval implements \Magento\Framework\Option\ArrayInterface
@@ -16,11 +30,11 @@ class Interval implements \Magento\Framework\Option\ArrayInterface
     public function toOptionArray()
     {
         return [
-            ['value' => self::EVERY_1_HOUR, 'label' => __('every 1 hour')],
-            ['value' => self::EVERY_3_HOUR, 'label' => __('every 3 hour')],
-            ['value' => self::EVERY_6_HOUR, 'label' => __('every 6 hour')],
-            ['value' => self::EVERY_12_HOUR, 'label' => __('every 12 hour')],
-            ['value' => self::EVERY_24_HOUR, 'label' => __('every 24 hour')],
+            ['value' => self::EVERY_1_HOUR, 'label' => __('every %1 hour', 1)],
+            ['value' => self::EVERY_3_HOUR, 'label' => __('every %1 hour', 3)],
+            ['value' => self::EVERY_6_HOUR, 'label' => __('every %1 hour', 6)],
+            ['value' => self::EVERY_12_HOUR, 'label' => __('every %1 hour', 12)],
+            ['value' => self::EVERY_24_HOUR, 'label' => __('every %1 hour', 24)],
         ];
     }
 

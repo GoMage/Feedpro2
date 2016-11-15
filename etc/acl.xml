@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Acl/etc/acl.xsd">
+    <acl>
+        <resources>
+            <resource id="Magento_Backend::admin">
+                <resource id="Magento_Backend::marketing">
+                    <resource id="GoMage_Feed::marketing_feed" title="GoMage Feeds" translate="title" sortOrder="100">
+                        <resource id="GoMage_Feed::feeds" title="Manage Feeds" translate="title" sortOrder="10" />
+                        <resource id="GoMage_Feed::attributes" title="Manage Dynamic Attributes" translate="title" sortOrder="20" />
+                    </resource>
+                </resource>
+                <resource id="Magento_Backend::stores">
+                    <resource id="Magento_Backend::stores_settings">
+                        <resource id="GoMage_Feed::config_feed" title="GoMage Feed Pro Configuration" translate="title" sortOrder="100"/>
+                        <resource id="GoMage_Feed::settings_feed" title="GoMage Feed Pro Activation" translate="title" sortOrder="110"/>
+                    </resource>
+                </resource>
+            </resource>
+        </resources>
+    </acl>
+</config>
