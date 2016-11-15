@@ -86,7 +86,7 @@
 .admin__control-table.feed-conditions-values .col-value select,
 .admin__control-table.feed-conditions-values .col-value input.input-text,
 .admin__control-table.feed-conditions-values .col-type select{
-  min-width: 120px;
+  /* min-width: 120px; */
 }
 .admin__control-table.feed-conditions-values .col-condition table td{
   width: 33.33%;
