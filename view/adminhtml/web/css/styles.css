@@ -1,3 +1,9 @@
+/* Feed list
+-------------------------------------------------- */
+.gomage-feed-feed-index .data-grid tbody td .data-grid-cell-content a{
+  word-break: break-all;
+}
+
 /* Conditions tab
 -------------------------------------------------- */
 #feed_tabs_conditions_section_content .rule-tree ul{
