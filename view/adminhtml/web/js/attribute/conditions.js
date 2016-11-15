@@ -65,8 +65,8 @@ define([
             reloadAttributeValues: function (attribute) {
 
                 var elementName = attribute.readAttribute('data-value');
-                var input = jQuery("input[name='" + elementName + "'"),
-                    select = jQuery("select[name='" + elementName + "'");
+                var input = jQuery("input[name='" + elementName + "']"),
+                    select = jQuery("select[name='" + elementName + "']");
 
                 if (attribute.getValue()) {
                     jQuery.ajax({

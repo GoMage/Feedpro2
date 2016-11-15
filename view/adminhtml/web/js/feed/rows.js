@@ -67,8 +67,8 @@ define([
             },
             setValue: function (typeField) {
                 var elementName = typeField.readAttribute('data-value');
-                var input = jQuery("input[name='" + elementName + "'"),
-                    select = jQuery("select[name='" + elementName + "'"),
+                var input = jQuery("input[name='" + elementName + "']"),
+                    select = jQuery("select[name='" + elementName + "']"),
                     values = [];
                 switch (parseInt(typeField.getValue())) {
                     case 2:
@@ -129,8 +129,8 @@ define([
                 Element.insert(container, element);
             },
             getTitleValue: function (row_id, name) {
-                var input = jQuery("input[name='" + config.htmlName + "[" + row_id + "][" + name + "]'"),
-                    select = jQuery("select[name='" + config.htmlName + "[" + row_id + "][" + name + "]'");
+                var input = jQuery("input[name='" + config.htmlName + "[" + row_id + "][" + name + "]']"),
+                    select = jQuery("select[name='" + config.htmlName + "[" + row_id + "][" + name + "]']");
                 if (!select.length || select.is(':disabled')) {
                     return input.val();
                 }
