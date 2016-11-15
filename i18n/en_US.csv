@@ -1,8 +1,5 @@
 "Feed Pro","Feed Pro"
 "Server Configurations","Server Configurations"
-"Generate Function","Generate Function"
-Fopen,Fopen
-Curl,Curl
 "Memory Limit, Mb","Memory Limit, Mb"
 "Max Upload File Size, Mb","Max Upload File Size, Mb"
 "Max Post Size, Mb","Max Post Size, Mb"
@@ -45,6 +42,30 @@ Code,Code
 Enclosure,Enclosure
 Delimiter,Delimiter
 "Suffix Delimiter","Suffix Delimiter"
-"Remove line break symbols","Remove line break symbols"
 "Use Addition Header","Use Addition Header"
 "Addition Header","Addition Header"
+"Catalog, Search","Catalog, Search"
+"Not Use Option","Not Use Option"
+"Not Visible Individually","Not Visible Individually"
+Catalog,Catalog
+Search,Search
+"Only Catalog","Only Catalog"
+"Only Search","Only Search"
+"In progress","In progress"
+"Completed","Completed"
+Failed,Failed
+Stopped,Stopped
+"FTP / FTPS","FTP / FTPS"
+"SFTP (SSH)","SFTP (SSH)"
+"Strip Tags","Strip Tags"
+"Encode special chars","Encode special chars"
+"Decode special chars","Decode special chars"
+"Delete Space","Delete Space"
+"Big to small","Big to small"
+"greater than or equal to","greater than or equal to"
+"less than or equal to","less than or equal to"
+"File Successfully Generated","File Successfully Generated"
+"File Successfully Uploaded","File Successfully Uploaded"
+"Static Value","Static Value"
+"Percent from value","Percent from value"
+"Configurable values","Configurable values"
