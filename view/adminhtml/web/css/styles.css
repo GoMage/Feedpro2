@@ -62,8 +62,8 @@
 .admin__control-table.feed-conditions-values table td{
   padding: 0 0 0 1rem;
 }
-.admin__control-table.feed-conditions-values .col-condition,
-.admin__control-table.feed-conditions-values .col-value{
+.admin__control-table.feed-conditions-values td.col-condition,
+.admin__control-table.feed-conditions-values td.col-value{
   padding-bottom: 0;
   padding-top: 0;
 }
