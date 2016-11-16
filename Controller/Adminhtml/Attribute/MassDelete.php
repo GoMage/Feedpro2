@@ -16,33 +16,54 @@
 
 namespace GoMage\Feed\Controller\Adminhtml\Attribute;
 
-use GoMage\Feed\Controller\Adminhtml\Attribute as AttributeController;
 use Magento\Framework\Controller\ResultFactory;
+use Magento\Backend\App\Action\Context;
+use Magento\Ui\Component\MassAction\Filter;
+use GoMage\Feed\Model\ResourceModel\Attribute\CollectionFactory;
 
-class MassDelete extends AttributeController
+class MassDelete extends \Magento\Backend\App\Action
 {
     /**
+     * @var Filter
+     */
+    protected $filter;
+
+    /**
+     * @var CollectionFactory
+     */
+    protected $collectionFactory;
+
+    /**
+     * @param Context $context
+     * @param Filter $filter
+     * @param CollectionFactory $collectionFactory
+     */
+    public function __construct(Context $context, Filter $filter, CollectionFactory $collectionFactory)
+    {
+        $this->filter            = $filter;
+        $this->collectionFactory = $collectionFactory;
+        parent::__construct($context);
+    }
+
+    /**
+     * Execute action
+     *
      * @return \Magento\Backend\Model\View\Result\Redirect
+     * @throws \Magento\Framework\Exception\LocalizedException|\Exception
      */
     public function execute()
     {
-        $attributeIds = $this->getRequest()->getParam('attributes');
-        if (!is_array($attributeIds)) {
-            $this->messageManager->addError(__('Please select attributes.'));
-        } else {
-            try {
-                foreach ($attributeIds as $attributeId) {
-                    $model = $this->_objectManager->create('GoMage\Feed\Model\Attribute')->load($attributeId);
-                    $model->delete();
-                }
-                $this->messageManager->addSuccess(__('Total of %1 record(s) were deleted.', count($attributeIds)));
-            } catch (\Exception $e) {
-                $this->messageManager->addError($e->getMessage());
-            }
+        $collection     = $this->filter->getCollection($this->collectionFactory->create());
+        $collectionSize = $collection->getSize();
+
+        foreach ($collection as $attribute) {
+            $attribute->delete();
         }
+
+        $this->messageManager->addSuccess(__('A total of %1 record(s) have been deleted.', $collectionSize));
+
         /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
         $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
-        $resultRedirect->setPath('gomage_feed/attribute/index');
-        return $resultRedirect;
+        return $resultRedirect->setPath('*/*/');
     }
 }

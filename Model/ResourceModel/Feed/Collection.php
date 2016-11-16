@@ -19,6 +19,11 @@ namespace GoMage\Feed\Model\ResourceModel\Feed;
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
     /**
+     * @var string
+     */
+    protected $_idFieldName = 'id';
+
+    /**
      * Init collection
      *
      * @return void
