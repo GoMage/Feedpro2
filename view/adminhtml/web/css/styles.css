@@ -67,7 +67,13 @@
 .admin__control-table.feed-conditions-values > thead > tr > th,
 .admin__control-table.feed-conditions-values > tbody > tr > td{
   border-right: 1px solid #fff;
+  border-bottom: 1px solid #fff;
   padding-left: 1rem;
+  padding-right: 1rem;
+  padding-bottom: 1.3rem;
+}
+.admin__control-table.feed-conditions-values > tfoot > tr > td{
+  padding: 1.3rem 1rem;
 }
 .admin__control-table.feed-conditions-values > thead > tr > th:last-child,
 .admin__control-table.feed-conditions-values > tbody > tr > td:last-child{
@@ -80,13 +86,6 @@
 .admin__control-table.feed-conditions-values td.col-value{
   padding-bottom: 0;
   padding-top: 0;
-}
-.admin__control-table.feed-conditions-values .col-condition select,
-.admin__control-table.feed-conditions-values .col-condition input.input-text,
-.admin__control-table.feed-conditions-values .col-value select,
-.admin__control-table.feed-conditions-values .col-value input.input-text,
-.admin__control-table.feed-conditions-values .col-type select{
-  /* min-width: 120px; */
 }
 .admin__control-table.feed-conditions-values .col-condition table td{
   width: 33.33%;
@@ -320,6 +319,6 @@ div.admin__field[data-ui-id="gomage-feed-attribute-tab-condition-fieldset-elemen
 #feed_mapping_fieldset #rows-container{
   margin-bottom: 0;
 }
-@-moz-document url-prefix() { /* Only target Gecko. (Breaks layout in IE.) */
+@-moz-document url-prefix() {
   .admin__scope-old #feed_tabs_content_section_content .fieldset-wrapper, .admin__scope-old #feed_tabs_content_section_content .fieldset { display: table-cell; }
 }
