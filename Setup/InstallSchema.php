@@ -155,6 +155,13 @@ class InstallSchema implements InstallSchemaInterface
                 'Generated at'
             )
             ->addColumn(
+                'generation_time',
+                \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+                50,
+                [],
+                'Generate time'
+            )
+            ->addColumn(
                 'uploaded_at',
                 \Magento\Framework\DB\Ddl\Table::TYPE_TIMESTAMP,
                 null,
