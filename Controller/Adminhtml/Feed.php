@@ -38,6 +38,12 @@ abstract class Feed extends Action
      */
     protected function _isAllowed()
     {
-        return $this->_authorization->isAllowed('GoMage_Feed::feeds');
+        $info = $this->_objectManager->get('GoMage\Feed\Helper\Data')->ga();
+
+        if (isset($info['d']) && isset($info['c']) && intval($info['c'])) {
+            return $this->_authorization->isAllowed('GoMage_Feed::feeds');
+        }
+        $this->messageManager->addError('Please activate GoMage Feed Pro');
+        return false;
     }
 }

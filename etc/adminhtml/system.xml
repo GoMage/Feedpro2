@@ -112,7 +112,7 @@
             <resource>GoMage_Notification::notification</resource>
             <group id="notification" translate="label" type="text" sortOrder="10" showInDefault="1">
                 <label>Notifications</label>
-                <field id="enable" translate="label comment" type="checkbox" sortOrder="10" showInDefault="1">
+                <field id="enable" translate="label comment" type="select" sortOrder="10" showInDefault="1">
                     <label>I'd like to get advertising by GoMage</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
