@@ -18,7 +18,7 @@ namespace GoMage\Feed\Helper;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 
-class Data extends \Magento\Framework\App\Helper\AbstractHelper
+class Data
 {
     /**
      * @var \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory
@@ -75,35 +75,33 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     protected $_objectManager;
 
+    /**
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     */
+    protected $_scopeConfig;
+
 
     public function __construct(
-        \Magento\Framework\App\Helper\Context $context,
-        \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory $attributeCollectionFactory,
-        \GoMage\Feed\Model\ResourceModel\Attribute\Collection $dynamicAttributeCollection,
-        \Magento\Framework\Filesystem $filesystem,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Store\Model\System\Store $systemStore,
-        \Magento\Framework\Stdlib\DateTime\DateTime $dateTime,
-        \Magento\Framework\Module\ModuleListInterface $moduleList,
-        \Magento\Framework\Json\Helper\Data $jsonHelper,
-        \Magento\Framework\Encryption\EncryptorInterface $encryptor,
-        \GoMage\Feed\Model\Mapper\Factory $mapperFactory,
         \Magento\Framework\ObjectManagerInterface $objectManager
     ) {
-        parent::__construct($context);
-        $this->_attributeCollectionFactory = $attributeCollectionFactory;
-        $this->_dynamicAttributeCollection = $dynamicAttributeCollection;
-        $this->_directory                  = $filesystem->getDirectoryRead(DirectoryList::MEDIA);
-        $this->_storeManager               = $storeManager;
-        $this->_systemStore                = $systemStore;
-        $this->_dateTime                   = $dateTime;
-        $this->_moduleList                 = $moduleList;
-        $this->_jsonHelper                 = $jsonHelper;
-        $this->_encryptor                  = $encryptor;
-        $this->_mapperFactory              = $mapperFactory;
         $this->_objectManager              = $objectManager;
+        $this->_attributeCollectionFactory = $objectManager->get('Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory');
+        $this->_dynamicAttributeCollection = $objectManager->get('GoMage\Feed\Model\ResourceModel\Attribute\Collection');
+        $filesystem                        = $objectManager->get('Magento\Framework\Filesystem');
+        $this->_directory                  = $filesystem->getDirectoryRead(DirectoryList::MEDIA);
+        $this->_storeManager               = $objectManager->get('Magento\Store\Model\StoreManager');
+        $this->_systemStore                = $objectManager->get('Magento\Store\Model\System\Store');
+        $this->_dateTime                   = $objectManager->get('Magento\Framework\Stdlib\DateTime\DateTime');
+        $this->_moduleList                 = $objectManager->get('Magento\Framework\Module\ModuleList');
+        $this->_jsonHelper                 = $objectManager->get('Magento\Framework\Json\Helper\Data');
+        $this->_encryptor                  = $objectManager->get('Magento\Framework\Encryption\Encryptor');
+        $this->_mapperFactory              = $objectManager->get('GoMage\Feed\Model\Mapper\Factory');
+        $this->_scopeConfig                = $objectManager->get('Magento\Framework\App\Config');
     }
 
+    /**
+     * @return array
+     */
     public function getProductAttributes()
     {
         $attributes = $this->_attributeCollectionFactory->create()->addVisibleFilter()->getItems();
@@ -212,7 +210,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
                     $hourTo = 24;
                 }
 
-                $hours = array();
+                $hours = [];
                 if ($hourFrom > $hourTo) {
                     for ($i = $hourFrom; $i <= 23; $i++) {
                         $hours[] = $i;
@@ -246,25 +244,25 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function getAvailableWebsites()
     {
-        if (!$this->scopeConfig->getValue('gomage_activation/feed/installed') ||
-            (intval($this->scopeConfig->getValue('gomage_activation/feed/count')) > 10)
+        if (!$this->_scopeConfig->getValue('gomage_activation/feed/installed') ||
+            (intval($this->_scopeConfig->getValue('gomage_activation/feed/count')) > 10)
         ) {
             return [];
         }
 
         $time_to_update = 60 * 60 * 24 * 15;
 
-        $r = $this->scopeConfig->getValue('gomage_activation/feed/ar');
-        $t = $this->scopeConfig->getValue('gomage_activation/feed/time');
-        $s = $this->scopeConfig->getValue('gomage_activation/feed/websites');
+        $r = $this->_scopeConfig->getValue('gomage_activation/feed/ar');
+        $t = $this->_scopeConfig->getValue('gomage_activation/feed/time');
+        $s = $this->_scopeConfig->getValue('gomage_activation/feed/websites');
 
         $last_check = str_replace($r, '', $this->_encryptor->decrypt($t));
 
         $sites = explode(',', str_replace($r, '', $this->_encryptor->decrypt($s)));
-        $sites = array_diff($sites, array(""));
+        $sites = array_diff($sites, ['']);
 
         if (($last_check + $time_to_update) < $this->_dateTime->gmtTimestamp()) {
-            $this->a(intval($this->scopeConfig->getValue('gomage_activation/feed/count')),
+            $this->a(intval($this->_scopeConfig->getValue('gomage_activation/feed/count')),
                 implode(',', $sites)
             );
         }
@@ -274,7 +272,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
 
     public function a($c = 0, $s = '')
     {
-        $k = $this->scopeConfig->getValue('gomage_settings/feed/key');
+        $k = $this->_scopeConfig->getValue('gomage_settings/feed/key');
 
         /** @var \Magento\Config\Model\Config $config */
         $config = $this->_objectManager->create('Magento\Config\Model\Config');
@@ -297,25 +295,22 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
 
         if (empty($r)) {
 
-            $value1 = $this->scopeConfig->getValue('gomage_activation/feed/ar');
+            $value1 = $this->_scopeConfig->getValue('gomage_activation/feed/ar');
 
-            $groups = array(
-                'feed' => array(
-                    'fields' => array(
-                        'ar'       => array(
-                            'value' => $value1
-                        ),
-                        'websites' => array(
-                            'value' => (string)$this->scopeConfig->getValue('gomage_activation/feed/websites')
-                        ),
-                        'time'     => array(
+            $groups = [
+                'feed' => [
+                    'fields' => [
+                        'ar'       => ['value' => $value1],
+                        'websites' => [
+                            'value' => (string)$this->_scopeConfig->getValue('gomage_activation/feed/websites')
+                        ],
+                        'time'     => [
                             'value' => (string)$this->_encryptor->encrypt($value1 . ($this->_dateTime->gmtTimestamp() - (60 * 60 * 24 * 15 - 1800)) . $value1)
-                        ),
-                        'count'    => array(
-                            'value' => $c + 1)
-                    )
-                )
-            );
+                        ],
+                        'count'    => ['value' => $c + 1]
+                    ]
+                ]
+            ];
 
             $config->setSection('gomage_activation')
                 ->setGroups($groups)
@@ -330,7 +325,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
             $value1 = $this->_encryptor->encrypt(base64_encode($this->_jsonHelper->jsonEncode($r)));
 
             if (!$s) {
-                $s = $this->scopeConfig->getValue('gomage_settings/feed/websites');
+                $s = $this->_scopeConfig->getValue('gomage_settings/feed/websites');
             }
 
             $s = array_slice(explode(',', $s), 0, $r['c']);
@@ -338,27 +333,19 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
             $value2 = $this->_encryptor->encrypt($value1 . implode(',', $s) . $value1);
 
         }
-        $groups = array(
-            'feed' => array(
-                'fields' => array(
-                    'ar'        => array(
-                        'value' => $value1
-                    ),
-                    'websites'  => array(
-                        'value' => (string)$value2
-                    ),
-                    'time'      => array(
+        $groups = [
+            'feed' => [
+                'fields' => [
+                    'ar'        => ['value' => $value1],
+                    'websites'  => ['value' => (string)$value2],
+                    'time'      => [
                         'value' => (string)$this->_encryptor->encrypt($value1 . $this->_dateTime->gmtTimestamp() . $value1)
-                    ),
-                    'installed' => array(
-                        'value' => 1
-                    ),
-                    'count'     => array(
-                        'value' => 0)
-
-                )
-            )
-        );
+                    ],
+                    'installed' => ['value' => 1],
+                    'count'     => ['value' => 0]
+                ]
+            ]
+        ];
 
         $config->setSection('gomage_activation')
             ->setGroups($groups)
@@ -370,7 +357,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function ga()
     {
-        $value = base64_decode($this->_encryptor->decrypt($this->scopeConfig->getValue('gomage_activation/feed/ar')));
+        $value = base64_decode($this->_encryptor->decrypt($this->_scopeConfig->getValue('gomage_activation/feed/ar')));
         if ($value) {
             return $this->_jsonHelper->jsonDecode($value);
         }
@@ -407,7 +394,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     private function _getVersion()
     {
-        return $this->_moduleList->getOne($this->_getModuleName())['setup_version'];
+        return $this->_moduleList->getOne('GoMage_Feed')['setup_version'];
     }
 
     /**
@@ -460,6 +447,74 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
             }
         }
         return $options;
+    }
+
+    public function notify()
+    {
+        $frequency = intval($this->_scopeConfig->getValue('gomage_notification/notification/frequency'));
+        if (!$frequency) {
+            $frequency = 24;
+        }
+        $last_update = intval($this->_scopeConfig->getValue('gomage_notification/notification/last_update'));
+
+        if (($frequency * 60 * 60 + $last_update) > $this->_dateTime->gmtTimestamp()) {
+            return false;
+        }
+
+        $timestamp = $last_update;
+        if (!$timestamp) {
+            $timestamp = $this->_dateTime->gmtTimestamp();
+        }
+
+        try {
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, sprintf('https://www.gomage.com/index.php/gomage_notification/index/data'));
+            curl_setopt($ch, CURLOPT_POST, true);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, 'sku=feed-pro-m2&timestamp=' . $timestamp . '&ver=' . urlencode($this->_getVersion()));
+            curl_setopt($ch, CURLOPT_TIMEOUT, 30);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+
+            $content = curl_exec($ch);
+
+            try {
+                $result = $this->_jsonHelper->jsonDecode($content);
+            } catch (\Exception $e) {
+                $result = false;
+            }
+
+            if ($result && isset($result['frequency']) && ($result['frequency'] != $frequency)) {
+                $frequency = $result['frequency'];
+            }
+
+            if ($result && isset($result['data'])) {
+                if (!empty($result['data'])) {
+                    /** @var \Magento\AdminNotification\Model\Inbox $inbox */
+                    $inbox = $this->_objectManager->create('Magento\AdminNotification\Model\Inbox');
+                    $inbox->parse($result['data']);
+                }
+            }
+        } catch (\Exception $e) {
+        }
+
+        $groups = [
+            'notification' => [
+                'fields' => [
+                    'frequency'   => ['value' => $frequency],
+                    'last_update' => ['value' => $this->_dateTime->gmtTimestamp()]
+                ]
+            ]
+        ];
+
+        /** @var \Magento\Config\Model\Config $config */
+        $config = $this->_objectManager->create('Magento\Config\Model\Config');
+
+        $config->setSection('gomage_notification')
+            ->setGroups($groups)
+            ->save();
+
     }
 
 }

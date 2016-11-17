@@ -16,6 +16,9 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
     <event name="admin_system_config_changed_section_gomage_settings">
-        <observer name="gomage_feed_config_change" instance="GoMage\Feed\Observer\ConfigChangeObserver" />
+        <observer name="gomage_feed_config_change" instance="GoMage\Feed\Observer\ConfigChangeObserver"/>
+    </event>
+    <event name="controller_action_predispatch">
+        <observer name="gomage_feed_notification" instance="GoMage\Feed\Observer\PredispatchAdminActionControllerObserver"/>
     </event>
 </config>

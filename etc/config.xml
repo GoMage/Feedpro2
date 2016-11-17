@@ -21,5 +21,10 @@
                 <template>gomage_feed_notification_template</template>
             </notification>
         </gomage_feed>
+        <gomage_notification>
+            <notification>
+                <enable>1</enable>
+            </notification>
+        </gomage_notification>
     </default>
 </config>
