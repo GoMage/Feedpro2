@@ -69,13 +69,11 @@ class Ftp extends \Magento\Backend\Block\Widget\Form\Generic implements \Magento
      * Prepare form
      *
      * @return $this
-     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function _prepareForm()
     {
         /* @var $model Feed */
         $model = $this->_coreRegistry->registry('current_feed');
-
 
         /** @var \Magento\Framework\Data\Form $form */
         $form = $this->_formFactory->create();
@@ -86,7 +84,6 @@ class Ftp extends \Magento\Backend\Block\Widget\Form\Generic implements \Magento
             'ftp_fieldset',
             ['legend' => __('FTP Settings')]
         );
-
 
         $fieldset->addField(
             'is_ftp',
@@ -172,7 +169,6 @@ class Ftp extends \Magento\Backend\Block\Widget\Form\Generic implements \Magento
                 'values' => $this->_enableDisable->toOptionArray(),
             ]
         );
-
 
         $form->setValues($model->getData());
         $this->setForm($form);

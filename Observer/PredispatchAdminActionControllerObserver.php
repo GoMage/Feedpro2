@@ -36,7 +36,6 @@ class PredispatchAdminActionControllerObserver implements ObserverInterface
      */
     protected $_scopeConfig;
 
-
     public function __construct(
         \GoMage\Feed\Helper\Data $helper,
         \Magento\Backend\Model\Auth\Session $backendAuthSession,

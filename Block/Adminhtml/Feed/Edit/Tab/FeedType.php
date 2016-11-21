@@ -41,7 +41,6 @@ class FeedType extends \Magento\Backend\Block\Widget\Form\Generic implements \Ma
      * Prepare form
      *
      * @return $this
-     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function _prepareForm()
     {

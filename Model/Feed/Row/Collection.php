@@ -24,7 +24,7 @@ class Collection implements \Iterator
     /**
      * @var array
      */
-    private $_items = [];
+    protected $_items = [];
 
     public function __construct()
     {
@@ -34,7 +34,7 @@ class Collection implements \Iterator
     /**
      * {@inheritdoc}
      */
-    function rewind()
+    public function rewind()
     {
         reset($this->_items);
     }
@@ -42,7 +42,7 @@ class Collection implements \Iterator
     /**
      * {@inheritdoc}
      */
-    function current()
+    public function current()
     {
         return current($this->_items);
     }
@@ -50,7 +50,7 @@ class Collection implements \Iterator
     /**
      * {@inheritdoc}
      */
-    function key()
+    public function key()
     {
         return key($this->_items);
     }
@@ -58,7 +58,7 @@ class Collection implements \Iterator
     /**
      * {@inheritdoc}
      */
-    function next()
+    public function next()
     {
         next($this->_items);
     }
@@ -66,7 +66,7 @@ class Collection implements \Iterator
     /**
      * {@inheritdoc}
      */
-    function valid()
+    public function valid()
     {
         return key($this->_items) !== null;
     }

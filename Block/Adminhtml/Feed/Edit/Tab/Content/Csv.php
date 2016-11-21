@@ -22,11 +22,6 @@ use Magento\Framework\Data\Form\Element\Renderer\RendererInterface;
 class Csv extends Widget implements RendererInterface
 {
     /**
-     * @var string
-     */
-    protected $_template = 'feed/edit/content/csv.phtml';
-
-    /**
      * Form element instance
      *
      * @var \Magento\Framework\Data\Form\Element\AbstractElement
@@ -34,8 +29,6 @@ class Csv extends Widget implements RendererInterface
     protected $_element;
 
     /**
-     * Core registry
-     *
      * @var \Magento\Framework\Registry
      */
     protected $_coreRegistry;
@@ -65,7 +58,6 @@ class Csv extends Widget implements RendererInterface
      */
     protected $_output;
 
-
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Framework\Registry $registry,
@@ -76,7 +68,6 @@ class Csv extends Widget implements RendererInterface
         \GoMage\Feed\Model\Config\Source\Output $output,
         array $data = []
     ) {
-
         $this->_coreRegistry = $registry;
         $this->_helper       = $helper;
         $this->_jsonHelper   = $jsonHelper;
@@ -168,7 +159,6 @@ class Csv extends Widget implements RendererInterface
     {
         return $this->getChildHtml('add_button');
     }
-
 
     /**
      * Prepare global layout

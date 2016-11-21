@@ -51,27 +51,28 @@ class Visibility implements \Magento\Framework\Option\ArrayInterface
      */
     public function getProductVisibility($visibility)
     {
+        $visibility = [];
         switch ($visibility) {
             case self::CATALOG_SEARCH:
-                return [ProductVisibility::VISIBILITY_IN_SEARCH, ProductVisibility::VISIBILITY_IN_CATALOG, ProductVisibility::VISIBILITY_BOTH];
+                $visibility = [ProductVisibility::VISIBILITY_IN_SEARCH, ProductVisibility::VISIBILITY_IN_CATALOG, ProductVisibility::VISIBILITY_BOTH];
                 break;
             case self::NOT_VISIBLE:
-                return [ProductVisibility::VISIBILITY_NOT_VISIBLE];
+                $visibility = [ProductVisibility::VISIBILITY_NOT_VISIBLE];
                 break;
             case self::CATALOG:
-                return [ProductVisibility::VISIBILITY_IN_CATALOG, ProductVisibility::VISIBILITY_BOTH];
+                $visibility = [ProductVisibility::VISIBILITY_IN_CATALOG, ProductVisibility::VISIBILITY_BOTH];
                 break;
             case self::SEARCH:
-                return [ProductVisibility::VISIBILITY_IN_SEARCH, ProductVisibility::VISIBILITY_BOTH];
+                $visibility = [ProductVisibility::VISIBILITY_IN_SEARCH, ProductVisibility::VISIBILITY_BOTH];
                 break;
             case self::ONLY_CATALOG:
-                return [ProductVisibility::VISIBILITY_IN_CATALOG];
+                $visibility = [ProductVisibility::VISIBILITY_IN_CATALOG];
                 break;
             case self::ONLY_SEARCH:
-                return [ProductVisibility::VISIBILITY_IN_SEARCH];
+                $visibility = [ProductVisibility::VISIBILITY_IN_SEARCH];
                 break;
         }
-        return [];
+        return $visibility;
     }
 }
 

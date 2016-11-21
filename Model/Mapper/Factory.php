@@ -47,45 +47,15 @@ class Factory
     public function create($type, $value)
     {
         $className = $this->_getCustomMapper($value);
-
         if (!$className) {
-            switch ($type) {
-                case TypeInterface::ATTRIBUTE:
-                    $className = 'GoMage\Feed\Model\Mapper\Attribute';
-                    break;
-                case TypeInterface::PARENT_ATTRIBUTE:
-                    $className = 'GoMage\Feed\Model\Mapper\ParentAttribute';
-                    break;
-                case TypeInterface::EMPTY_PARENT_ATTRIBUTE:
-                    $className = 'GoMage\Feed\Model\Mapper\EmptyParentAttribute';
-                    break;
-                case TypeInterface::EMPTY_CHILD_ATTRIBUTE:
-                    $className = 'GoMage\Feed\Model\Mapper\EmptyChildAttribute';
-                    break;
-                case TypeInterface::STATIC_VALUE:
-                    $className = 'GoMage\Feed\Model\Mapper\StaticValue';
-                    break;
-                case TypeInterface::PERCENT:
-                    $className = 'GoMage\Feed\Model\Mapper\AttributePercent';
-                    break;
-                case TypeInterface::ATTRIBUTE_SET:
-                    $className = 'GoMage\Feed\Model\Mapper\AttributeSet';
-                    break;
-                case TypeInterface::CONFIGURABLE_VALUES:
-                    $className = 'GoMage\Feed\Model\Mapper\ConfigurableValue';
-                    break;
-                case TypeInterface::DYNAMIC_ATTRIBUTE:
-                    $className = 'GoMage\Feed\Model\Mapper\DynamicAttribute';
-                    break;
-            }
+            $className = $this->_getMapper($type);
         }
-
         return $this->_objectManager->create($className, ['value' => $value]);
     }
 
     /**
      * @param  string $value
-     * @return bool
+     * @return bool|string
      */
     protected function _getCustomMapper($value)
     {
@@ -93,6 +63,44 @@ class Factory
             return $this->_customMappers[$value];
         }
         return false;
+    }
+
+    /**
+     * @param  int $type
+     * @return string
+     */
+    protected function _getMapper($type)
+    {
+        switch ($type) {
+            case TypeInterface::ATTRIBUTE:
+                $className = 'GoMage\Feed\Model\Mapper\Attribute';
+                break;
+            case TypeInterface::PARENT_ATTRIBUTE:
+                $className = 'GoMage\Feed\Model\Mapper\ParentAttribute';
+                break;
+            case TypeInterface::EMPTY_PARENT_ATTRIBUTE:
+                $className = 'GoMage\Feed\Model\Mapper\EmptyParentAttribute';
+                break;
+            case TypeInterface::EMPTY_CHILD_ATTRIBUTE:
+                $className = 'GoMage\Feed\Model\Mapper\EmptyChildAttribute';
+                break;
+            case TypeInterface::STATIC_VALUE:
+                $className = 'GoMage\Feed\Model\Mapper\StaticValue';
+                break;
+            case TypeInterface::PERCENT:
+                $className = 'GoMage\Feed\Model\Mapper\AttributePercent';
+                break;
+            case TypeInterface::ATTRIBUTE_SET:
+                $className = 'GoMage\Feed\Model\Mapper\AttributeSet';
+                break;
+            case TypeInterface::CONFIGURABLE_VALUES:
+                $className = 'GoMage\Feed\Model\Mapper\ConfigurableValue';
+                break;
+            case TypeInterface::DYNAMIC_ATTRIBUTE:
+                $className = 'GoMage\Feed\Model\Mapper\DynamicAttribute';
+                break;
+        }
+        return $className;
     }
 
     /**

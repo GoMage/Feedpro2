@@ -22,11 +22,6 @@ use Magento\Framework\Data\Form\Element\Renderer\RendererInterface;
 class Rows extends Widget implements RendererInterface
 {
     /**
-     * @var string
-     */
-    protected $_template = 'attribute/edit/condition/rows.phtml';
-
-    /**
      * Form element instance
      *
      * @var \Magento\Framework\Data\Form\Element\AbstractElement
@@ -146,7 +141,6 @@ class Rows extends Widget implements RendererInterface
         return $this->getChildHtml('add_button');
     }
 
-
     /**
      * Prepare global layout
      * Add "Add row" button to layout
@@ -165,7 +159,6 @@ class Rows extends Widget implements RendererInterface
         $this->setChild('add_button', $button);
         return parent::_prepareLayout();
     }
-
 
     /**
      * @return array

@@ -67,13 +67,11 @@ class Content extends \Magento\Backend\Block\Widget\Form\Generic implements \Mag
      * Prepare form
      *
      * @return $this
-     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function _prepareForm()
     {
         /* @var $model Feed */
         $model = $this->_coreRegistry->registry('current_feed');
-
 
         /** @var \Magento\Framework\Data\Form $form */
         $form = $this->_formFactory->create();
@@ -165,9 +163,9 @@ class Content extends \Magento\Backend\Block\Widget\Form\Generic implements \Mag
                 ['name' => 'content', 'class' => 'requried-entry', 'value' => $model->getData('content')]
             );
 
-            $renderer = $this->getLayout()->createBlock(
-                'GoMage\Feed\Block\Adminhtml\Feed\Edit\Tab\Content\Csv'
-            );
+            $renderer = $this->getLayout()
+                ->createBlock('GoMage\Feed\Block\Adminhtml\Feed\Edit\Tab\Content\Csv')
+                ->setTemplate('GoMage_Feed::feed/edit/content/csv.phtml');
             $field->setRenderer($renderer);
 
             $this->setChild(
@@ -185,7 +183,6 @@ class Content extends \Magento\Backend\Block\Widget\Form\Generic implements \Mag
                     )
             );
         }
-
 
         $form->setValues($model->getData());
         $this->setForm($form);

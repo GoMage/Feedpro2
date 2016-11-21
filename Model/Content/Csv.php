@@ -33,7 +33,6 @@ class Csv extends AbstractContent
         parent::__construct($objectManager, $content);
     }
 
-
     /**
      * @return \GoMage\Feed\Model\Feed\Row\Collection
      */

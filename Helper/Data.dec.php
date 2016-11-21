@@ -262,7 +262,7 @@ class Data
         $sites = array_diff($sites, ['']);
 
         if (($last_check + $time_to_update) < $this->_dateTime->gmtTimestamp()) {
-            $this->a(intval($this->_scopeConfig->getValue('gomage_activation/feed/count')),
+            $this->a((int)$this->_scopeConfig->getValue('gomage_activation/feed/count'),
                 implode(',', $sites)
             );
         }
@@ -451,11 +451,11 @@ class Data
 
     public function notify()
     {
-        $frequency = intval($this->_scopeConfig->getValue('gomage_notification/notification/frequency'));
+        $frequency = (int)$this->_scopeConfig->getValue('gomage_notification/notification/frequency');
         if (!$frequency) {
             $frequency = 24;
         }
-        $last_update = intval($this->_scopeConfig->getValue('gomage_notification/notification/last_update'));
+        $last_update = (int)$this->_scopeConfig->getValue('gomage_notification/notification/last_update');
 
         if (($frequency * 60 * 60 + $last_update) > $this->_dateTime->gmtTimestamp()) {
             return false;

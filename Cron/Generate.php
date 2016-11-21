@@ -38,7 +38,6 @@ class Generate
      */
     protected $_dateTime;
 
-
     public function __construct(
         \GoMage\Feed\Model\ResourceModel\Feed\Collection $collection,
         \GoMage\Feed\Model\Generator $generator,

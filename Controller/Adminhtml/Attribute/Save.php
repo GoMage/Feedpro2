@@ -84,7 +84,7 @@ class Save extends AttributeController
      * @param array $data
      * @return \Magento\Backend\Model\View\Result\Redirect
      */
-    private function _proceedToEdit($data)
+    protected function _proceedToEdit($data)
     {
         $this->_getSession()->setPageData($data);
         /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */

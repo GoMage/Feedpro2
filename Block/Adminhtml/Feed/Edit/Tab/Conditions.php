@@ -30,14 +30,6 @@ class Conditions extends \Magento\Backend\Block\Widget\Form\Generic implements \
      */
     protected $_conditions;
 
-    /**
-     * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Framework\Data\FormFactory $formFactory
-     * @param \Magento\Rule\Block\Conditions $conditions
-     * @param \Magento\Backend\Block\Widget\Form\Renderer\Fieldset $rendererFieldset
-     * @param array $data
-     */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Framework\Registry $registry,
@@ -153,7 +145,7 @@ class Conditions extends \Magento\Backend\Block\Widget\Form\Generic implements \
      * @param string $formName
      * @return void
      */
-    private function setConditionFormName(\Magento\Rule\Model\Condition\AbstractCondition $conditions, $formName)
+    protected function setConditionFormName(\Magento\Rule\Model\Condition\AbstractCondition $conditions, $formName)
     {
         $conditions->setFormName($formName);
         $conditions->setJsFormObject($formName);

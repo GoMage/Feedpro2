@@ -52,7 +52,7 @@ class AccessUrl extends Column
         if (isset($dataSource['data']['items'])) {
             foreach ($dataSource['data']['items'] as &$item) {
                 $fileName                     = $item['filename'] . '.' . $item['file_ext'];
-                $url                          = $this->_helper->getFeedUrl($fileName, intval($item['store_id']));
+                $url                          = $this->_helper->getFeedUrl($fileName, (int)$item['store_id']);
                 $item[$this->getData('name')] = $url ? '<a href="' . $url . '" target="_blank">' . $url . '</a>' : '';
             }
         }

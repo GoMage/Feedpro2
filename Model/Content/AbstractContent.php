@@ -33,7 +33,6 @@ abstract class AbstractContent implements ContentInterface
      */
     protected $_rows;
 
-
     public function __construct(
         \Magento\Framework\ObjectManagerInterface $objectManager,
         $content
@@ -41,5 +40,4 @@ abstract class AbstractContent implements ContentInterface
         $this->_objectManager = $objectManager;
         $this->_content       = $content;
     }
-
 }

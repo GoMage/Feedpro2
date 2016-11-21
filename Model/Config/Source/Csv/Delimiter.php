@@ -46,27 +46,28 @@ class Delimiter implements \Magento\Framework\Option\ArrayInterface
      */
     public function getSymbol($delimiter)
     {
-        switch (intval($delimiter)) {
+        $symbol = ",";
+        switch ((int)$delimiter) {
             case (self::TAB):
-                return "\t";
+                $symbol = "\t";
                 break;
             case (self::COLON):
-                return ":";
+                $symbol = ":";
                 break;
             case (self::SPACE):
-                return " ";
+                $symbol = " ";
                 break;
             case (self::VERTICAL_PIPE):
-                return "|";
+                $symbol = "|";
                 break;
             case (self::SEMI_COLON):
-                return ";";
+                $symbol = ";";
                 break;
             case (self::COMMA):
-            default:
-                return ",";
+                $symbol = ",";
                 break;
         }
+        return $symbol;
     }
 
 }

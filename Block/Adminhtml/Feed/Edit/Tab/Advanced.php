@@ -20,7 +20,6 @@ use GoMage\Feed\Model\Feed;
 use Magento\Config\Model\Config\Source\Yesno;
 use Magento\Config\Model\Config\Source\Enabledisable;
 
-
 class Advanced extends \Magento\Backend\Block\Widget\Form\Generic implements \Magento\Backend\Block\Widget\Tab\TabInterface
 {
 
@@ -66,7 +65,6 @@ class Advanced extends \Magento\Backend\Block\Widget\Form\Generic implements \Ma
         \GoMage\Feed\Model\Config\Source\DateTime\Interval $interval,
         array $data = []
     ) {
-
         $this->_yesNo         = $yesNo;
         $this->_enableDisable = $enableDisable;
         $this->_visibility    = $visibility;
@@ -81,13 +79,11 @@ class Advanced extends \Magento\Backend\Block\Widget\Form\Generic implements \Ma
      * Prepare form
      *
      * @return $this
-     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function _prepareForm()
     {
         /* @var $model Feed */
         $model = $this->_coreRegistry->registry('current_feed');
-
 
         /** @var \Magento\Framework\Data\Form $form */
         $form = $this->_formFactory->create();

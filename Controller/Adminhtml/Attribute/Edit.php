@@ -24,27 +24,20 @@ use Magento\Framework\Controller\ResultFactory;
 class Edit extends AttributeController
 {
     /**
-     * Core registry
-     *
      * @var \Magento\Framework\Registry
      */
-    protected $coreRegistry;
+    protected $_coreRegistry;
 
-    /**
-     * @param \Magento\Backend\App\Action\Context $context
-     * @param \Magento\Framework\Registry $coreRegistry
-     */
     public function __construct(
         Context $context,
         Registry $coreRegistry
     ) {
-        $this->coreRegistry = $coreRegistry;
+        $this->_coreRegistry = $coreRegistry;
         parent::__construct($context);
     }
 
     /**
      * @return \Magento\Framework\Controller\ResultInterface
-     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function execute()
     {
@@ -68,7 +61,7 @@ class Edit extends AttributeController
             $model->addData($data);
         }
 
-        $this->coreRegistry->register('current_attribute', $model);
+        $this->_coreRegistry->register('current_attribute', $model);
 
         $resultPage = $this->createPage();
         $resultPage->getConfig()->getTitle()->prepend(__('Manage Dynamic Attributes'));

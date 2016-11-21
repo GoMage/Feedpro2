@@ -40,7 +40,7 @@ abstract class Attribute extends Action
     {
         $info = $this->_objectManager->get('GoMage\Feed\Helper\Data')->ga();
 
-        if (isset($info['d']) && isset($info['c']) && intval($info['c'])) {
+        if (isset($info['d']) && isset($info['c']) && (int)$info['c']) {
             return $this->_authorization->isAllowed('GoMage_Feed::attributes');
         }
         $this->messageManager->addError('Please activate GoMage Feed Pro');

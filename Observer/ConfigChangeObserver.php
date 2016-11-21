@@ -26,7 +26,6 @@ class ConfigChangeObserver implements ObserverInterface
      */
     protected $_helper;
 
-
     public function __construct(
         \GoMage\Feed\Helper\Data $helper
     ) {

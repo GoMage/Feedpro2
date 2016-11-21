@@ -48,7 +48,7 @@ class Factory
     {
         /** @var \GoMage\Feed\Model\Protocol\Params $params */
         $params = $this->_objectManager->create('GoMage\Feed\Model\Protocol\Params', ['data' => $data]);
-        return $this->_objectManager->create($this->_protocols[intval($protocol)], ['params' => $params]);
+        return $this->_objectManager->create($this->_protocols[(int)$protocol], ['params' => $params]);
     }
 
 }

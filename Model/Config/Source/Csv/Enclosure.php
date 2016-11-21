@@ -43,21 +43,22 @@ class Enclosure implements \Magento\Framework\Option\ArrayInterface
      */
     public function getSymbol($enclosure)
     {
-        switch (intval($enclosure)) {
+        $symbol = '"';
+        switch ((int)$enclosure) {
             case (self::QUOTE):
-                return '"';
+                $symbol = '"';
                 break;
             case (self::SPACE):
-                return ' ';
+                $symbol = ' ';
                 break;
             case (self::SINGLE_SPACE):
-                return ' ';
+                $symbol = ' ';
                 break;
             case (self::DOUBLE_QUOTE):
-            default:
-                return '"';
+                $symbol = '"';
                 break;
         }
+        return $symbol;
     }
 
 }

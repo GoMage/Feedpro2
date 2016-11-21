@@ -77,7 +77,7 @@ class Collection implements ReaderInterface
         $collection = $this->_getCollection();
 
         $collection->setPage($page, $limit);
-        if (!$collection->count()) {
+        if (!$collection->getSize()) {
             return false;
         }
         if ($page > $collection->getLastPageNumber()) {

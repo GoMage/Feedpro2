@@ -160,7 +160,7 @@ class Generator
             ini_set("post_max_size", $postSize . "M");
         }
         $timeLimit = $this->_scopeConfig->getValue('gomage_feed/server/time_limit');
-        set_time_limit(intval($timeLimit));
+        set_time_limit((int)$timeLimit);
     }
 
     protected function _finish()

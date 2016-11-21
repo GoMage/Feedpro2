@@ -21,17 +21,10 @@ use GoMage\Feed\Model\Feed;
 class Edit extends \Magento\Backend\Block\Widget\Form\Container
 {
     /**
-     * Core registry
-     *
      * @var \Magento\Framework\Registry
      */
     protected $_coreRegistry;
 
-    /**
-     * @param \Magento\Backend\Block\Widget\Context $context
-     * @param \Magento\Framework\Registry $registry
-     * @param array $data
-     */
     public function __construct(
         \Magento\Backend\Block\Widget\Context $context,
         \Magento\Framework\Registry $registry,
@@ -41,9 +34,6 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
         parent::__construct($context, $data);
     }
 
-    /**
-     * @return void
-     */
     protected function _construct()
     {
         /* @var $model Feed */
@@ -95,7 +85,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
     }
 
     /**
-     * @return \Magento\Framework\Phrase
+     * @return string
      */
     public function getHeaderText()
     {

@@ -51,7 +51,7 @@ class Factory
      */
     public function get($operator)
     {
-        return $this->_objectManager->get($this->_operators[intval($operator)]);
+        return $this->_objectManager->get($this->_operators[(int)$operator]);
     }
 
 }

@@ -28,7 +28,6 @@ class Website extends \Magento\Config\Block\System\Config\Form\Field
      */
     protected $_helper;
 
-
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Framework\View\Helper\Js $jsHelper,
@@ -49,7 +48,7 @@ class Website extends \Magento\Config\Block\System\Config\Form\Field
 
         $info = $this->_helper->ga();
 
-        if (isset($info['d']) && isset($info['c']) && intval($info['c'])) {
+        if (isset($info['d']) && isset($info['c']) && (int)$info['c']) {
 
             $websites = $this->_helper->getAvailableWebsites();
 
@@ -72,7 +71,7 @@ class Website extends \Magento\Config\Block\System\Config\Form\Field
             $jsString = '
             $$("input[name=\'' . $element->getName() . '\']").each(function(element) {
                element.observe("click", function () {
-                    if($$("input[name=\'' . $element->getName() . '\']:checked").length >= ' . intval($info['c']) . '){
+                    if($$("input[name=\'' . $element->getName() . '\']:checked").length >= ' . $info['c'] . '){
                         $$("input[name=\'' . $element->getName() . '\']").each(function(e){
                             if(!e.checked){
                                 e.disabled = "disabled";
@@ -87,7 +86,6 @@ class Website extends \Magento\Config\Block\System\Config\Form\Field
     			    }
                });
             });';
-
 
             return $html . $this->_jsHelper->getScript(
                 'require([\'prototype\'], function(){document.observe("dom:loaded", function() {' . $jsString . '});});'

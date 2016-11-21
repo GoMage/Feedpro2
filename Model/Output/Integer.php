@@ -24,6 +24,6 @@ class Integer implements OutputInterface
      */
     public function format($value)
     {
-        return intval($value);
+        return (int)$value;
     }
 }

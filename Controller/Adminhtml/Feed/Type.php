@@ -24,16 +24,10 @@ use Magento\Framework\Controller\ResultFactory;
 class Type extends FeedController
 {
     /**
-     * Core registry
-     *
      * @var \Magento\Framework\Registry
      */
     protected $_coreRegistry;
 
-    /**
-     * @param \Magento\Backend\App\Action\Context $context
-     * @param \Magento\Framework\Registry $coreRegistry
-     */
     public function __construct(
         Context $context,
         Registry $coreRegistry
@@ -44,7 +38,6 @@ class Type extends FeedController
 
     /**
      * @return \Magento\Framework\Controller\ResultInterface
-     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function execute()
     {

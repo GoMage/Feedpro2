@@ -46,7 +46,7 @@ class Row
         \Magento\Framework\ObjectManagerInterface $objectManager
     ) {
         $this->_name  = $rowData->getName();
-        $this->_limit = intval($rowData->getLimit());
+        $this->_limit = (int)$rowData->getLimit();
 
         $this->_outputs = $objectManager->create('GoMage\Feed\Model\Collection');
         foreach ($rowData->getOutput() as $value) {

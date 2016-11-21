@@ -36,7 +36,6 @@ class Handler extends \Magento\Framework\Logger\Handler\Base
      */
     protected $fileName = '/var/log/feed.log';
 
-
     public function __construct(
         DriverInterface $filesystem,
         $filePath = null,
@@ -47,5 +46,4 @@ class Handler extends \Magento\Framework\Logger\Handler\Base
         }
         parent::__construct($filesystem, $filePath);
     }
-
 }

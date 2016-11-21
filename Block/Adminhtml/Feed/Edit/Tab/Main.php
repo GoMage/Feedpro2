@@ -38,7 +38,6 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
      */
     protected $_helper;
 
-
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Framework\Registry $registry,
@@ -58,13 +57,11 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
      * Prepare form
      *
      * @return $this
-     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function _prepareForm()
     {
         /* @var $model Feed */
         $model = $this->_coreRegistry->registry('current_feed');
-
 
         /** @var \Magento\Framework\Data\Form $form */
         $form = $this->_formFactory->create();

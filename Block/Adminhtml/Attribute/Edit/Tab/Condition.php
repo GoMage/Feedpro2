@@ -46,7 +46,6 @@ class Condition extends \Magento\Backend\Block\Widget\Form\Generic implements
         /* @var $model \GoMage\Feed\Model\Attribute */
         $model = $this->_coreRegistry->registry('current_attribute');
 
-
         /** @var \Magento\Framework\Data\Form $form */
         $form = $this->_formFactory->create();
 
@@ -64,7 +63,8 @@ class Condition extends \Magento\Backend\Block\Widget\Form\Generic implements
         );
 
         $renderer = $this->getLayout()
-            ->createBlock('GoMage\Feed\Block\Adminhtml\Attribute\Edit\Tab\Condition\Rows');
+            ->createBlock('GoMage\Feed\Block\Adminhtml\Attribute\Edit\Tab\Condition\Rows')
+            ->setTemplate('GoMage_Feed::attribute/edit/condition/rows.phtml');
 
         $field->setRenderer($renderer);
 
