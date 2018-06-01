@@ -95,7 +95,7 @@ class Collection implements ReaderInterface
             $this->_collection = $this->_productCollectionFactory->create();
 
             if ($this->_params->getStoreId()) {
-                $this->_collection->setStoreId($this->_params->getStoreId());
+                $this->_collection->addStoreFilter($this->_params->getStoreId());
             }
 
             $visibility = $this->_visibility->getProductVisibility($this->_params->getVisibility());
