@@ -16,43 +16,51 @@
 
 namespace GoMage\Feed\Model\Output;
 
+use Magento\Framework\ObjectManagerInterface;
+
 class Factory
 {
     /**
-     * @var \Magento\Framework\ObjectManagerInterface
+     * @var ObjectManagerInterface
      */
-    protected $_objectManager;
+    private $objectManager;
 
     /**
      * @var array
      */
-    protected $_outputs = [
-        OutputInterface::NONE              => 'GoMage\Feed\Model\Output\None',
-        OutputInterface::INTEGER           => 'GoMage\Feed\Model\Output\Integer',
-        OutputInterface::FLOATS            => 'GoMage\Feed\Model\Output\Floats',
-        OutputInterface::STRIP_TAGS        => 'GoMage\Feed\Model\Output\StripTags',
-        OutputInterface::SPECIAL_ENCODE    => 'GoMage\Feed\Model\Output\SpecialEncode',
-        OutputInterface::SPECIAL_DECODE    => 'GoMage\Feed\Model\Output\SpecialDecode',
-        OutputInterface::DELETE_SPACE      => 'GoMage\Feed\Model\Output\DeleteSpace',
-        OutputInterface::BIG_TO_SMALL      => 'GoMage\Feed\Model\Output\BigToSmall',
-        OutputInterface::REMOVE_LINE_BREAK => 'GoMage\Feed\Model\Output\RemoveLineBreak',
+    private $_outputs = [
+        OutputInterface::NONE               => None::class,
+        OutputInterface::INTEGER            => Integer::class,
+        OutputInterface::FLOATS             => Floats::class,
+        OutputInterface::STRIP_TAGS         => StripTags::class,
+        OutputInterface::SPECIAL_ENCODE     => SpecialEncode::class,
+        OutputInterface::SPECIAL_DECODE     => SpecialDecode::class,
+        OutputInterface::DELETE_SPACE       => DeleteSpace::class,
+        OutputInterface::BIG_TO_SMALL       => BigToSmall::class,
+        OutputInterface::REMOVE_LINE_BREAK  => RemoveLineBreak::class,
+        OutputInterface::HTML_SPECIAL_CHARS_ENCODE => HtmlSpecialChars::class,
     ];
 
     /**
-     * @param \Magento\Framework\ObjectManagerInterface $objectManager
+     * @param ObjectManagerInterface $objectManager
      */
-    public function __construct(\Magento\Framework\ObjectManagerInterface $objectManager)
+    public function __construct(ObjectManagerInterface $objectManager)
     {
-        $this->_objectManager = $objectManager;
+        $this->objectManager = $objectManager;
     }
 
     /**
-     * @param  string $output
-     * @return \GoMage\Feed\Model\Output\OutputInterface
+     * @param string
+     * @return OutputInterface
+     * @throws \Exception
      */
     public function get($output)
     {
-        return $this->_objectManager->get($this->_outputs[$output]);
+        if (!isset($this->_outputs[$output])) {
+            throw new \Exception($output . ' output isn\'t supported');
+        }
+
+        return $this->objectManager->get($this->_outputs[$output]);
     }
 
 }

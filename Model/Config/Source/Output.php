@@ -36,6 +36,7 @@ class Output implements \Magento\Framework\Option\ArrayInterface
             ['value' => OutputInterface::DELETE_SPACE, 'label' => __('Delete Space')],
             ['value' => OutputInterface::BIG_TO_SMALL, 'label' => __('Big to small')],
             ['value' => OutputInterface::REMOVE_LINE_BREAK, 'label' => __('Remove line break symbols')],
+            ['value' => OutputInterface::HTML_SPECIAL_CHARS_ENCODE, 'label' => __('Encode html special chars')],
         ];
     }
 
