@@ -2,6 +2,7 @@
 
 /**
  * GoMage.com
+ *
  * GoMage Feed Pro M2
  *
  * @category     Extension
