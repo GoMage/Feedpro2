@@ -59,7 +59,7 @@ class Factory
      */
     protected function _getCustomMapper($value)
     {
-        if (isset($this->_customMappers[$value])) {
+        if (!is_array($value) && isset($this->_customMappers[$value])) {
             return $this->_customMappers[$value];
         }
         return false;
