@@ -322,3 +322,7 @@ div.admin__field[data-ui-id="gomage-feed-attribute-tab-condition-fieldset-elemen
 @-moz-document url-prefix() {
   .admin__scope-old #feed_tabs_content_section_content .fieldset-wrapper, .admin__scope-old #feed_tabs_content_section_content .fieldset { display: table-cell; }
 }
+
+.page-main-actions .page-actions button.generate {
+  order: 1;
+}

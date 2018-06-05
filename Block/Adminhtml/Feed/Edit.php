@@ -59,7 +59,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
                         'onclick' => 'setLocation(\'' . $url . '\')',
                         'class'   => 'stop'
                     ],
-                    5
+                    0
                 );
             } else {
                 $url = $this->getUrl('gomage_feed/feed/generate', [
@@ -73,7 +73,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
                         'onclick' => 'setLocation(\'' . $url . '\')',
                         'class'   => 'generate'
                     ],
-                    5
+                    0
                 );
             }
         }
@@ -82,6 +82,9 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
             $this->buttonList->update('save', 'label', __('Continue'));
         }
 
+        $this->buttonList->update('save', 'level', -1);
+        $this->buttonList->update('delete', 'level', 1);
+        $this->buttonList->update('reset', 'level', 0);
     }
 
     /**
