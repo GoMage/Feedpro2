@@ -87,6 +87,16 @@ class Collection implements ReaderInterface
     }
 
     /**
+     * @return int
+     */
+    public function getSize()
+    {
+        $collection = $this->_getCollection();
+
+        return $collection->getSize();
+    }
+
+    /**
      * @return \Magento\Catalog\Model\ResourceModel\Product\Collection
      */
     protected function _getCollection()

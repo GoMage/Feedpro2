@@ -70,7 +70,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
                     'generate',
                     [
                         'label'   => __('Generate'),
-                        'onclick' => 'setLocation(\'' . $url . '\')',
+                        'onclick' => 'goMageFeedGenerate(\'' . $url . '\')',
                         'class'   => 'generate'
                     ],
                     0

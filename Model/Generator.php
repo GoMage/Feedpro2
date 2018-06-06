@@ -17,6 +17,7 @@
 namespace GoMage\Feed\Model;
 
 use GoMage\Feed\Model\Config\Source\Status;
+use GoMage\Feed\Model\Feed\ResultModel;
 use GoMage\Feed\Model\Generator\ApplyServerSettings;
 use GoMage\Feed\Model\Generator\Generate;
 use GoMage\Feed\Model\Logger\HandlerFactory;
@@ -90,10 +91,11 @@ class Generator
 
     /**
      * @param  int $feedId
+     * @param  int|null $page
      *
-     * @throws \Exception
+     * @return ResultModel
      */
-    public function generate($feedId)
+    public function generate($feedId, $page = null)
     {
         $feed = $this->feedFactory->create()->load($feedId);
         $this->storeManager->setCurrentStore($feed->getStoreId());
@@ -111,9 +113,10 @@ class Generator
 
             $this->applyServerSettings->execute();
 
-            $this->generate->execute($feed, $this->logger);
+            $resultModel = $this->generate->execute($feed, $this->logger, $page);
 
             $feed->setStatus(Status::COMPLETED);
+
             $time = microtime(true) - $time;
             $time = max([$time, 1]);
 
@@ -121,6 +124,7 @@ class Generator
                 ->setData('generated_at', $this->dateTime->gmtDate('Y-m-j H:i:s'))
                 ->save();
 
+            $resultModel->setFeed($feed);
             $this->logger->info(__('Finish'));
         } catch (\Exception $e) {
             $feed->setStatus(Status::FAILED);
@@ -128,6 +132,8 @@ class Generator
 
             throw new \Exception($e->getMessage());
         }
+
+        return $resultModel;
     }
 
     /**

@@ -19,6 +19,7 @@ namespace GoMage\Feed\Model\Generator;
 use GoMage\Feed\Model\Config\Source\FeedType;
 use GoMage\Feed\Model\Content\Factory as ContentFactory;
 use GoMage\Feed\Model\Feed;
+use GoMage\Feed\Model\Feed\ResultModel;
 use GoMage\Feed\Model\Reader\CollectionFactory as ReaderCollectionFactory;
 use GoMage\Feed\Model\Reader\Factory as ReaderFactory;
 use GoMage\Feed\Model\Reader\ParamsFactory;
@@ -53,34 +54,43 @@ class Generate
     private $contentFactory;
 
     /**
+     * @var ResultModel
+     */
+    private $resultModel;
+
+    /**
      * @param ReaderFactory $readerFactory
      * @param WriterFactory $writerFactory
      * @param ParamsFactory $paramsFactory
      * @param ReaderCollectionFactory $readerCollectionFactory
      * @param ContentFactory $contentFactory
+     * @param ResultModel $resultModel
      */
     public function __construct(
         ReaderFactory $readerFactory,
         WriterFactory $writerFactory,
         ParamsFactory $paramsFactory,
         ReaderCollectionFactory $readerCollectionFactory,
-        ContentFactory $contentFactory
+        ContentFactory $contentFactory,
+        ResultModel $resultModel
     ) {
         $this->readerFactory = $readerFactory;
         $this->writerFactory = $writerFactory;
         $this->paramsFactory = $paramsFactory;
         $this->readerCollectionFactory = $readerCollectionFactory;
         $this->contentFactory = $contentFactory;
+        $this->resultModel = $resultModel;
     }
 
     /**
      * @param Feed $feed
      * @param LoggerInterface $logger
-     * @@return void
+     * @param int|null $page
+     * @return ResultModel
      */
-    public function execute(Feed $feed, LoggerInterface $logger)
+    public function execute(Feed $feed, LoggerInterface $logger, $page)
     {
-        $page = 1;
+        $breakAfterFirstIteration = true;
         $limit = $feed->getLimit();
 
         $content = $this->contentFactory->create(
@@ -93,14 +103,34 @@ class Generate
         $reader = $this->getReader($feed, $content->getRows()->getAttributes());
         $writer = $this->getWriter($feed);
 
+        if ($page === null) { //need to process all data
+            $breakAfterFirstIteration = false;
+            $page = 1;
+        }
+
         while ($items = $reader->read($page, $limit)) {
             $logger->info(__('Page - %1', $page));
             foreach ($items as $item) {
                 $data = $content->getRows()->calc($item);
                 $writer->write($data);
             }
+            if ($breakAfterFirstIteration === true) {
+                break;
+            }
             $page++;
         }
+
+        $feedSize = $reader->getSize();
+        if ($limit > 0) {
+            $totalPages = $feedSize / $limit;
+        } else {
+            $totalPages = 1;
+        }
+
+        $this->resultModel->setCurrentPage($page);
+        $this->resultModel->setTotalPages($totalPages);
+
+        return $this->resultModel;
     }
 
     /**

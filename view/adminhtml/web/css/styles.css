@@ -326,3 +326,30 @@ div.admin__field[data-ui-id="gomage-feed-attribute-tab-condition-fieldset-elemen
 .page-main-actions .page-actions button.generate {
   order: 1;
 }
+.page-main-actions .page-actions button.stop {
+  order: 1;
+}
+
+.gomage-feed-progress-modal {
+  visibility: visible;
+  opacity: 1;
+  min-width: inherit;
+  transform: none;
+}
+
+.gomage-feed-progress-modal .ui-dialog-titlebar-close {
+  display: none;
+}
+
+.gomage-feed-progress-modal .ui-progressbar {
+  height: 30px;
+  position: relative;
+  border: 1px #514943 solid;
+  margin-top: 10px;
+}
+
+.gomage-feed-progress-modal .ui-progressbar .ui-progressbar-value {
+  position: absolute;
+  height: 100%;
+  background: #eb5202;
+}
