@@ -40,6 +40,24 @@ class Feed extends \Magento\Rule\Model\AbstractModel
      */
     protected $_actionCollectionFactory;
 
+    /**
+     * This class is added in Magento 2.2.
+     *
+     * @var \Magento\Framework\Serialize\Serializer\Json
+     */
+    protected $serializer;
+
+    /**
+     * @param \Magento\Framework\Model\Context $context
+     * @param \Magento\Framework\Registry $registry
+     * @param \Magento\Framework\Data\FormFactory $formFactory
+     * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
+     * @param \Magento\CatalogRule\Model\Rule\Condition\CombineFactory $combineFactory
+     * @param \Magento\CatalogRule\Model\Rule\Action\CollectionFactory $actionCollectionFactory
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource|null $resource
+     * @param \Magento\Framework\Data\Collection\AbstractDb|null $resourceCollection
+     * @param array $data
+     */
     public function __construct(
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
@@ -105,7 +123,12 @@ class Feed extends \Magento\Rule\Model\AbstractModel
         if ($this->hasConditionsSerialized()) {
             $conditions = $this->getConditionsSerialized();
             if (!empty($conditions)) {
-                $conditions = unserialize($conditions);
+                //magento verision <= 2.1.x
+                $conditions = @unserialize($conditions);
+                if ($conditions === false) {
+                    // magento version >= 2.2
+                    $conditions = $this->serializer->unserialize($conditions);
+                }
                 if (is_array($conditions) && !empty($conditions)) {
                     $this->_resetConditions();
                     $this->_conditions->loadArray($conditions);
