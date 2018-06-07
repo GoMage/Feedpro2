@@ -97,7 +97,7 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
             [
                 'label' => __('Access Url'),
                 'title' => __('Access Url'),
-                'text'  => $url ? '<a href="' . $url . '" target="_blank">' . $url . '</a>' : '',
+                'text'  => '<a href="' . $url . '" target="_blank">' . $url . '</a>',
             ]
         );
 

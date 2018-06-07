@@ -32,7 +32,7 @@ require([
 
                     jQuery('.field-generated_at .control-value').text(data.lastGenerated);
                     jQuery('.field-generation_time .control-value').text(data.generationTime);
-
+                    jQuery('.field-comments .control-value a').text(data.url);
                 }
             });
         },

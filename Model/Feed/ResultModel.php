@@ -15,6 +15,7 @@
 
 namespace GoMage\Feed\Model\Feed;
 
+use GoMage\Feed\Helper\Data;
 use GoMage\Feed\Model\Feed;
 
 class ResultModel
@@ -33,6 +34,20 @@ class ResultModel
      * @var Feed
      */
     private $feed;
+
+    /**
+     * @var Data
+     */
+    private $helper;
+
+    /**
+     * @param Data $helper
+     */
+    public function __construct(
+        Data $helper
+    ) {
+        $this->helper = $helper;
+    }
 
     /**
      * @return int
@@ -96,9 +111,12 @@ class ResultModel
         ];
 
         if ($this->getCurrentPage() >= $this->getTotalPages()) {
-            $result['generationTime'] = $this->getFeed()->getData('generation_time');
+            $feed = $this->getFeed();
+            $result['generationTime'] = $feed->getData('generation_time');
+            $url = $this->helper->getFeedUrl($feed->getFullFileName(), $feed->getStoreId());
+            $result['url'] = $url;
 
-            $lastGenerated = $this->getFeed()->getData('generated_at');
+            $lastGenerated = $feed->getData('generated_at');
             $result['lastGenerated'] = Date('Y-m-d H:i:s', strtotime($lastGenerated));;
         }
 
