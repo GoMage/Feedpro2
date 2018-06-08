@@ -72,9 +72,14 @@ define([
                 if (this.count == 1) {
                     return;
                 }
-                var element = $(Event.findElement(event, 'tr'));
+                var element = jQuery(event.target).closest('tr');
+
+                if (jQuery(event.target).hasClass('delete-condition')) {
+                    element = element.parents('tr');
+                }
+
                 if (element) {
-                    Element.remove(element);
+                    element.remove();
                     this.count--;
                 }
             },
@@ -115,6 +120,7 @@ define([
             bindActions: function () {
                 Event.observe('add_new_row_button', 'click', this.add.bind(Rows, {}));
                 this.container.on('click', '.delete-row', this.remove.bind(this));
+                this.container.on('click', '.delete.delete-condition', this.remove.bind(this));
                 this.container.on('change', '.type-select', this.changeType.bind(this));
                 this.container.on('click', '.add-condition', this.addCondition.bind(this));
                 this.container.on('click', '.add-value', this.addValue.bind(this));
