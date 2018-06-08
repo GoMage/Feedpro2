@@ -59,9 +59,18 @@ class Generate extends FeedController
 
         $result = $this->resultJsonFactory->create();
         if ($id) {
-            $resultModel = $this->generator->generate($id, $page);
+            try {
+                $resultModel = $this->generator->generate($id, $page);
 
-            $result->setData($resultModel->getStructuredData());
+                $result->setData($resultModel->getStructuredData());
+            } catch (\Exception $e) {
+                $result->setData(
+                    [
+                        'error' => true,
+                        'message' => $e->getMessage(),
+                    ]
+                );
+            }
         }
 
         return $result;

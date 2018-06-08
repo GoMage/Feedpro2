@@ -17,6 +17,22 @@ require([
                     'page': page
                 }
             }).done(function (data) {
+                if (data.error === true) {
+                    $('#goMageFeedProgressModal').dialog('close');
+                    $('.page-main-actions').after(
+                        '<div id="messages">' +
+                            '<div class="messages">' +
+                                '<div class="message message-error error">' +
+                                    '<div data-ui-id="messages-message-error">' +
+                                        data.message +
+                                    '</div>' +
+                                '</div>' +
+                            '</div>' +
+                        '</div>'
+                    );
+                    return;
+                }
+
                 var percent = ((data.currentPage * 100) / data.totalPages);
                 $('#goMageFeedProgressBar').progressbar({
                     value: percent
