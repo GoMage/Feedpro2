@@ -60,7 +60,13 @@ define([
                     var row_id = element.readAttribute('data-row-id');
                     this.setTitle(row_id);
                     element.toggleClassName('__opened');
+                    self = row_id;
                 }
+                this.container.childElements().forEach(function (data) {
+                    if (self !== data.readAttribute('data-row-id')) {
+                        data.classList.remove('__opened');
+                    }
+                }, this);
             },
             changeType: function (event) {
                 var element = $(Event.findElement(event, 'select'));
@@ -153,7 +159,7 @@ define([
             bindActions: function () {
                 Event.observe('add_new_row_button', 'click', this.add.bind(Rows, {}));
                 this.container.on('click', '.delete-row', this.remove.bind(this));
-                this.container.on('click', '.edit-row, .close-row', this.toggleEdit.bind(this));
+                this.container.on('click', '.fm-block-title', this.toggleEdit.bind(this));
                 this.container.on('change', '.type-select', this.changeType.bind(this));
             }
         };
