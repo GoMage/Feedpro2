@@ -62,7 +62,12 @@ class Generate extends FeedController
             try {
                 $resultModel = $this->generator->generate($id, $page);
 
-                $result->setData($resultModel->getStructuredData());
+                $resultArray = array_merge(
+                    $resultModel->getStructuredData(),
+                    ['message' => __('You generated the feed.')]
+                );
+
+                $result->setData($resultArray);
             } catch (\Exception $e) {
                 $result->setData(
                     [

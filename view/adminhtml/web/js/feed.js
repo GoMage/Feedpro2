@@ -19,17 +19,8 @@ require([
             }).done(function (data) {
                 if (data.error === true) {
                     $('#goMageFeedProgressModal').dialog('close');
-                    $('.page-main-actions').after(
-                        '<div id="messages">' +
-                            '<div class="messages">' +
-                                '<div class="message message-error error">' +
-                                    '<div data-ui-id="messages-message-error">' +
-                                        data.message +
-                                    '</div>' +
-                                '</div>' +
-                            '</div>' +
-                        '</div>'
-                    );
+                    $('.page-main-actions').after(self.getMessagesHtml('error', data.message));
+
                     return;
                 }
 
@@ -49,6 +40,8 @@ require([
                     jQuery('.field-generated_at .control-value').text(data.lastGenerated);
                     jQuery('.field-generation_time .control-value').text(data.generationTime);
                     jQuery('.field-comments .control-value a').text(data.url);
+
+                    $('.page-main-actions').after(self.getMessagesHtml('success', data.message));
                 }
             });
         },
@@ -73,6 +66,17 @@ require([
             });
 
             self.progressByPage(url, 1);
+        },
+        getMessagesHtml: function (messageType, message) {
+            return '<div id="messages">' +
+                        '<div class="messages">' +
+                            '<div class="message message-' + messageType + ' ' + messageType + '>' +
+                                '<div data-ui-id="messages-message-' + messageType + '">' +
+                                    message +
+                                '</div>' +
+                            '</div>' +
+                        '</div>' +
+                    '</div>'
         }
     };
 
