@@ -40,9 +40,11 @@ class Save extends AttributeController
                     $model->load($id);
                 }
                 if (isset($data['content']) && $data['content']) {
+                    $contentArray = $data['content'];
                     $data['content'] = $this->_prepareData($data['content']);
                     $data['content'] = $this->_objectManager->get('Magento\Framework\Json\Helper\Data')
                         ->jsonEncode($data['content']);
+                    $this->validateConditions($contentArray);
                 }
                 $model->addData($data);
                 $model->save();
@@ -90,5 +92,22 @@ class Save extends AttributeController
         /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
         $redirectResult = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
         return $redirectResult->setPath('gomage_feed/attribute/edit', ['id' => $this->getRequest()->getPost('id', null)]);
+    }
+
+    /**
+     * @param array $content
+     * @return void
+     *
+     * @throws LocalizedException
+     */
+    private function validateConditions(array $content)
+    {
+        foreach ($content as $row) {
+            foreach ($row['conditions'] as $condition) {
+                if ($condition['code'] === '') {
+                    throw new LocalizedException(__('Condition code is required.'));
+                }
+            }
+        }
     }
 }
