@@ -20,6 +20,7 @@ use GoMage\Feed\Model\Config\Source\FeedType;
 use GoMage\Feed\Model\Content\Factory as ContentFactory;
 use GoMage\Feed\Model\Feed;
 use GoMage\Feed\Model\Feed\ResultModel;
+use GoMage\Feed\Model\Feed\ResultModelFactory;
 use GoMage\Feed\Model\Reader\CollectionFactory as ReaderCollectionFactory;
 use GoMage\Feed\Model\Reader\Factory as ReaderFactory;
 use GoMage\Feed\Model\Reader\ParamsFactory;
@@ -54,9 +55,9 @@ class Generate
     private $contentFactory;
 
     /**
-     * @var ResultModel
+     * @var ResultModelFactory
      */
-    private $resultModel;
+    private $resultModelFactory;
 
     /**
      * @param ReaderFactory $readerFactory
@@ -64,7 +65,7 @@ class Generate
      * @param ParamsFactory $paramsFactory
      * @param ReaderCollectionFactory $readerCollectionFactory
      * @param ContentFactory $contentFactory
-     * @param ResultModel $resultModel
+     * @param ResultModelFactory $resultModelFactory
      */
     public function __construct(
         ReaderFactory $readerFactory,
@@ -72,23 +73,24 @@ class Generate
         ParamsFactory $paramsFactory,
         ReaderCollectionFactory $readerCollectionFactory,
         ContentFactory $contentFactory,
-        ResultModel $resultModel
+        ResultModelFactory $resultModelFactory
     ) {
         $this->readerFactory = $readerFactory;
         $this->writerFactory = $writerFactory;
         $this->paramsFactory = $paramsFactory;
         $this->readerCollectionFactory = $readerCollectionFactory;
         $this->contentFactory = $contentFactory;
-        $this->resultModel = $resultModel;
+        $this->resultModelFactory = $resultModelFactory;
     }
 
     /**
      * @param Feed $feed
      * @param LoggerInterface $logger
      * @param int|null $page
+     * @param string $fileMode
      * @return ResultModel
      */
-    public function execute(Feed $feed, LoggerInterface $logger, $page)
+    public function execute(Feed $feed, LoggerInterface $logger, $page, string $fileMode)
     {
         $breakAfterFirstIteration = true;
         $limit = $feed->getLimit();
@@ -101,7 +103,19 @@ class Generate
         );
 
         $reader = $this->getReader($feed, $content->getRows()->getAttributes());
-        $writer = $this->getWriter($feed);
+
+        $feedSize = $reader->getSize();
+        if ($limit > 0) {
+            $totalPages = $feedSize / $limit;
+        } else {
+            $totalPages = 1;
+        }
+
+        $resultModel = $this->resultModelFactory->create();
+        $resultModel->setCurrentPage($page);
+        $resultModel->setTotalPages($totalPages);
+
+        $writer = $this->getWriter($feed, $fileMode, $page, $totalPages);
 
         if ($page === null) { //need to process all data
             $breakAfterFirstIteration = false;
@@ -120,17 +134,7 @@ class Generate
             $page++;
         }
 
-        $feedSize = $reader->getSize();
-        if ($limit > 0) {
-            $totalPages = $feedSize / $limit;
-        } else {
-            $totalPages = 1;
-        }
-
-        $this->resultModel->setCurrentPage($page);
-        $this->resultModel->setTotalPages($totalPages);
-
-        return $this->resultModel;
+        return $resultModel;
     }
 
     /**
@@ -160,12 +164,18 @@ class Generate
 
     /**
      * @param \GoMage\Feed\Model\Feed $feed
+     * @param string $fileMode
+     * @param $page
+     * @param $totalPages
      *
      * @return \GoMage\Feed\Model\Writer\WriterInterface
      */
-    private function getWriter(Feed $feed)
+    private function getWriter(Feed $feed, string $fileMode, $page, $totalPages)
     {
-        $arguments = ['fileName' => $feed->getFullFileName()];
+        $arguments = [
+            'fileName' => $feed->getFullFileName(),
+            'fileMode'  => $fileMode,
+        ];
 
         if ($feed->getType() == FeedType::CSV_TYPE) {
             $arguments = array_merge(
@@ -178,10 +188,18 @@ class Generate
                 ]
             );
         } else {
-            $arguments['content'] = $this->contentFactory->create(
+            $content = $this->contentFactory->create(
                 $feed->getType(),
                 [
                     'content' => $feed->getContent(),
+                ]
+            );
+            $arguments = array_merge(
+                $arguments,
+                [
+                    'content' => $content,
+                    'page' => $page,
+                    'totalPages' => $totalPages,
                 ]
             );
         }

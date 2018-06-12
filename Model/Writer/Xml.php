@@ -18,20 +18,44 @@ namespace GoMage\Feed\Model\Writer;
 
 class Xml extends AbstractWriter
 {
-
     /**
      * @var \GoMage\Feed\Model\Content\Xml
      */
     protected $_content;
 
+    /**
+     * @var null|int
+     */
+    private $page;
+
+    /**
+     * @var float
+     */
+    private $totalPages;
+
+    /**
+     * @param \Magento\Framework\Filesystem $filesystem
+     * @param $fileName
+     * @param string $fileMode
+     * @param \GoMage\Feed\Model\Content\Xml $content
+     * @param $page
+     * @param $totalPages
+     */
     public function __construct(
         \Magento\Framework\Filesystem $filesystem,
         $fileName,
-        \GoMage\Feed\Model\Content\Xml $content
+        string $fileMode,
+        \GoMage\Feed\Model\Content\Xml $content,
+        $page,
+        $totalPages
     ) {
-        parent::__construct($filesystem, $fileName);
+        parent::__construct($filesystem, $fileName, $fileMode);
         $this->_content = $content;
-        $this->_fileHandler->write($this->_content->getHeader());
+        $this->page = $page;
+        $this->totalPages = $totalPages;
+        if ($page === null || $page == 1) {
+            $this->_fileHandler->write($this->_content->getHeader());
+        }
     }
 
     /**
@@ -39,7 +63,9 @@ class Xml extends AbstractWriter
      */
     public function __destruct()
     {
-        $this->_fileHandler->write($this->_content->getFooter());
+        if ($this->totalPages / $this->page <= 1) {
+            $this->_fileHandler->write($this->_content->getFooter());
+        }
         parent::__destruct();
     }
 

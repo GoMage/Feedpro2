@@ -36,6 +36,7 @@ require([
                     self.progressByPage(url, page);
                 } else {
                     $('#goMageFeedProgressModal').dialog('close');
+                    $('#goMageFeedProgressValue').html(0);
 
                     jQuery('.field-generated_at .control-value').text(data.lastGenerated);
                     jQuery('.field-generation_time .control-value').text(data.generationTime);

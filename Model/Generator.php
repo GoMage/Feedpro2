@@ -92,10 +92,11 @@ class Generator
     /**
      * @param  int $feedId
      * @param  int|null $page
+     * @param  string $writeMode
      *
      * @return ResultModel
      */
-    public function generate($feedId, $page = null)
+    public function generate($feedId, $page = null, string $writeMode = 'w')
     {
         $feed = $this->feedFactory->create()->load($feedId);
         $this->storeManager->setCurrentStore($feed->getStoreId());
@@ -113,7 +114,7 @@ class Generator
 
             $this->applyServerSettings->execute();
 
-            $resultModel = $this->generate->execute($feed, $this->logger, $page);
+            $resultModel = $this->generate->execute($feed, $this->logger, $page, $writeMode);
 
             $feed->setStatus(Status::COMPLETED);
 

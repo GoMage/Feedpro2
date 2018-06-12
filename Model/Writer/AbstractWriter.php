@@ -31,16 +31,21 @@ abstract class AbstractWriter implements WriterInterface
      */
     protected $_fileHandler;
 
-
+    /**
+     * @param Filesystem $filesystem
+     * @param $fileName
+     * @param string $mode
+     */
     public function __construct(
         \Magento\Framework\Filesystem $filesystem,
-        $fileName
+        $fileName,
+        string $mode = 'w'
     ) {
         $this->_fileName = $fileName;
         $filePath        = WriterInterface::DIRECTORY . '/' . $this->_fileName;
 
         $directoryHandle    = $filesystem->getDirectoryWrite(DirectoryList::MEDIA);
-        $this->_fileHandler = $directoryHandle->openFile($filePath, 'w');
+        $this->_fileHandler = $directoryHandle->openFile($filePath, $mode);
         $this->_fileHandler->flush();
     }
 

@@ -41,17 +41,29 @@ class Csv extends AbstractWriter
      */
     protected $_headerCols = null;
 
+    /**
+     * @param \Magento\Framework\Filesystem $filesystem
+     * @param Enclosure $enclosureModel
+     * @param Delimiter $delimiterModel
+     * @param $fileName
+     * @param string $fileMode
+     * @param int $delimiter
+     * @param int $enclosure
+     * @param bool $isHeader
+     * @param string $additionHeader
+     */
     public function __construct(
         \Magento\Framework\Filesystem $filesystem,
         Enclosure $enclosureModel,
         Delimiter $delimiterModel,
         $fileName,
+        string $fileMode,
         $delimiter = Delimiter::COMMA,
         $enclosure = Enclosure::DOUBLE_QUOTE,
         $isHeader = true,
         $additionHeader = ''
     ) {
-        parent::__construct($filesystem, $fileName);
+        parent::__construct($filesystem, $fileName, $fileMode);
         $this->_delimiter = $delimiterModel->getSymbol($delimiter);
         $this->_enclosure = $enclosureModel->getSymbol($enclosure);
         $this->_isHeader  = $isHeader;

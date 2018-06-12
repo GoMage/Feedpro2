@@ -19,7 +19,10 @@ namespace GoMage\Feed\Controller\Adminhtml\Feed;
 use GoMage\Feed\Controller\Adminhtml\Feed as FeedController;
 use GoMage\Feed\Model\Generator;
 use Magento\Backend\App\Action;
+use Magento\Framework\App\ResponseInterface;
+use Magento\Framework\Controller\Result\Json;
 use Magento\Framework\Controller\Result\JsonFactory as ResultJsonFactory;
+use Magento\Framework\Controller\ResultInterface;
 
 class Generate extends FeedController
 {
@@ -50,7 +53,7 @@ class Generate extends FeedController
     }
 
     /**
-     * @return \Magento\Framework\App\ResponseInterface|\Magento\Framework\Controller\Result\Json|\Magento\Framework\Controller\ResultInterface
+     * @return ResponseInterface|Json|ResultInterface
      */
     public function execute()
     {
@@ -60,7 +63,11 @@ class Generate extends FeedController
         $result = $this->resultJsonFactory->create();
         if ($id) {
             try {
-                $resultModel = $this->generator->generate($id, $page);
+                $writeMode = 'a'; //write after all in file.
+                if ($page == 1) {
+                    $writeMode = 'w'; //clear file and then write.
+                }
+                $resultModel = $this->generator->generate($id, $page, $writeMode);
 
                 $resultArray = array_merge(
                     $resultModel->getStructuredData(),
