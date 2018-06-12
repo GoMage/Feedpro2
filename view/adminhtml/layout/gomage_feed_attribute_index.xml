@@ -15,6 +15,9 @@
  */
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <head>
+        <css src="GoMage_Feed::css/styles.css"/>
+    </head>
     <body>
         <referenceContainer name="content">
             <uiComponent name="gomage_feed_attribute_listing"/>

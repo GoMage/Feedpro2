@@ -363,6 +363,7 @@ div.admin__field[data-ui-id="gomage-feed-attribute-tab-condition-fieldset-elemen
   font-size: 1.2rem;
 }
 
-.gomage-feed-feed-index .admin__data-grid-wrap .data-row {
+.gomage-feed-feed-index .admin__data-grid-wrap .data-row,
+.gomage-feed-attribute-index .admin__data-grid-wrap .data-row {
   cursor: pointer
 }
