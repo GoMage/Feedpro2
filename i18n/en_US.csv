@@ -72,3 +72,4 @@ Stopped,Stopped
 "Configurable values","Configurable values"
 " output isn\'t supported", " output isn\'t supported"
 "You generated the feed.","You generated the feed."
+"Attribute code is required.","Attribute code is required."

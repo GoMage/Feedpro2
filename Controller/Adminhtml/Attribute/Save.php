@@ -44,7 +44,7 @@ class Save extends AttributeController
                     $data['content'] = $this->_prepareData($data['content']);
                     $data['content'] = $this->_objectManager->get('Magento\Framework\Json\Helper\Data')
                         ->jsonEncode($data['content']);
-                    $this->validateConditions($contentArray);
+                    $this->validateContent($contentArray);
                 }
                 $model->addData($data);
                 $model->save();
@@ -100,12 +100,28 @@ class Save extends AttributeController
      *
      * @throws LocalizedException
      */
-    private function validateConditions(array $content)
+    private function validateContent(array $content)
     {
         foreach ($content as $row) {
             foreach ($row['conditions'] as $condition) {
                 if ($condition['code'] === '') {
                     throw new LocalizedException(__('Condition code is required.'));
+                }
+            }
+
+            if (is_array($row['value'])) {
+                $rowValue = $row['value'];
+
+                if (isset($rowValue['code'])) {
+                    if ($rowValue['code'] === '') {
+                        throw new LocalizedException(__('Attribute code is required.'));
+                    }
+                } else {
+                    foreach ($rowValue as $value) {
+                        if ($value['code'] === '') {
+                            throw new LocalizedException(__('Attribute code is required.'));
+                        }
+                    }
                 }
             }
         }
