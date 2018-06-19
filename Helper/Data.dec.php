@@ -105,6 +105,13 @@ class Data
     public function getProductAttributes()
     {
         $attributes = $this->_attributeCollectionFactory->create()->addVisibleFilter()->getItems();
+        $customMappers = $this->_mapperFactory->getCustomMappers();
+
+        foreach ($attributes as $key => $attribute) {
+            if (isset($customMappers[$attribute->getAttributeCode()])) {
+                unset($attributes[$key]);
+            }
+        }
 
         $attributes = array_map(function ($attribute) {
             return [
@@ -114,7 +121,7 @@ class Data
         }, $attributes
         );
 
-        foreach ($this->_mapperFactory->getCustomMappers() as $value => $class) {
+        foreach ($customMappers as $value => $class) {
             $attributes[] = [
                 'value' => $value,
                 'label' => $class::getLabel()

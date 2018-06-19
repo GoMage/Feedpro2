@@ -75,6 +75,8 @@
                 <item name="id" xsi:type="string">GoMage\Feed\Model\Mapper\Custom\ProductId</item>
                 <item name="product_url" xsi:type="string">GoMage\Feed\Model\Mapper\Custom\ProductUrl</item>
                 <item name="category_subcategory" xsi:type="string">GoMage\Feed\Model\Mapper\Custom\CategorySubcategory</item>
+                <item name="category_ids" xsi:type="string">GoMage\Feed\Model\Mapper\Custom\CategoryIds</item>
+                <item name="category" xsi:type="string">GoMage\Feed\Model\Mapper\Custom\Category</item>
             </argument>
         </arguments>
     </type>
