@@ -59,12 +59,16 @@ define([
                 if (element) {
                     var row_id = element.readAttribute('data-row-id');
                     this.setTitle(row_id);
+                    this.validateElement(element);
                     element.toggleClassName('__opened');
                     self = row_id;
                 }
                 this.container.childElements().forEach(function (data) {
                     if (self !== data.readAttribute('data-row-id')) {
-                        data.classList.remove('__opened');
+                        if (data.classList.contains('__opened')) {
+                            this.validateElement(data);
+                            data.classList.remove('__opened');
+                        }
                     }
                 }, this);
             },
@@ -161,6 +165,34 @@ define([
                 this.container.on('click', '.delete-row', this.remove.bind(this));
                 this.container.on('click', '.fm-block-title', this.toggleEdit.bind(this));
                 this.container.on('change', '.type-select', this.changeType.bind(this));
+            },
+            validateElement: function (element) {
+                if (element.classList.contains('__opened')) {
+                    jQuery('#edit_form').valid();
+                    if (!element.select('.fm-block-title-right')[0].hasClassName('warning')) {
+                        if (element.select('.mage-error').length > 0) {
+                            var needToAdd = false;
+                            for (var i = 0; i < element.select('.mage-error').length; i++) {
+                                if (element.select('.mage-error')[i].getStyle('display') !== 'none') {
+                                    needToAdd = true;
+                                }
+                            }
+                            if (needToAdd === true) {
+                                element.select('.fm-block-title-right')[0].addClassName('warning');
+                            }
+                        }
+                    } else {
+                        var needToDelete = true;
+                        for (var i = 0; i < element.select('.mage-error').length; i++) {
+                            if (element.select('.mage-error')[i].getStyle('display') !== 'none') {
+                                needToDelete = false;
+                            }
+                        }
+                        if (needToDelete === true) {
+                            element.select('.fm-block-title-right')[0].removeClassName('warning');
+                        }
+                    }
+                }
             }
         };
         Rows.init();

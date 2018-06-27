@@ -91,7 +91,7 @@ $_dynamicAttributes = $block->getDynamicAttributes();
                     <label class="admin__field-label"><span><?php echo __('Value') ?></span></label>
 
                     <div class="admin__field-control">
-                        <select class="admin__control-select"
+                        <select class="admin__control-select" data-validate="{required:true, minlength:1}"
                                 name="<?php echo $_htmlName ?>[<%- data.row_id %>][value]"
                         </select>
                         <input type="text" class="admin__control-text"

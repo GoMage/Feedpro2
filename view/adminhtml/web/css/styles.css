@@ -368,3 +368,12 @@ div.admin__field[data-ui-id="gomage-feed-attribute-tab-condition-fieldset-elemen
 .gomage-feed-attribute-index .admin__data-grid-wrap .data-row {
   cursor: pointer
 }
+
+.fm-block-title-right.warning:before
+{
+  color: #eb5202;
+  content: '\e623';
+  font-family: Admin Icons;
+  font-size: 2rem;
+  margin-right:10px;
+}
