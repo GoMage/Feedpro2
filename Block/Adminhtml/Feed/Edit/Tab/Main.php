@@ -105,10 +105,11 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
             'filename',
             'text',
             [
-                'name'     => 'filename',
+                'name' => 'filename',
                 'required' => true,
-                'label'    => __('File Name'),
-                'title'    => __('File Name'),
+                'label' => __('File Name'),
+                'title' => __('File Name'),
+                'class' => 'validate-no-spaces'
             ]
         );
 

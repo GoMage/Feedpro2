@@ -1,7 +1,9 @@
 var goMageFeedGenerate;
 
 require([
-    'jquery'
+    'jquery',
+    'jquery/validate',
+    'mage/translate'
 ], function ($) {
     'use strict';
 
@@ -83,5 +85,10 @@ require([
 
     goMageFeedGenerate = function (url) {
         goMageFeed.generate(url);
-    }
+    };
+
+    $.validator.addMethod(
+        'validate-no-spaces', function (value) {
+            return value.indexOf(' ') === -1;
+        }, $.mage.__('Spaces are not allowed in the file name!'));
 });
