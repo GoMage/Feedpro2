@@ -115,6 +115,7 @@ class Ftp extends \Magento\Backend\Block\Widget\Form\Generic implements \Magento
                 'label' => __('Host Name'),
                 'title' => __('Host Name'),
                 'note'  => __('e.g. "ftp.domain.com"'),
+                'class' => 'no-whitespace'
             ]
         );
 
