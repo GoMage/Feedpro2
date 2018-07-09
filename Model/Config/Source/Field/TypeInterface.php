@@ -29,4 +29,5 @@ interface TypeInterface extends ArrayInterface
     const PERCENT = 6;
     const CONFIGURABLE_VALUES = 7;
     const DYNAMIC_ATTRIBUTE = 8;
+    const PARENT_DYNAMIC_ATTRIBUTE = 9;
 }

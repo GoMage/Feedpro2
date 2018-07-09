@@ -96,6 +96,7 @@ define([
                         values = [];
                         break;
                     case 8:
+                    case 9:
                         values = config.dynamicAttributes;
                         break;
                     default:

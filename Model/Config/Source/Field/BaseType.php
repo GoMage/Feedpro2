@@ -29,6 +29,7 @@ class BaseType implements TypeInterface
             ['value' => self::PARENT_ATTRIBUTE, 'label' => __('Parent Attribute')],
             ['value' => self::STATIC_VALUE, 'label' => __('Static Value')],
             ['value' => self::DYNAMIC_ATTRIBUTE, 'label' => __('Dynamic Attribute')],
+            ['value' => self::PARENT_DYNAMIC_ATTRIBUTE, 'label' => __('Parent Dynamic Attribute')],
         ];
     }
 
