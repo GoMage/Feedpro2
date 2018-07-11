@@ -99,12 +99,12 @@ class Advanced extends \Magento\Backend\Block\Widget\Form\Generic implements \Ma
             'limit',
             'text',
             [
-                'name'     => 'limit',
-                'label'    => __('Number of Products'),
-                'title'    => __('Number of Products'),
-                'class'    => 'validate-number',
+                'name' => 'limit',
+                'label' => __('Number of Products'),
+                'title' => __('Number of Products'),
+                'class' => 'validate-not-negative-number integer',
                 'required' => true,
-                'note'     => __('"0" = All products. This option allows to optimize file creation for low memory servers. You have to increase php memory_limit before changing this value to maximum.'),
+                'note' => __('"0" = All products. This option allows to optimize file creation for low memory servers. You have to increase php memory_limit before changing this value to maximum.'),
             ]
         );
 
