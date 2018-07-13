@@ -38,6 +38,8 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
         $this->_blockGroup = 'GoMage_Feed';
         $this->_controller = 'adminhtml_attribute';
         parent::_construct();
+
+        $this->buttonList->update('reset', 'level', 1);
     }
 
     /**
