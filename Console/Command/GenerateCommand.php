@@ -68,7 +68,7 @@ class GenerateCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->_appState->setAreaCode('catalog');
+        $this->_appState->setAreaCode(\Magento\Framework\App\Area::AREA_CRONTAB);
         $feedId = $input->getArgument(self::INPUT_KEY_FEED_ID);
 
         try {
