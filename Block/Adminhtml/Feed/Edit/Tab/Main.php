@@ -34,11 +34,6 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
     protected $_xml;
 
     /**
-     * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface
-     */
-    protected $timezone;
-
-    /**
      * @var \GoMage\Feed\Helper\Data
      */
     protected $_helper;
@@ -47,14 +42,12 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Framework\Registry $registry,
         \Magento\Framework\Data\FormFactory $formFactory,
-        \Magento\Framework\Stdlib\DateTime\TimezoneInterface $timezone,
         Csv $csv,
         Xml $xml,
         \GoMage\Feed\Helper\Data $helper,
         array $data = []
     ) {
         $this->_xml    = $xml;
-        $this->timezone = $timezone;
         $this->_csv    = $csv;
         $this->_helper = $helper;
         parent::__construct($context, $registry, $formFactory, $data);
@@ -69,9 +62,6 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
     {
         /* @var $model Feed */
         $model = $this->_coreRegistry->registry('current_feed');
-        $localizedDateTimeISO = $this->timezone->date(new \DateTime($model->getData('generated_at')))
-            ->format(\Magento\Framework\Stdlib\DateTime::DATETIME_PHP_FORMAT);
-        $model->setData('generated_at', $localizedDateTimeISO);
 
         /** @var \Magento\Framework\Data\Form $form */
         $form = $this->_formFactory->create();
@@ -107,7 +97,7 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
             [
                 'label' => __('Access Url'),
                 'title' => __('Access Url'),
-                'text'  => '<a href="' . $url . '" target="_blank">' . $url . '</a>',
+                'text'  => $url ? '<a href="' . $url . '" target="_blank">' . $url . '</a>' : '',
             ]
         );
 
@@ -115,11 +105,10 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
             'filename',
             'text',
             [
-                'name' => 'filename',
+                'name'     => 'filename',
                 'required' => true,
-                'label' => __('File Name'),
-                'title' => __('File Name'),
-                'class' => 'validate-no-spaces'
+                'label'    => __('File Name'),
+                'title'    => __('File Name'),
             ]
         );
 
