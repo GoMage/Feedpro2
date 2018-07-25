@@ -96,7 +96,7 @@ class Generator
      *
      * @return ResultModel
      */
-    public function generate($feedId, $page = null, string $writeMode = 'w')
+    public function generate($feedId, $page = null, $writeMode = 'w')
     {
         $feed = $this->feedFactory->create()->load($feedId);
         $this->storeManager->setCurrentStore($feed->getStoreId());

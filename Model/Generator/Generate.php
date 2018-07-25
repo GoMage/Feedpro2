@@ -90,7 +90,7 @@ class Generate
      * @param string $fileMode
      * @return ResultModel
      */
-    public function execute(Feed $feed, LoggerInterface $logger, $page, string $fileMode)
+    public function execute(Feed $feed, LoggerInterface $logger, $page,  $fileMode)
     {
         $breakAfterFirstIteration = true;
         $limit = $feed->getLimit();
@@ -170,7 +170,7 @@ class Generate
      *
      * @return \GoMage\Feed\Model\Writer\WriterInterface
      */
-    private function getWriter(Feed $feed, string $fileMode, $page, $totalPages)
+    private function getWriter(Feed $feed,  $fileMode, $page, $totalPages)
     {
         $arguments = [
             'fileName' => $feed->getFullFileName(),

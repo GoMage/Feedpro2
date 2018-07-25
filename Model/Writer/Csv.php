@@ -57,7 +57,7 @@ class Csv extends AbstractWriter
         Enclosure $enclosureModel,
         Delimiter $delimiterModel,
         $fileName,
-        string $fileMode,
+        $fileMode,
         $delimiter = Delimiter::COMMA,
         $enclosure = Enclosure::DOUBLE_QUOTE,
         $isHeader = true,

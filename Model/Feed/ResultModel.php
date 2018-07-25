@@ -86,7 +86,7 @@ class ResultModel
     /**
      * @return Feed
      */
-    private function getFeed(): Feed
+    private function getFeed()
     {
         return $this->feed;
     }

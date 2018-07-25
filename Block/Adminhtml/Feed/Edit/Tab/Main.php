@@ -47,19 +47,17 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Framework\Registry $registry,
         \Magento\Framework\Data\FormFactory $formFactory,
-        \Magento\Framework\Stdlib\DateTime\TimezoneInterface $timezone,
         Csv $csv,
         Xml $xml,
         \GoMage\Feed\Helper\Data $helper,
         array $data = []
     ) {
         $this->_xml    = $xml;
-        $this->timezone = $timezone;
+        $this->timezone = $context->getLocaleDate();
         $this->_csv    = $csv;
         $this->_helper = $helper;
         parent::__construct($context, $registry, $formFactory, $data);
     }
-
     /**
      * Prepare form
      *
