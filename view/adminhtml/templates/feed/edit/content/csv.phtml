@@ -6,11 +6,11 @@
  * GoMage Feed Pro M2
  *
  * @category     Extension
- * @copyright    Copyright (c) 2010-2016 GoMage.com (https://www.gomage.com)
+ * @copyright    Copyright (c) 2010-2018 GoMage.com (https://www.gomage.com)
  * @author       GoMage.com
  * @license      https://www.gomage.com/licensing  Single domain license
  * @terms of use https://www.gomage.com/terms-of-use
- * @version      Release: 1.0.0
+ * @version      Release: 1.1.0
  * @since        Class available since Release 1.0.0
  */
 
@@ -91,7 +91,7 @@ $_dynamicAttributes = $block->getDynamicAttributes();
                     <label class="admin__field-label"><span><?php echo __('Value') ?></span></label>
 
                     <div class="admin__field-control">
-                        <select class="admin__control-select"
+                        <select class="admin__control-select" data-validate="{required:true, minlength:1}"
                                 name="<?php echo $_htmlName ?>[<%- data.row_id %>][value]"
                         </select>
                         <input type="text" class="admin__control-text"

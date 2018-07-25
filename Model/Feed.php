@@ -6,11 +6,11 @@
  * GoMage Feed Pro M2
  *
  * @category     Extension
- * @copyright    Copyright (c) 2010-2016 GoMage.com (https://www.gomage.com)
+ * @copyright    Copyright (c) 2010-2018 GoMage.com (https://www.gomage.com)
  * @author       GoMage.com
  * @license      https://www.gomage.com/licensing  Single domain license
  * @terms of use https://www.gomage.com/terms-of-use
- * @version      Release: 1.0.0
+ * @version      Release: 1.1.0
  * @since        Class available since Release 1.0.0
  */
 
@@ -40,6 +40,24 @@ class Feed extends \Magento\Rule\Model\AbstractModel
      */
     protected $_actionCollectionFactory;
 
+    /**
+     * This class is added in Magento 2.2.
+     *
+     * @var \Magento\Framework\Serialize\Serializer\Json
+     */
+    protected $serializer;
+
+    /**
+     * @param \Magento\Framework\Model\Context $context
+     * @param \Magento\Framework\Registry $registry
+     * @param \Magento\Framework\Data\FormFactory $formFactory
+     * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
+     * @param \Magento\CatalogRule\Model\Rule\Condition\CombineFactory $combineFactory
+     * @param \Magento\CatalogRule\Model\Rule\Action\CollectionFactory $actionCollectionFactory
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource|null $resource
+     * @param \Magento\Framework\Data\Collection\AbstractDb|null $resourceCollection
+     * @param array $data
+     */
     public function __construct(
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
@@ -105,10 +123,15 @@ class Feed extends \Magento\Rule\Model\AbstractModel
         if ($this->hasConditionsSerialized()) {
             $conditions = $this->getConditionsSerialized();
             if (!empty($conditions)) {
-                $conditions = unserialize($conditions);
-                if (is_array($conditions) && !empty($conditions)) {
+                //magento verision <= 2.1.x
+                $conditionsOutput = @unserialize($conditions);
+                if ($conditionsOutput === false) {
+                    // magento version >= 2.2
+                    $conditionsOutput = $this->serializer->unserialize($conditions);
+                }
+                if (is_array($conditionsOutput) && !empty($conditionsOutput)) {
                     $this->_resetConditions();
-                    $this->_conditions->loadArray($conditions);
+                    $this->_conditions->loadArray($conditionsOutput);
                 }
             }
             $this->unsConditionsSerialized();

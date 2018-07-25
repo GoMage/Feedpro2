@@ -6,21 +6,23 @@
  * GoMage Feed Pro M2
  *
  * @category     Extension
- * @copyright    Copyright (c) 2010-2016 GoMage.com (https://www.gomage.com)
+ * @copyright    Copyright (c) 2010-2018 GoMage.com (https://www.gomage.com)
  * @author       GoMage.com
  * @license      https://www.gomage.com/licensing  Single domain license
  * @terms of use https://www.gomage.com/terms-of-use
- * @version      Release: 1.0.0
+ * @version      Release: 1.1.0
  * @since        Class available since Release 1.0.0
  */
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="admin-2columns-left" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <head>
+        <script src="GoMage_Feed::js/feed.js"/>
         <css src="GoMage_Feed::css/styles.css"/>
     </head>
     <body>
         <referenceContainer name="content">
             <block class="GoMage\Feed\Block\Adminhtml\Feed\Edit" name="gomage.feed.edit"/>
+            <block class="Magento\Framework\View\Element\Template" name="gomage.feed.edit.tools" template="GoMage_Feed::feed/edit/tools.phtml"/>
         </referenceContainer>
         <referenceContainer name="left">
             <block class="GoMage\Feed\Block\Adminhtml\Feed\Edit\Tabs" name="gomage_feed_edit_tabs">

@@ -6,11 +6,11 @@
  * GoMage Feed Pro M2
  *
  * @category     Extension
- * @copyright    Copyright (c) 2010-2016 GoMage.com (https://www.gomage.com)
+ * @copyright    Copyright (c) 2010-2018 GoMage.com (https://www.gomage.com)
  * @author       GoMage.com
  * @license      https://www.gomage.com/licensing  Single domain license
  * @terms of use https://www.gomage.com/terms-of-use
- * @version      Release: 1.0.0
+ * @version      Release: 1.1.0
  * @since        Class available since Release 1.0.0
  */
 
@@ -27,11 +27,11 @@ interface OutputInterface
     const DELETE_SPACE = 'delete_space';
     const BIG_TO_SMALL = 'big_to_small';
     const REMOVE_LINE_BREAK = 'remove_lb';
+    const HTML_SPECIAL_CHARS_ENCODE = 'htmlspecialchars';
 
     /**
      * @param  $value
      * @return mixed
      */
     public function format($value);
-
 }

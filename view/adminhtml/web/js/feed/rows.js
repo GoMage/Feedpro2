@@ -4,11 +4,11 @@
  * GoMage Feed Pro M2
  *
  * @category     Extension
- * @copyright    Copyright (c) 2010-2016 GoMage.com (https://www.gomage.com)
+ * @copyright    Copyright (c) 2010-2018 GoMage.com (https://www.gomage.com)
  * @author       GoMage.com
  * @license      https://www.gomage.com/licensing  Single domain license
  * @terms of use https://www.gomage.com/terms-of-use
- * @version      Release: 1.0.0
+ * @version      Release: 1.1.0
  * @since        Class available since Release 1.0.0
  */
 
@@ -59,8 +59,18 @@ define([
                 if (element) {
                     var row_id = element.readAttribute('data-row-id');
                     this.setTitle(row_id);
+                    this.validateElement(element);
                     element.toggleClassName('__opened');
+                    self = row_id;
                 }
+                this.container.childElements().forEach(function (data) {
+                    if (self !== data.readAttribute('data-row-id')) {
+                        if (data.classList.contains('__opened')) {
+                            this.validateElement(data);
+                            data.classList.remove('__opened');
+                        }
+                    }
+                }, this);
             },
             changeType: function (event) {
                 var element = $(Event.findElement(event, 'select'));
@@ -86,6 +96,7 @@ define([
                         values = [];
                         break;
                     case 8:
+                    case 9:
                         values = config.dynamicAttributes;
                         break;
                     default:
@@ -153,8 +164,36 @@ define([
             bindActions: function () {
                 Event.observe('add_new_row_button', 'click', this.add.bind(Rows, {}));
                 this.container.on('click', '.delete-row', this.remove.bind(this));
-                this.container.on('click', '.edit-row, .close-row', this.toggleEdit.bind(this));
+                this.container.on('click', '.fm-block-title', this.toggleEdit.bind(this));
                 this.container.on('change', '.type-select', this.changeType.bind(this));
+            },
+            validateElement: function (element) {
+                if (element.classList.contains('__opened')) {
+                    jQuery('#edit_form').valid();
+                    if (!element.select('.fm-block-title-right')[0].hasClassName('warning')) {
+                        if (element.select('.mage-error').length > 0) {
+                            var needToAdd = false;
+                            for (var i = 0; i < element.select('.mage-error').length; i++) {
+                                if (element.select('.mage-error')[i].getStyle('display') !== 'none') {
+                                    needToAdd = true;
+                                }
+                            }
+                            if (needToAdd === true) {
+                                element.select('.fm-block-title-right')[0].addClassName('warning');
+                            }
+                        }
+                    } else {
+                        var needToDelete = true;
+                        for (var i = 0; i < element.select('.mage-error').length; i++) {
+                            if (element.select('.mage-error')[i].getStyle('display') !== 'none') {
+                                needToDelete = false;
+                            }
+                        }
+                        if (needToDelete === true) {
+                            element.select('.fm-block-title-right')[0].removeClassName('warning');
+                        }
+                    }
+                }
             }
         };
         Rows.init();

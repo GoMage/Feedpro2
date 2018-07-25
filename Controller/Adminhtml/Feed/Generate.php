@@ -6,46 +6,85 @@
  * GoMage Feed Pro M2
  *
  * @category     Extension
- * @copyright    Copyright (c) 2010-2016 GoMage.com (https://www.gomage.com)
+ * @copyright    Copyright (c) 2010-2018 GoMage.com (https://www.gomage.com)
  * @author       GoMage.com
  * @license      https://www.gomage.com/licensing  Single domain license
  * @terms of use https://www.gomage.com/terms-of-use
- * @version      Release: 1.0.0
+ * @version      Release: 1.1.0
  * @since        Class available since Release 1.0.0
  */
 
 namespace GoMage\Feed\Controller\Adminhtml\Feed;
 
 use GoMage\Feed\Controller\Adminhtml\Feed as FeedController;
-use Magento\Framework\Controller\ResultFactory;
+use GoMage\Feed\Model\Generator;
+use Magento\Backend\App\Action;
+use Magento\Framework\App\ResponseInterface;
+use Magento\Framework\Controller\Result\Json;
+use Magento\Framework\Controller\Result\JsonFactory as ResultJsonFactory;
+use Magento\Framework\Controller\ResultInterface;
 
 class Generate extends FeedController
 {
     /**
-     * @return \Magento\Backend\Model\View\Result\Redirect
+     * @var ResultJsonFactory
+     */
+    private $resultJsonFactory;
+
+    /**
+     * @var Generator
+     */
+    private $generator;
+
+    /**
+     * @param Action\Context $context
+     * @param ResultJsonFactory $resultJsonFactory
+     * @param Generator $generator
+     */
+    public function __construct(
+        Action\Context $context,
+        ResultJsonFactory $resultJsonFactory,
+        Generator $generator
+    ) {
+        $this->resultJsonFactory = $resultJsonFactory;
+        $this->generator = $generator;
+
+        parent::__construct($context);
+    }
+
+    /**
+     * @return ResponseInterface|Json|ResultInterface
      */
     public function execute()
     {
         $id = $this->getRequest()->getParam('id');
-        /** @var \Magento\Backend\Model\View\Result\Redirect $redirectResult */
-        $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
+        $page = $this->getRequest()->getParam('page') ?: 1;
+
+        $result = $this->resultJsonFactory->create();
         if ($id) {
             try {
-                /** @var \GoMage\Feed\Model\Generator $generator */
-                $generator = $this->_objectManager->get('GoMage\Feed\Model\Generator');
-                $generator->generate($id);
-                
-                $this->messageManager->addSuccess(__('Feed has been successfully generated.'));
-                $resultRedirect->setPath('gomage_feed/feed/edit', ['id' => $id]);
-                return $resultRedirect;
+                $writeMode = 'a'; //write after all in file.
+                if ($page == 1) {
+                    $writeMode = 'w'; //clear file and then write.
+                }
+                $resultModel = $this->generator->generate($id, $page, $writeMode);
+
+                $resultArray = array_merge(
+                    $resultModel->getStructuredData(),
+                    ['message' => __('You generated the feed.')]
+                );
+
+                $result->setData($resultArray);
             } catch (\Exception $e) {
-                $this->messageManager->addError($e->getMessage());
-                $resultRedirect->setPath('gomage_feed/feed/edit', ['id' => $this->getRequest()->getParam('id')]);
-                return $resultRedirect;
+                $result->setData(
+                    [
+                        'error' => true,
+                        'message' => $e->getMessage(),
+                    ]
+                );
             }
         }
-        $this->messageManager->addError(__('We can\'t find a feed to generate.'));
-        $resultRedirect->setPath('gomage_feed/feed/index');
-        return $resultRedirect;
+
+        return $result;
     }
 }

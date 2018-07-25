@@ -6,11 +6,11 @@
  * GoMage Feed Pro M2
  *
  * @category     Extension
- * @copyright    Copyright (c) 2010-2016 GoMage.com (https://www.gomage.com)
+ * @copyright    Copyright (c) 2010-2018 GoMage.com (https://www.gomage.com)
  * @author       GoMage.com
  * @license      https://www.gomage.com/licensing  Single domain license
  * @terms of use https://www.gomage.com/terms-of-use
- * @version      Release: 1.0.0
+ * @version      Release: 1.1.0
  * @since        Class available since Release 1.0.0
  */
 
@@ -59,7 +59,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
                         'onclick' => 'setLocation(\'' . $url . '\')',
                         'class'   => 'stop'
                     ],
-                    5
+                    0
                 );
             } else {
                 $url = $this->getUrl('gomage_feed/feed/generate', [
@@ -70,10 +70,10 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
                     'generate',
                     [
                         'label'   => __('Generate'),
-                        'onclick' => 'setLocation(\'' . $url . '\')',
+                        'onclick' => 'goMageFeedGenerate(\'' . $url . '\')',
                         'class'   => 'generate'
                     ],
-                    5
+                    0
                 );
             }
         }
@@ -82,6 +82,9 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
             $this->buttonList->update('save', 'label', __('Continue'));
         }
 
+        $this->buttonList->update('save', 'level', -1);
+        $this->buttonList->update('delete', 'level', 1);
+        $this->buttonList->update('reset', 'level', 0);
     }
 
     /**

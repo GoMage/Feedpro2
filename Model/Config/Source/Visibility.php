@@ -6,21 +6,21 @@
  * GoMage Feed Pro M2
  *
  * @category     Extension
- * @copyright    Copyright (c) 2010-2016 GoMage.com (https://www.gomage.com)
+ * @copyright    Copyright (c) 2010-2018 GoMage.com (https://www.gomage.com)
  * @author       GoMage.com
  * @license      https://www.gomage.com/licensing  Single domain license
  * @terms of use https://www.gomage.com/terms-of-use
- * @version      Release: 1.0.0
+ * @version      Release: 1.1.0
  * @since        Class available since Release 1.0.0
  */
 
 namespace GoMage\Feed\Model\Config\Source;
 
 use Magento\Catalog\Model\Product\Visibility as ProductVisibility;
+use Magento\Framework\Option\ArrayInterface;
 
-class Visibility implements \Magento\Framework\Option\ArrayInterface
+class Visibility implements ArrayInterface
 {
-
     const CATALOG_SEARCH = 0;
     const NOT_USE = 1;
     const NOT_VISIBLE = 2;
@@ -51,10 +51,13 @@ class Visibility implements \Magento\Framework\Option\ArrayInterface
      */
     public function getProductVisibility($visibility)
     {
-        $visibility = [];
         switch ($visibility) {
             case self::CATALOG_SEARCH:
-                $visibility = [ProductVisibility::VISIBILITY_IN_SEARCH, ProductVisibility::VISIBILITY_IN_CATALOG, ProductVisibility::VISIBILITY_BOTH];
+                $visibility = [
+                    ProductVisibility::VISIBILITY_IN_SEARCH,
+                    ProductVisibility::VISIBILITY_IN_CATALOG,
+                    ProductVisibility::VISIBILITY_BOTH
+                ];
                 break;
             case self::NOT_VISIBLE:
                 $visibility = [ProductVisibility::VISIBILITY_NOT_VISIBLE];
@@ -72,7 +75,7 @@ class Visibility implements \Magento\Framework\Option\ArrayInterface
                 $visibility = [ProductVisibility::VISIBILITY_IN_SEARCH];
                 break;
         }
+
         return $visibility;
     }
 }
-

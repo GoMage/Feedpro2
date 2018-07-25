@@ -4,11 +4,11 @@
  * GoMage Feed Pro M2
  *
  * @category     Extension
- * @copyright    Copyright (c) 2010-2016 GoMage.com (https://www.gomage.com)
+ * @copyright    Copyright (c) 2010-2018 GoMage.com (https://www.gomage.com)
  * @author       GoMage.com
  * @license      https://www.gomage.com/licensing  Single domain license
  * @terms of use https://www.gomage.com/terms-of-use
- * @version      Release: 1.0.0
+ * @version      Release: 1.1.0
  * @since        Class available since Release 1.0.0
  */
 
@@ -318,7 +318,62 @@ div.admin__field[data-ui-id="gomage-feed-attribute-tab-condition-fieldset-elemen
 }
 #feed_mapping_fieldset #rows-container{
   margin-bottom: 0;
+  cursor: pointer;
 }
 @-moz-document url-prefix() {
   .admin__scope-old #feed_tabs_content_section_content .fieldset-wrapper, .admin__scope-old #feed_tabs_content_section_content .fieldset { display: table-cell; }
+}
+
+.page-main-actions .page-actions button.generate {
+  order: 1;
+}
+.page-main-actions .page-actions button.stop {
+  order: 1;
+}
+
+.gomage-feed-progress-modal {
+  visibility: visible;
+  opacity: 1;
+  transform: none;
+}
+
+.gomage-feed-progress-modal .ui-dialog-titlebar-close {
+  display: none;
+}
+
+.gomage-feed-progress-modal .ui-progressbar {
+  height: 20px;
+  position: relative;
+  border: 1px #514943 solid;
+  margin-top: 10px;
+}
+
+.gomage-feed-progress-modal .ui-progressbar .ui-progressbar-value {
+  position: absolute;
+  height: 100%;
+  background: #eb5202;
+}
+
+.ui-dialog .ui-button{
+  height: 30px;
+  width: 60px;
+  padding-top: 4px;
+}
+
+.ui-dialog .ui-button-text {
+  font-size: 1.2rem;
+}
+
+.gomage-feed-feed-index .admin__data-grid-wrap .data-row,
+.gomage-feed-attribute-index .admin__data-grid-wrap .data-row {
+  cursor: pointer
+}
+
+.fm-block-title-right.warning:before
+{
+  color: #eb5202;
+  content: '\e623';
+  font-family: Admin Icons;
+  font-size: 2rem;
+  margin-right:10px;
 }

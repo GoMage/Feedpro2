@@ -6,11 +6,11 @@
  * GoMage Feed Pro M2
  *
  * @category     Extension
- * @copyright    Copyright (c) 2010-2016 GoMage.com (https://www.gomage.com)
+ * @copyright    Copyright (c) 2010-2018 GoMage.com (https://www.gomage.com)
  * @author       GoMage.com
  * @license      https://www.gomage.com/licensing  Single domain license
  * @terms of use https://www.gomage.com/terms-of-use
- * @version      Release: 1.0.0
+ * @version      Release: 1.1.0
  * @since        Class available since Release 1.0.0
  */
 
@@ -40,9 +40,11 @@ class Save extends AttributeController
                     $model->load($id);
                 }
                 if (isset($data['content']) && $data['content']) {
+                    $contentArray = $data['content'];
                     $data['content'] = $this->_prepareData($data['content']);
                     $data['content'] = $this->_objectManager->get('Magento\Framework\Json\Helper\Data')
                         ->jsonEncode($data['content']);
+                    $this->validateContent($contentArray);
                 }
                 $model->addData($data);
                 $model->save();
@@ -90,5 +92,38 @@ class Save extends AttributeController
         /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
         $redirectResult = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
         return $redirectResult->setPath('gomage_feed/attribute/edit', ['id' => $this->getRequest()->getPost('id', null)]);
+    }
+
+    /**
+     * @param array $content
+     * @return void
+     *
+     * @throws LocalizedException
+     */
+    private function validateContent(array $content)
+    {
+        foreach ($content as $row) {
+            foreach ($row['conditions'] as $condition) {
+                if ($condition['code'] === '') {
+                    throw new LocalizedException(__('Condition code is required.'));
+                }
+            }
+
+            if (is_array($row['value'])) {
+                $rowValue = $row['value'];
+
+                if (isset($rowValue['code'])) {
+                    if ($rowValue['code'] === '') {
+                        throw new LocalizedException(__('Attribute code is required.'));
+                    }
+                } else {
+                    foreach ($rowValue as $value) {
+                        if ($value['code'] === '') {
+                            throw new LocalizedException(__('Attribute code is required.'));
+                        }
+                    }
+                }
+            }
+        }
     }
 }

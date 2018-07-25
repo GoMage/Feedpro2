@@ -6,11 +6,11 @@
  * GoMage Feed Pro M2
  *
  * @category     Extension
- * @copyright    Copyright (c) 2010-2016 GoMage.com (https://www.gomage.com)
+ * @copyright    Copyright (c) 2010-2018 GoMage.com (https://www.gomage.com)
  * @author       GoMage.com
  * @license      https://www.gomage.com/licensing  Single domain license
  * @terms of use https://www.gomage.com/terms-of-use
- * @version      Release: 1.0.0
+ * @version      Release: 1.1.0
  * @since        Class available since Release 1.0.0
  */
 
@@ -87,6 +87,16 @@ class Collection implements ReaderInterface
     }
 
     /**
+     * @return int
+     */
+    public function getSize()
+    {
+        $collection = $this->_getCollection();
+
+        return $collection->getSize();
+    }
+
+    /**
      * @return \Magento\Catalog\Model\ResourceModel\Product\Collection
      */
     protected function _getCollection()
@@ -95,7 +105,7 @@ class Collection implements ReaderInterface
             $this->_collection = $this->_productCollectionFactory->create();
 
             if ($this->_params->getStoreId()) {
-                $this->_collection->setStoreId($this->_params->getStoreId());
+                $this->_collection->addStoreFilter($this->_params->getStoreId());
             }
 
             $visibility = $this->_visibility->getProductVisibility($this->_params->getVisibility());

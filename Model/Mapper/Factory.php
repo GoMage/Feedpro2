@@ -6,11 +6,11 @@
  * GoMage Feed Pro M2
  *
  * @category     Extension
- * @copyright    Copyright (c) 2010-2016 GoMage.com (https://www.gomage.com)
+ * @copyright    Copyright (c) 2010-2018 GoMage.com (https://www.gomage.com)
  * @author       GoMage.com
  * @license      https://www.gomage.com/licensing  Single domain license
  * @terms of use https://www.gomage.com/terms-of-use
- * @version      Release: 1.0.0
+ * @version      Release: 1.1.0
  * @since        Class available since Release 1.0.0
  */
 
@@ -29,7 +29,6 @@ class Factory
      * @var array
      */
     protected $_customMappers;
-
 
     public function __construct(
         \Magento\Framework\ObjectManagerInterface $objectManager,
@@ -59,7 +58,7 @@ class Factory
      */
     protected function _getCustomMapper($value)
     {
-        if (isset($this->_customMappers[$value])) {
+        if (!is_array($value) && isset($this->_customMappers[$value])) {
             return $this->_customMappers[$value];
         }
         return false;
@@ -71,35 +70,41 @@ class Factory
      */
     protected function _getMapper($type)
     {
+        $className = null;
+
         switch ($type) {
             case TypeInterface::ATTRIBUTE:
-                $className = 'GoMage\Feed\Model\Mapper\Attribute';
+                $className = Attribute::class;
                 break;
             case TypeInterface::PARENT_ATTRIBUTE:
-                $className = 'GoMage\Feed\Model\Mapper\ParentAttribute';
+                $className = ParentAttribute::class;
                 break;
             case TypeInterface::EMPTY_PARENT_ATTRIBUTE:
-                $className = 'GoMage\Feed\Model\Mapper\EmptyParentAttribute';
+                $className = EmptyParentAttribute::class;
                 break;
             case TypeInterface::EMPTY_CHILD_ATTRIBUTE:
-                $className = 'GoMage\Feed\Model\Mapper\EmptyChildAttribute';
+                $className = EmptyChildAttribute::class;
                 break;
             case TypeInterface::STATIC_VALUE:
-                $className = 'GoMage\Feed\Model\Mapper\StaticValue';
+                $className = StaticValue::class;
                 break;
             case TypeInterface::PERCENT:
-                $className = 'GoMage\Feed\Model\Mapper\AttributePercent';
+                $className = AttributePercent::class;
                 break;
             case TypeInterface::ATTRIBUTE_SET:
-                $className = 'GoMage\Feed\Model\Mapper\AttributeSet';
+                $className = AttributeSet::class;
                 break;
             case TypeInterface::CONFIGURABLE_VALUES:
-                $className = 'GoMage\Feed\Model\Mapper\ConfigurableValue';
+                $className = ConfigurableValue::class;
                 break;
             case TypeInterface::DYNAMIC_ATTRIBUTE:
-                $className = 'GoMage\Feed\Model\Mapper\DynamicAttribute';
+                $className = DynamicAttribute::class;
+                break;
+            case TypeInterface::PARENT_DYNAMIC_ATTRIBUTE:
+                $className = ParentDynamicAttribute::class;
                 break;
         }
+
         return $className;
     }
 
@@ -110,5 +115,4 @@ class Factory
     {
         return $this->_customMappers;
     }
-
 }
