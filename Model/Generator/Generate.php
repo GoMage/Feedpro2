@@ -94,9 +94,8 @@ class Generate
     {
         $breakAfterFirstIteration = true;
         $limit = $feed->getLimit();
-
         $content = $this->contentFactory->create(
-            $feed->getFileExt(),
+            $feed->getType(),
             [
                 'content' => $feed->getContent(),
             ]

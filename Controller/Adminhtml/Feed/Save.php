@@ -31,7 +31,6 @@ class Save extends FeedController
     public function execute()
     {
         $data = $this->getRequest()->getPostValue();
-
         if ($data) {
             try {
                 /** @var \GoMage\Feed\Model\Feed $model */
@@ -108,6 +107,11 @@ class Save extends FeedController
         $this->_getSession()->setPageData($data);
         /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
         $redirectResult = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
-        return $redirectResult->setPath('gomage_feed/feed/edit', ['id' => $this->getRequest()->getPost('id', null)]);
+        return $redirectResult->setPath('gomage_feed/feed/edit',
+            ['id' => $this->getRequest()->getPost('id', null),
+             'switch_type' => $this->getRequest()->getPost('switch_type', null),
+             'type' =>   $this->getRequest()->getPost('type', null)
+            ]
+        );
     }
 }

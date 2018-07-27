@@ -61,6 +61,14 @@ class Edit extends FeedController
             $model->addData($data);
         }
 
+        if(!$data && $this->getRequest()->getParam('key') && $this->getRequest()->getParam('type')) {
+            $data = [];
+            $data['key'] = $this->getRequest()->getParam('key');
+            $data['type'] = $this->getRequest()->getParam('type');
+            if($data) {
+                $model->addData($data);
+            }
+        }
         $this->_coreRegistry->register('current_feed', $model);
 
         $resultPage = $this->createPage();
