@@ -67,9 +67,12 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
     {
         /* @var $model Feed */
         $model = $this->_coreRegistry->registry('current_feed');
-        $localizedDateTimeISO = $this->timezone->date(new \DateTime($model->getData('generated_at')))
-            ->format(\Magento\Framework\Stdlib\DateTime::DATETIME_PHP_FORMAT);
-        $model->setData('generated_at', $localizedDateTimeISO);
+        if($model->getData('generated_at'))
+        {
+            $localizedDateTimeISO = $this->timezone->date(new \DateTime($model->getData('generated_at')))
+                ->format(\Magento\Framework\Stdlib\DateTime::DATETIME_PHP_FORMAT);
+            $model->setData('generated_at', $localizedDateTimeISO);
+        }
 
         /** @var \Magento\Framework\Data\Form $form */
         $form = $this->_formFactory->create();
