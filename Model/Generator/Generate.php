@@ -96,7 +96,7 @@ class Generate
         $limit = $feed->getLimit();
 
         $content = $this->contentFactory->create(
-            $feed->getType(),
+            $feed->getFileExt(),
             [
                 'content' => $feed->getContent(),
             ]
