@@ -59,9 +59,9 @@ define([
                 if (element) {
                     var row_id = element.readAttribute('data-row-id');
                     this.setTitle(row_id);
-                    this.validateElement(element);
+                    //this.validateElement(element);
                     element.toggleClassName('__opened');
-                    self = row_id;
+                    var self = row_id;
                 }
                 this.container.childElements().forEach(function (data) {
                     if (self !== data.readAttribute('data-row-id')) {
