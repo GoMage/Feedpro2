@@ -147,7 +147,7 @@ define([
                     data: data
                 });
 
-                if( container.innerHTML ) {
+                if( container ) {
                     container.innerHTML = '';
                     Element.insert(container, element);
                 }
