@@ -147,8 +147,11 @@ define([
                     data: data
                 });
 
-                container.innerHTML = '';
-                Element.insert(container, element);
+                if( container.innerHTML ) {
+                    container.innerHTML = '';
+                    Element.insert(container, element);
+                }
+
             },
             getTitleValue: function (row_id, name) {
                 var input = jQuery("input[name='" + config.htmlName + "[" + row_id + "][" + name + "]']"),
