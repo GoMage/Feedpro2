@@ -74,6 +74,11 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
             $model->setData('generated_at', $localizedDateTimeISO);
         }
 
+        if(!$model->getData('type') && $this->getRequest()->getParam('type'))
+        {
+            $model->setData('type' , $this->getRequest()->getParam('type'));
+        }
+
         /** @var \Magento\Framework\Data\Form $form */
         $form = $this->_formFactory->create();
 
@@ -87,7 +92,9 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
         if ($model->getId()) {
             $fieldset->addField('id', 'hidden', ['name' => 'id']);
         }
-        $fieldset->addField('type', 'hidden', ['name' => 'type']);
+        $fieldset->addField('type', 'hidden', [
+            'name' => 'type_feed',
+        ]);
 
         $fieldset->addField(
             'name',
@@ -186,7 +193,6 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
                 'title' => __('Last Uploaded'),
             ]
         );
-
         $form->setValues($model->getData());
         $this->setForm($form);
 

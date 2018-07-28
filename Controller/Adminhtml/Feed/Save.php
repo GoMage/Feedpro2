@@ -62,6 +62,11 @@ class Save extends FeedController
                     $data['upload_day'] = implode(',', $data['upload_day']);
                 }
 
+                if($data['type_feed']) {
+                    $data['type'] = $data['type_feed'];
+                    unset($data['type_feed']);
+                }
+
                 $model->loadPost($data);
                 $model->save();
                 $this->messageManager->addSuccess(__('You saved the feed.'));
