@@ -42,6 +42,7 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
      * @var \GoMage\Feed\Helper\Data
      */
     protected $_helper;
+    protected $currencyModel;
 
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -50,12 +51,14 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
         Csv $csv,
         Xml $xml,
         \GoMage\Feed\Helper\Data $helper,
+        \Magento\Directory\Model\Currency $currencyModel,
         array $data = []
     ) {
         $this->_xml    = $xml;
         $this->timezone = $context->getLocaleDate();
         $this->_csv    = $csv;
         $this->_helper = $helper;
+        $this->currencyModel = $currencyModel;
         parent::__construct($context, $registry, $formFactory, $data);
     }
     /**
@@ -158,6 +161,21 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
                 'title'    => __('Store View'),
                 'required' => true,
                 'values'   => $this->_helper->getStoreOptionArray(),
+            ]
+        );
+        $currencyCodes = [];
+        foreach ($this->currencyModel->getConfigAllowCurrencies() as $item) {
+            $currencyCodes[$item] = $item;
+        }
+        $field    = $fieldset->addField(
+            'currency_code',
+            'select',
+            [
+                'name'     => 'currency_code',
+                'label'    => __('Currency code'),
+                'title'    => __('Currency code'),
+                'required' => true,
+                'values'   => $currencyCodes,
             ]
         );
         $renderer = $this->getLayout()->createBlock(

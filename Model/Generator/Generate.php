@@ -26,6 +26,8 @@ use GoMage\Feed\Model\Reader\Factory as ReaderFactory;
 use GoMage\Feed\Model\Reader\ParamsFactory;
 use GoMage\Feed\Model\Writer\Factory as WriterFactory;
 use Psr\Log\LoggerInterface;
+use Magento\Store\Model\StoreManagerInterface;
+use Magento\Framework\Math\Calculator;
 
 class Generate
 {
@@ -45,6 +47,11 @@ class Generate
     private $paramsFactory;
 
     /**
+     * @var StoreManagerInterface
+     */
+    private $storeManager;
+
+    /**
      * @var ReaderCollectionFactory
      */
     private $readerCollectionFactory;
@@ -58,14 +65,17 @@ class Generate
      * @var ResultModelFactory
      */
     private $resultModelFactory;
+    private $calculator;
 
     /**
+     * Generate constructor.
      * @param ReaderFactory $readerFactory
      * @param WriterFactory $writerFactory
      * @param ParamsFactory $paramsFactory
      * @param ReaderCollectionFactory $readerCollectionFactory
      * @param ContentFactory $contentFactory
      * @param ResultModelFactory $resultModelFactory
+     * @param StoreManagerInterface $storeManager
      */
     public function __construct(
         ReaderFactory $readerFactory,
@@ -73,8 +83,12 @@ class Generate
         ParamsFactory $paramsFactory,
         ReaderCollectionFactory $readerCollectionFactory,
         ContentFactory $contentFactory,
-        ResultModelFactory $resultModelFactory
+        ResultModelFactory $resultModelFactory,
+        StoreManagerInterface $storeManager,
+        Calculator $calculator
     ) {
+        $this->calculator = $calculator;
+        $this->storeManager = $storeManager;
         $this->readerFactory = $readerFactory;
         $this->writerFactory = $writerFactory;
         $this->paramsFactory = $paramsFactory;
@@ -124,6 +138,11 @@ class Generate
         while ($items = $reader->read($page, $limit)) {
             $logger->info(__('Page - %1', $page));
             foreach ($items as $item) {
+                if($feed->getCurrencyCode()) {
+                    $store = $this->storeManager->getStore($feed->getStoreId());
+                    $rates = $store->getBaseCurrency()->getRate($feed->getCurrencyCode());
+                    $item->setPrice($this->calculator->deltaRound($item->getPrice() * $rates));
+                }
                 $data = $content->getRows()->calc($item);
                 $writer->write($data);
             }
