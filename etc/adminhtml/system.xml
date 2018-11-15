@@ -10,7 +10,7 @@
  * @author       GoMage.com
  * @license      https://www.gomage.com/licensing  Single domain license
  * @terms of use https://www.gomage.com/terms-of-use
- * @version      Release: 1.1.1
+ * @version      Release: 1.2.0
  * @since        Class available since Release 1.0.0
  */
 -->
@@ -95,7 +95,7 @@
             <tab>gomage</tab>
             <resource>GoMage_Feed::settings_feed</resource>
             <group id="feed" translate="label" type="text" sortOrder="10" showInDefault="1">
-                <label>GoMage Feed Pro v.1.0</label>
+                <label>GoMage Feed Pro v.1.2.0</label>
                 <field id="key" translate="label comment" type="text" sortOrder="10" showInDefault="1">
                     <label>Activation Key</label>
                 </field>
