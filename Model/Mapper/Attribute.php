@@ -29,24 +29,70 @@ class Attribute implements MapperInterface
      */
     protected $_attribute;
 
+    /**
+     * @var \GoMage\Feed\Model\Feed
+     */
+    protected $feedModel;
 
+    /**
+     * @var \GoMage\Feed\Model\ResourceModel\Feed
+     */
+    protected $feedResourceModel;
+
+    /**
+     * @var \Magento\Framework\App\RequestInterface
+     */
+    protected $request;
+
+    /**
+     * @var \Magento\Framework\Pricing\PriceCurrencyInterface
+     */
+    protected $priceCurrency;
+
+    /**
+     * Attribute constructor.
+     * @param $value
+     * @param \Magento\Catalog\Api\ProductAttributeRepositoryInterface $attributeRepository
+     * @param \GoMage\Feed\Model\Feed $feedModel
+     * @param \GoMage\Feed\Model\ResourceModel\Feed $feedResourceModel
+     * @param \Magento\Framework\App\RequestInterface $request
+     * @param \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     */
     public function __construct(
         $value,
-        \Magento\Catalog\Api\ProductAttributeRepositoryInterface $attributeRepository
+        \Magento\Catalog\Api\ProductAttributeRepositoryInterface $attributeRepository,
+        \GoMage\Feed\Model\Feed $feedModel,
+        \GoMage\Feed\Model\ResourceModel\Feed $feedResourceModel,
+        \Magento\Framework\App\RequestInterface $request,
+        \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency
     ) {
         $this->_code      = $value;
         $this->_attribute = $attributeRepository->get($this->_code);
+        $this->feedModel = $feedModel;
+        $this->feedResourceModel = $feedResourceModel;
+        $this->request = $request;
+        $this->priceCurrency = $priceCurrency;
     }
 
     /**
-     * @param  \Magento\Framework\DataObject $object
-     * @return mixed
+     * @param \Magento\Framework\DataObject $object
+     * @return float|mixed|string
      */
     public function map(\Magento\Framework\DataObject $object)
     {
-        return $this->_attribute->getFrontendModel() == 'Magento\Catalog\Model\Product\Attribute\Frontend\Image' ?
-            $this->_attribute->getFrontend()->getUrl($object) :
-            $this->_attribute->getFrontend()->getValue($object);
+        if ($this->_attribute->getFrontendModel() == 'Magento\Catalog\Model\Product\Attribute\Frontend\Image') {
+            $value = $this->_attribute->getFrontend()->getUrl($object);
+        } elseif ($this->_code == 'price' || $this->_code == 'special_price') {
+            $feedId = $this->request->getParam('id');
+            $this->feedResourceModel->load($this->feedModel, $feedId);
+            $currencyCode = $this->feedModel->getCurrencyCode();
+            $value = $this->priceCurrency->convert($this->_attribute->getFrontend()->getValue($object), null, $currencyCode);
+            $value = number_format($value, 4, '.', '');
+        } else {
+            $value = $this->_attribute->getFrontend()->getValue($object);
+        }
+        return $value;
     }
 
     /**
