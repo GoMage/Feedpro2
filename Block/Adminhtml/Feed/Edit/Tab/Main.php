@@ -112,13 +112,14 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
         );
 
         $url = $this->_helper->getFeedUrl($model->getFullFileName(), $model->getStoreId());
+        $openNewTab = $model->getType() == \GoMage\Feed\Model\Config\Source\FeedType::XML_TYPE ? 'target="_blank"' : '';
         $fieldset->addField(
             'comments',
             'note',
             [
                 'label' => __('Access Url'),
                 'title' => __('Access Url'),
-                'text'  => '<a href="' . $url . '" target="_blank">' . $url . '</a>',
+                'text'  => '<a href="' . $url . '" ' . $openNewTab . '>' . $url . '</a>',
             ]
         );
 
