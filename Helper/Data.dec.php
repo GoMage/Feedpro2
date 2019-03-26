@@ -113,27 +113,29 @@ class Data
             }
         }
 
-        $attributes = array_map(function ($attribute) {
-            return [
-                'value' => $attribute->getAttributeCode(),
-                'label' => $attribute->getStoreLabel()
-            ];
-        }, $attributes
-        );
+        $attributeList = [];
+        foreach ($attributes as $attribute) {
+            if ($attribute->getStoreLabel()) {
+                $attributeList[] = [
+                    'value' => $attribute->getAttributeCode(),
+                    'label' => $attribute->getStoreLabel()
+                ];
+            }
+        }
 
         foreach ($customMappers as $value => $class) {
-            $attributes[] = [
+            $attributeList[] = [
                 'value' => $value,
                 'label' => $class::getLabel()
             ];
         }
 
-        usort($attributes, function ($a, $b) {
+        usort($attributeList, function ($a, $b) {
             return strcmp($a['label'], $b['label']);
         }
         );
 
-        return $attributes;
+        return $attributeList;
     }
 
     /**
