@@ -73,14 +73,12 @@ class ParentAttribute extends Attribute implements MapperInterface
             ->where('parent_id != ?', $object->getId())
             ->query()
             ->fetchColumn();
-
         if ($parentId) {
             $collection = $this->_productCollectionFactory->create();
             return $collection->addAttributeToSelect($this->_code)
                 ->addIdFilter($parentId)
-                ->fetchItem();
+                ->getFirstItem();
         }
         return false;
     }
-
 }
