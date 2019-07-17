@@ -31,7 +31,7 @@ namespace GoMage\Feed\Model;
 class Feed extends \Magento\Rule\Model\AbstractModel
 {
     /**
-     * @var \Magento\CatalogRule\Model\Rule\Condition\CombineFactory
+     * @var Rule\Condition\CombineFactory
      */
     protected $_combineFactory;
 
@@ -48,11 +48,12 @@ class Feed extends \Magento\Rule\Model\AbstractModel
     protected $serializer;
 
     /**
+     * Feed constructor.
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Data\FormFactory $formFactory
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
-     * @param \Magento\CatalogRule\Model\Rule\Condition\CombineFactory $combineFactory
+     * @param Rule\Condition\CombineFactory $combineFactory
      * @param \Magento\CatalogRule\Model\Rule\Action\CollectionFactory $actionCollectionFactory
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource|null $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb|null $resourceCollection
@@ -63,7 +64,7 @@ class Feed extends \Magento\Rule\Model\AbstractModel
         \Magento\Framework\Registry $registry,
         \Magento\Framework\Data\FormFactory $formFactory,
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
-        \Magento\CatalogRule\Model\Rule\Condition\CombineFactory $combineFactory,
+        \GoMage\Feed\Model\Rule\Condition\CombineFactory $combineFactory,
         \Magento\CatalogRule\Model\Rule\Action\CollectionFactory $actionCollectionFactory,
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
@@ -157,11 +158,7 @@ class Feed extends \Magento\Rule\Model\AbstractModel
         return $this;
     }
 
-    /**
-     * Getter for rule conditions collection
-     *
-     * @return \Magento\Rule\Model\Condition\Combine
-     */
+
     public function getConditionsInstance()
     {
         return $this->_combineFactory->create();

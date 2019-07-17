@@ -121,8 +121,10 @@ class Collection implements ReaderInterface
                 $this->_stockFilter->addInStockFilterToCollection($this->_collection);
             }
 
+            $persistedConditions = $this->_params->getConditions()->getConditions();
             $this->_params->getConditions()->collectValidatedAttributes($this->_collection);
             $this->_builder->attachConditionToCollection($this->_collection, $this->_params->getConditions());
+            $this->_params->getConditions()->setConditions($persistedConditions); // in order the conditions will not disapper in feed entity
 
             $this->_collection->addFieldToSelect($this->_params->getAttributes())
                 ->addAttributeToSort(self::SORT_ATTRIBUTE);
