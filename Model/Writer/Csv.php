@@ -42,15 +42,23 @@ class Csv extends AbstractWriter
     protected $_headerCols = null;
 
     /**
+     * @var RequestInterface
+     */
+    protected $request;
+
+    /**
+     * Csv constructor.
      * @param \Magento\Framework\Filesystem $filesystem
      * @param Enclosure $enclosureModel
      * @param Delimiter $delimiterModel
      * @param $fileName
-     * @param string $fileMode
+     * @param $fileMode
      * @param int $delimiter
      * @param int $enclosure
      * @param bool $isHeader
      * @param string $additionHeader
+     * @param RequestInterface $request
+     * @throws \Magento\Framework\Exception\FileSystemException
      */
     public function __construct(
         \Magento\Framework\Filesystem $filesystem,
@@ -61,7 +69,8 @@ class Csv extends AbstractWriter
         $delimiter = Delimiter::COMMA,
         $enclosure = Enclosure::DOUBLE_QUOTE,
         $isHeader = true,
-        $additionHeader = ''
+        $additionHeader = '',
+        RequestInterface $request
     ) {
         parent::__construct($filesystem, $fileName, $fileMode);
         $this->_delimiter = $delimiterModel->getSymbol($delimiter);
@@ -70,6 +79,7 @@ class Csv extends AbstractWriter
         if ($additionHeader) {
             $this->_fileHandler->write($additionHeader);
         }
+        $this->request = $request;
     }
 
     /**
@@ -87,7 +97,8 @@ class Csv extends AbstractWriter
             foreach ($headerColumns as $columnName) {
                 $this->_headerCols[$columnName] = false;
             }
-            if ($this->_isHeader) {
+            $page = $this->request->getParam('page');
+            if ($this->_isHeader && ($page == 1 || $page === null)) {
                 $this->_fileHandler->writeCsv(array_keys($this->_headerCols), $this->_delimiter, $this->_enclosure);
             }
         }
