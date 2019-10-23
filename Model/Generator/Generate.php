@@ -65,6 +65,10 @@ class Generate
      * @var ResultModelFactory
      */
     private $resultModelFactory;
+
+    /**
+     * @var Calculator
+     */
     private $calculator;
 
     /**
@@ -76,6 +80,7 @@ class Generate
      * @param ContentFactory $contentFactory
      * @param ResultModelFactory $resultModelFactory
      * @param StoreManagerInterface $storeManager
+     * @param Calculator $calculator
      */
     public function __construct(
         ReaderFactory $readerFactory,

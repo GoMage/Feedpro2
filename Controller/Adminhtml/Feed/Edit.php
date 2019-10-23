@@ -20,7 +20,7 @@ use GoMage\Feed\Controller\Adminhtml\Feed as FeedController;
 use Magento\Backend\App\Action\Context;
 use Magento\Framework\Registry;
 use Magento\Framework\Controller\ResultFactory;
-
+use GoMage\Core\Helper\Data as coreHelper;
 class Edit extends FeedController
 {
     /**
@@ -28,12 +28,19 @@ class Edit extends FeedController
      */
     protected $_coreRegistry;
 
+    /**
+     * Edit constructor.
+     * @param Context $context
+     * @param Registry $coreRegistry
+     * @param coreHelper $coreHelper
+     */
     public function __construct(
         Context $context,
-        Registry $coreRegistry
+        Registry $coreRegistry,
+        coreHelper $coreHelper
     ) {
         $this->_coreRegistry = $coreRegistry;
-        parent::__construct($context);
+        parent::__construct($context,$coreHelper);
     }
 
     /**

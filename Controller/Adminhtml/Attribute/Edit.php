@@ -20,7 +20,7 @@ use GoMage\Feed\Controller\Adminhtml\Attribute as AttributeController;
 use Magento\Backend\App\Action\Context;
 use Magento\Framework\Registry;
 use Magento\Framework\Controller\ResultFactory;
-
+use GoMage\Core\Helper\Data as coreHelper;
 class Edit extends AttributeController
 {
     /**
@@ -28,16 +28,23 @@ class Edit extends AttributeController
      */
     protected $_coreRegistry;
 
+    /**
+     * Edit constructor.
+     * @param Context $context
+     * @param Registry $coreRegistry
+     * @param coreHelper $coreHelper
+     */
     public function __construct(
         Context $context,
-        Registry $coreRegistry
+        Registry $coreRegistry,
+        coreHelper $coreHelper
     ) {
         $this->_coreRegistry = $coreRegistry;
-        parent::__construct($context);
+        parent::__construct($context, $coreHelper);
     }
 
     /**
-     * @return \Magento\Framework\Controller\ResultInterface
+     * @return \Magento\Backend\Model\View\Result\Page|\Magento\Backend\Model\View\Result\Redirect|\Magento\Framework\App\ResponseInterface|\Magento\Framework\Controller\ResultInterface
      */
     public function execute()
     {

@@ -18,7 +18,7 @@ namespace GoMage\Feed\Controller\Adminhtml\Attribute;
 
 use GoMage\Feed\Controller\Adminhtml\Attribute as AttributeController;
 use Magento\Framework\DataObject;
-
+use GoMage\Core\Helper\Data as coreHelper;
 class Value extends AttributeController
 {
 
@@ -32,13 +32,20 @@ class Value extends AttributeController
      */
     protected $_productAttributeRepository;
 
-
+    /**
+     * Value constructor.
+     * @param \Magento\Backend\App\Action\Context $context
+     * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
+     * @param \Magento\Catalog\Model\Product\Attribute\Repository $productAttributeRepository
+     * @param coreHelper $coreHelper
+     */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
         \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory,
-        \Magento\Catalog\Model\Product\Attribute\Repository $productAttributeRepository
+        \Magento\Catalog\Model\Product\Attribute\Repository $productAttributeRepository,
+        coreHelper $coreHelper
     ) {
-        parent::__construct($context);
+        parent::__construct($context, $coreHelper);
         $this->_resultJsonFactory          = $resultJsonFactory;
         $this->_productAttributeRepository = $productAttributeRepository;
     }

@@ -23,6 +23,7 @@ use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\Controller\Result\Json;
 use Magento\Framework\Controller\Result\JsonFactory as ResultJsonFactory;
 use Magento\Framework\Controller\ResultInterface;
+use GoMage\Core\Helper\Data as coreHelper;
 
 class Generate extends FeedController
 {
@@ -37,19 +38,23 @@ class Generate extends FeedController
     private $generator;
 
     /**
+     * Generate constructor.
      * @param Action\Context $context
      * @param ResultJsonFactory $resultJsonFactory
      * @param Generator $generator
+     * @param coreHelper $coreHelper
      */
     public function __construct(
         Action\Context $context,
         ResultJsonFactory $resultJsonFactory,
-        Generator $generator
-    ) {
+        Generator $generator,
+        coreHelper $coreHelper
+    )
+    {
         $this->resultJsonFactory = $resultJsonFactory;
         $this->generator = $generator;
 
-        parent::__construct($context);
+        parent::__construct($context, $coreHelper);
     }
 
     /**
