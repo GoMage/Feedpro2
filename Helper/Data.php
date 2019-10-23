@@ -17,7 +17,7 @@
 namespace GoMage\Feed\Helper;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
-
+use GoMage\Core\Helper\Data as coreHelper;
 class Data
 {
     const MODULE_NAME = 'GoMage_Feed';
@@ -82,9 +82,19 @@ class Data
      */
     protected $_scopeConfig;
 
+    /**
+     * @var coreHelper
+     */
+    protected $_coreHelper;
 
+    /**
+     * Data constructor.
+     * @param \Magento\Framework\ObjectManagerInterface $objectManager
+     * @param coreHelper $coreHelper
+     */
     public function __construct(
-        \Magento\Framework\ObjectManagerInterface $objectManager
+        \Magento\Framework\ObjectManagerInterface $objectManager,
+        coreHelper $coreHelper
     ) {
         $this->_objectManager              = $objectManager;
         $this->_attributeCollectionFactory = $objectManager->get('Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory');
@@ -99,6 +109,7 @@ class Data
         $this->_encryptor                  = $objectManager->get('Magento\Framework\Encryption\Encryptor');
         $this->_mapperFactory              = $objectManager->get('GoMage\Feed\Model\Mapper\Factory');
         $this->_scopeConfig                = $objectManager->get('Magento\Framework\App\Config');
+        $this->_coreHelper                = $coreHelper;
     }
 
     /**
@@ -325,5 +336,21 @@ class Data
             ->setGroups($groups)
             ->save();
 
+    }
+
+    /**
+     * @return array
+     */
+    public function getStoreOptionArray()
+    {
+        $modulesAvailableStores =  $this->_coreHelper->getAvailableStores($this->_coreHelper->getN());
+        $options = [];
+        if(isset($modulesAvailableStores[self::MODULE_NAME])){
+            foreach ( explode(',',$modulesAvailableStores[self::MODULE_NAME]) as $k => $id) {
+                $options[$k]['value'] = $id;
+                $options[$k]['label'] =  $this->_storeManager->getStore($id)->getName();
+            }
+        }
+        return $options;
     }
 }
