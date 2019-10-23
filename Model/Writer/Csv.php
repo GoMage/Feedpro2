@@ -65,14 +65,13 @@ class Csv extends AbstractWriter
         Enclosure $enclosureModel,
         Delimiter $delimiterModel,
         $fileName,
-        $fileMode,
         $delimiter = Delimiter::COMMA,
         $enclosure = Enclosure::DOUBLE_QUOTE,
         $isHeader = true,
         $additionHeader = '',
         RequestInterface $request
     ) {
-        parent::__construct($filesystem, $fileName, $fileMode);
+        parent::__construct($filesystem, $fileName);
         $this->_delimiter = $delimiterModel->getSymbol($delimiter);
         $this->_enclosure = $enclosureModel->getSymbol($enclosure);
         $this->_isHeader  = $isHeader;
