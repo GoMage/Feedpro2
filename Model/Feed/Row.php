@@ -44,8 +44,9 @@ class Row
         \GoMage\Feed\Model\Feed\Row\Data $rowData,
         \GoMage\Feed\Model\Output\Factory $outputFactory,
         \Magento\Framework\ObjectManagerInterface $objectManager
-    ) {
-        $this->_name  = $rowData->getName();
+    )
+    {
+        $this->_name = $rowData->getName();
         $this->_limit = (int)$rowData->getLimit();
 
         $this->_outputs = $objectManager->create('GoMage\Feed\Model\Collection');
@@ -72,17 +73,16 @@ class Row
     }
 
     /**
-     * @param  \Magento\Framework\DataObject $object
+     * @param \Magento\Framework\DataObject $object
      * @return mixed
      */
     public function map(\Magento\Framework\DataObject $object)
     {
         $array = array_map(function (\GoMage\Feed\Model\Feed\Field $field) use ($object) {
-            return $field->map($object);
+            return $this->getReformattedValue($field, $object);
         }, iterator_to_array($this->_fields)
         );
-
-        return $this->format(implode('', $array));
+        return implode('', $array);
     }
 
     /**
@@ -114,4 +114,18 @@ class Row
         return $attributes;
     }
 
+    /**
+     *
+     * @param $field
+     * @param $object
+     * @return mixed
+     *
+     */
+    protected function getReformattedValue($field, $object)
+    {
+        if (!$field->getType()) {
+            return $this->format($field->map($object));
+        }
+        return $field->map($object);
+    }
 }

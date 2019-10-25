@@ -59,4 +59,10 @@ class Field
         return $this->_mapper->getUsedAttributes();
     }
 
+    /**
+     * @return string
+     */
+    public function getType(){
+        return $this->_type;
+    }
 }
