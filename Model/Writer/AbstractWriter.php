@@ -39,7 +39,7 @@ abstract class AbstractWriter implements WriterInterface
     public function __construct(
         \Magento\Framework\Filesystem $filesystem,
         $fileName,
-         $mode = 'w'
+         $mode = WriterInterface::DEFAULT_MODE
     ) {
         $this->_fileName = $fileName;
         $filePath        = WriterInterface::DIRECTORY . '/' . $this->_fileName;

@@ -58,7 +58,7 @@ class Generate extends FeedController
     public function execute()
     {
         $id = $this->getRequest()->getParam('id');
-        $page = $this->getRequest()->getParam('page') ?: 1;
+        $page = (int)$this->getRequest()->getParam('page') ?: 1;
 
         $result = $this->resultJsonFactory->create();
         if ($id) {

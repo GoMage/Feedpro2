@@ -20,6 +20,7 @@ interface WriterInterface
 {
 
     const DIRECTORY = 'gomage_feed';
+    const DEFAULT_MODE = 'w';
 
     /**
      * @param  array $data

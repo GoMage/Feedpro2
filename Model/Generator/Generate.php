@@ -65,6 +65,10 @@ class Generate
      * @var ResultModelFactory
      */
     private $resultModelFactory;
+
+    /**
+     * @var Calculator
+     */
     private $calculator;
 
     /**
@@ -76,6 +80,7 @@ class Generate
      * @param ContentFactory $contentFactory
      * @param ResultModelFactory $resultModelFactory
      * @param StoreManagerInterface $storeManager
+     * @param Calculator $calculator
      */
     public function __construct(
         ReaderFactory $readerFactory,
@@ -202,7 +207,8 @@ class Generate
                     'delimiter' => $feed->getDelimiter(),
                     'enclosure' => $feed->getEnclosure(),
                     'isHeader' => boolval($feed->getIsHeader()),
-                    'additionHeader' => $feed->getIsAdditionHeader() ? $feed->getAdditionHeader() : ''
+                    'additionHeader' => $feed->getIsAdditionHeader() ? $feed->getAdditionHeader() : '',
+                    'page' => $page
                 ]
             );
         } else {

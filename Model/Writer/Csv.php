@@ -37,20 +37,28 @@ class Csv extends AbstractWriter
     protected $_isHeader;
 
     /**
+     * @var string
+     */
+    protected $_page;
+
+    /**
      * @var array
      */
     protected $_headerCols = null;
 
+
     /**
+     * Csv constructor.
      * @param \Magento\Framework\Filesystem $filesystem
      * @param Enclosure $enclosureModel
      * @param Delimiter $delimiterModel
      * @param $fileName
-     * @param string $fileMode
+     * @param $fileMode
      * @param int $delimiter
      * @param int $enclosure
      * @param bool $isHeader
      * @param string $additionHeader
+     * @param $page
      */
     public function __construct(
         \Magento\Framework\Filesystem $filesystem,
@@ -61,12 +69,15 @@ class Csv extends AbstractWriter
         $delimiter = Delimiter::COMMA,
         $enclosure = Enclosure::DOUBLE_QUOTE,
         $isHeader = true,
-        $additionHeader = ''
-    ) {
-        parent::__construct($filesystem, $fileName, $fileMode);
+        $additionHeader = '',
+        $page
+    )
+    {
+        parent::__construct($filesystem, $fileName,$fileMode);
         $this->_delimiter = $delimiterModel->getSymbol($delimiter);
         $this->_enclosure = $enclosureModel->getSymbol($enclosure);
-        $this->_isHeader  = $isHeader;
+        $this->_isHeader = $isHeader;
+        $this->_page = $page;
         if ($additionHeader) {
             $this->_fileHandler->write($additionHeader);
         }
@@ -84,17 +95,18 @@ class Csv extends AbstractWriter
             throw new \Magento\Framework\Exception\LocalizedException(__('The header column names are already set.'));
         }
         if ($headerColumns) {
+
             foreach ($headerColumns as $columnName) {
                 $this->_headerCols[$columnName] = false;
             }
-            if ($this->_isHeader) {
+            if ($this->_isHeader && ($this->_page == 1 || $this->_page === null)) {
                 $this->_fileHandler->writeCsv(array_keys($this->_headerCols), $this->_delimiter, $this->_enclosure);
             }
         }
     }
 
     /**
-     * @param  array $data
+     * @param array $data
      */
     public function write(array $data)
     {
