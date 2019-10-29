@@ -77,10 +77,9 @@ class Collection implements \Iterator
      */
     public function add(Row $row)
     {
-        if (isset($this->_items[$row->getName()])) {
-            throw new \Magento\Framework\Exception\LocalizedException(__('Duplicate row.'));
+        if (!isset($this->_items[$row->getName()])) {
+            $this->_items[$row->getName()] = $row;
         }
-        $this->_items[$row->getName()] = $row;
     }
 
     /**
