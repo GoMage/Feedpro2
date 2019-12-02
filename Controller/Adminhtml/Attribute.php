@@ -21,25 +21,51 @@ use GoMage\Feed\Helper\Data as Helper;
 use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
 use Magento\Framework\Controller\ResultFactory;
-
+use GoMage\Feed\Model\AttributeFactory;
+use Magento\Backend\Model\Session;
+use Magento\Framework\Json\Helper\Data as jsonHelper;
 abstract class Attribute extends Action
 {
+    /**
+     * @var jsonHelper
+     */
+    protected  $jsonHelper;
+
+    /**
+     * @var Session
+     */
+    protected  $session;
+
+    /**
+     * @var AttributeFactory
+     */
+    protected  $attribute;
+
     /**
      * @var coreHelper
      */
     private $coreHelper;
 
     /**
-     * Feed constructor.
+     * Attribute constructor.
      * @param Context $context
      * @param coreHelper $coreHelper
+     * @param AttributeFactory $attribute
+     * @param Session $session
+     * @param jsonHelper $jsonHelper
      */
     public function __construct(
         Action\Context $context,
-        coreHelper $coreHelper
+        coreHelper $coreHelper,
+        AttributeFactory $attribute,
+        Session $session,
+        jsonHelper $jsonHelper
     )
     {
         $this->coreHelper = $coreHelper;
+        $this->attribute = $attribute;
+        $this->session = $session;
+        $this->jsonHelper = $jsonHelper;
         parent::__construct($context);
     }
 

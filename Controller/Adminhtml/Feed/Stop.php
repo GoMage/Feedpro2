@@ -32,7 +32,7 @@ class Stop extends FeedController
         if ($id) {
             try {
                 /** @var \GoMage\Feed\Model\Feed $model */
-                $model = $this->_objectManager->create('GoMage\Feed\Model\Feed')->load($id);
+                $model = $this->feed->create()->load($id);
                 $model->setStatus(\GoMage\Feed\Model\Config\Source\Status::STOPPED);
 
                 $this->messageManager->addSuccess(__('Feed has been successfully stopped.'));

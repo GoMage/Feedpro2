@@ -18,10 +18,6 @@ namespace GoMage\Feed\Model\Content;
 
 abstract class AbstractContent implements ContentInterface
 {
-    /**
-     * @var \Magento\Framework\ObjectManagerInterface
-     */
-    protected $_objectManager;
 
     /**
      * @var string
@@ -31,13 +27,47 @@ abstract class AbstractContent implements ContentInterface
     /**
      * @var \GoMage\Feed\Model\Feed\Row\Collection
      */
+    protected $_collection;
+
+    /**
+     * @var \GoMage\Feed\Model\Feed\Row\Data
+     */
+    protected $_dataRow;
+
+    /**
+     * @var \GoMage\Feed\Model\Feed\Row
+     */
+    protected $_row;
+
+    /**
+     * @var \Magento\Framework\Json\Helper\Data
+     */
+    protected $_jsonHelper;
+
+    /**
+     * @var \GoMage\Feed\Model\Feed\Row\Collection
+     */
     protected $_rows;
 
+    /**
+     * AbstractContent constructor.
+     * @param \GoMage\Feed\Model\Feed\Row\Collection $collection
+     * @param \GoMage\Feed\Model\Feed\Row\Data $dataRow
+     * @param \GoMage\Feed\Model\Feed\Row $row
+     * @param \Magento\Framework\Json\Helper\Data $jsonHelper
+     * @param $content
+     */
     public function __construct(
-        \Magento\Framework\ObjectManagerInterface $objectManager,
+        \GoMage\Feed\Model\Feed\Row\CollectionFactory $collection,
+        \GoMage\Feed\Model\Feed\Row\DataFactory $dataRow,
+        \GoMage\Feed\Model\Feed\RowFactory $row,
+        \Magento\Framework\Json\Helper\Data $jsonHelper,
         $content
     ) {
-        $this->_objectManager = $objectManager;
+        $this->_collection = $collection;
+        $this->_dataRow = $dataRow;
+        $this->_row = $row;
+        $this->_jsonHelper = $jsonHelper;
         $this->_content       = $content;
     }
 }

@@ -20,6 +20,9 @@ use GoMage\Feed\Controller\Adminhtml\Attribute as AttributeController;
 use Magento\Backend\App\Action\Context;
 use Magento\Framework\Registry;
 use Magento\Framework\Controller\ResultFactory;
+use GoMage\Feed\Model\AttributeFactory;
+use Magento\Backend\Model\Session;
+use Magento\Framework\Json\Helper\Data as jsonHelper;
 use GoMage\Core\Helper\Data as coreHelper;
 class Edit extends AttributeController
 {
@@ -36,11 +39,20 @@ class Edit extends AttributeController
      */
     public function __construct(
         Context $context,
-        Registry $coreRegistry,
-        coreHelper $coreHelper
+        coreHelper $coreHelper,
+        AttributeFactory $attribute,
+        Session $session,
+        jsonHelper $jsonHelper,
+        Registry $coreRegistry
     ) {
         $this->_coreRegistry = $coreRegistry;
-        parent::__construct($context, $coreHelper);
+        parent::__construct(
+            $context,
+            $coreHelper,
+            $attribute,
+            $session,
+            $jsonHelper
+        );
     }
 
     /**
@@ -49,7 +61,7 @@ class Edit extends AttributeController
     public function execute()
     {
         $id    = $this->getRequest()->getParam('id');
-        $model = $this->_objectManager->create('GoMage\Feed\Model\Attribute');
+        $model = $this->attribute->create();
 
         if ($id) {
             $model->load($id);
@@ -63,7 +75,7 @@ class Edit extends AttributeController
         }
 
         // set entered data if was error when we do save
-        $data = $this->_objectManager->get('Magento\Backend\Model\Session')->getPageData(true);
+        $data = $this->session->getPageData(true);
         if (!empty($data)) {
             $model->addData($data);
         }

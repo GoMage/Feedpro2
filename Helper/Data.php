@@ -88,28 +88,62 @@ class Data
     protected $_coreHelper;
 
     /**
+     * @var \Magento\AdminNotification\Model\InboxFactory
+     */
+    protected $_inboxFactory;
+
+    /**
+     * @var \Magento\Config\Model\ConfigFactory
+     */
+    protected $_configFactory;
+
+    /**
      * Data constructor.
-     * @param \Magento\Framework\ObjectManagerInterface $objectManager
+     * @param \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory $attributeCollectionFactory
+     * @param \GoMage\Feed\Model\ResourceModel\Attribute\Collection $dynamicAttributeCollection
+     * @param \Magento\Framework\Filesystem $filesystem
+     * @param \Magento\Store\Model\StoreManager $storeManager
+     * @param \Magento\Store\Model\System\Store $systemStore
+     * @param \Magento\Framework\Stdlib\DateTime\DateTime $dateTime
+     * @param \Magento\Framework\Module\ModuleList $moduleList
+     * @param \Magento\Framework\Json\Helper\Data $jsonHelper
+     * @param \Magento\Framework\Encryption\Encryptor $encryptor
+     * @param \GoMage\Feed\Model\Mapper\Factory $mapperFactory
+     * @param \Magento\Framework\App\Config $config
+     * @param \Magento\AdminNotification\Model\InboxFactory $inboxFactory
+     * @param \Magento\Config\Model\ConfigFactory $configFactory
      * @param coreHelper $coreHelper
      */
     public function __construct(
-        \Magento\Framework\ObjectManagerInterface $objectManager,
+        \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory $attributeCollectionFactory,
+        \GoMage\Feed\Model\ResourceModel\Attribute\Collection $dynamicAttributeCollection,
+        \Magento\Framework\Filesystem $filesystem,
+        \Magento\Store\Model\StoreManager $storeManager,
+        \Magento\Store\Model\System\Store $systemStore,
+        \Magento\Framework\Stdlib\DateTime\DateTime $dateTime,
+        \Magento\Framework\Module\ModuleList $moduleList,
+        \Magento\Framework\Json\Helper\Data $jsonHelper,
+        \Magento\Framework\Encryption\Encryptor $encryptor,
+        \GoMage\Feed\Model\Mapper\Factory $mapperFactory,
+        \Magento\Framework\App\Config $config,
+        \Magento\AdminNotification\Model\InboxFactory $inboxFactory,
+        \Magento\Config\Model\ConfigFactory $configFactory,
         coreHelper $coreHelper
     ) {
-        $this->_objectManager              = $objectManager;
-        $this->_attributeCollectionFactory = $objectManager->get('Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory');
-        $this->_dynamicAttributeCollection = $objectManager->get('GoMage\Feed\Model\ResourceModel\Attribute\Collection');
-        $filesystem                        = $objectManager->get('Magento\Framework\Filesystem');
+        $this->_attributeCollectionFactory = $attributeCollectionFactory;
+        $this->_dynamicAttributeCollection = $dynamicAttributeCollection;
         $this->_directory                  = $filesystem->getDirectoryRead(DirectoryList::MEDIA);
-        $this->_storeManager               = $objectManager->get('Magento\Store\Model\StoreManager');
-        $this->_systemStore                = $objectManager->get('Magento\Store\Model\System\Store');
-        $this->_dateTime                   = $objectManager->get('Magento\Framework\Stdlib\DateTime\DateTime');
-        $this->_moduleList                 = $objectManager->get('Magento\Framework\Module\ModuleList');
-        $this->_jsonHelper                 = $objectManager->get('Magento\Framework\Json\Helper\Data');
-        $this->_encryptor                  = $objectManager->get('Magento\Framework\Encryption\Encryptor');
-        $this->_mapperFactory              = $objectManager->get('GoMage\Feed\Model\Mapper\Factory');
-        $this->_scopeConfig                = $objectManager->get('Magento\Framework\App\Config');
-        $this->_coreHelper                = $coreHelper;
+        $this->_storeManager               = $storeManager;
+        $this->_systemStore                = $systemStore;
+        $this->_dateTime                   = $dateTime;
+        $this->_moduleList                 = $moduleList;
+        $this->_jsonHelper                 = $jsonHelper;
+        $this->_encryptor                  = $encryptor;
+        $this->_mapperFactory              = $mapperFactory;
+        $this->_scopeConfig                = $config;
+        $this->_coreHelper                 = $coreHelper;
+        $this->_inboxFactory               = $inboxFactory;
+        $this->_configFactory              = $configFactory;
     }
 
     /**
@@ -126,27 +160,29 @@ class Data
             }
         }
 
-        $attributes = array_map(function ($attribute) {
-            return [
-                'value' => $attribute->getAttributeCode(),
-                'label' => $attribute->getStoreLabel()
-            ];
-        }, $attributes
-        );
+        $attributeList = [];
+        foreach ($attributes as $attribute) {
+            if ($attribute->getStoreLabel()) {
+                $attributeList[] = [
+                    'value' => $attribute->getAttributeCode(),
+                    'label' => $attribute->getStoreLabel()
+                ];
+            }
+        }
 
         foreach ($customMappers as $value => $class) {
-            $attributes[] = [
+            $attributeList[] = [
                 'value' => $value,
                 'label' => $class::getLabel()
             ];
         }
 
-        usort($attributes, function ($a, $b) {
+        usort($attributeList, function ($a, $b) {
             return strcmp($a['label'], $b['label']);
         }
         );
 
-        return $attributes;
+        return $attributeList;
     }
 
     /**
@@ -313,7 +349,7 @@ class Data
             if ($result && isset($result['data'])) {
                 if (!empty($result['data'])) {
                     /** @var \Magento\AdminNotification\Model\Inbox $inbox */
-                    $inbox = $this->_objectManager->create('Magento\AdminNotification\Model\Inbox');
+                    $inbox = $this->_inboxFactory->create();
                     $inbox->parse($result['data']);
                 }
             }
@@ -330,7 +366,7 @@ class Data
         ];
 
         /** @var \Magento\Config\Model\Config $config */
-        $config = $this->_objectManager->create('Magento\Config\Model\Config');
+        $config = $this->_configFactory->create();
 
         $config->setSection('gomage_notification')
             ->setGroups($groups)

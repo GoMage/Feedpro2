@@ -21,9 +21,26 @@ use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
 use Magento\Framework\Controller\ResultFactory;
 use GoMage\Core\Helper\Data as coreHelper;
+use GoMage\Feed\Model\FeedFactory;
+use Magento\Framework\Json\Helper\Data as jsonHelper;
+use Magento\Backend\Model\Session;
 
 abstract class Feed extends Action
 {
+    /**
+     * @var FeedFactory
+     */
+    protected $feed;
+
+    /**
+     * @var jsonHelper
+     */
+    protected $jsonHelper;
+
+    /**
+     * @var Session
+     */
+    protected $session;
     /**
      * @var coreHelper
      */
@@ -36,10 +53,16 @@ abstract class Feed extends Action
      */
     public function __construct(
         Action\Context $context,
+        FeedFactory $feed,
+        jsonHelper $jsonHelper,
+        Session $session,
         coreHelper $coreHelper
     )
     {
         $this->coreHelper = $coreHelper;
+        $this->feed = $feed;
+        $this->jsonHelper = $jsonHelper;
+        $this->session = $session;
         parent::__construct($context);
     }
 

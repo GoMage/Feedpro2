@@ -31,7 +31,7 @@ class Delete extends AttributeController
         $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
         if ($id) {
             try {
-                $model = $this->_objectManager->create('GoMage\Feed\Model\Attribute');
+                $model = $this->attribute->create();
                 $model->setId($id);
                 $model->delete();
                 $this->messageManager->addSuccess(__('You deleted the attribute.'));

@@ -21,6 +21,9 @@ use Magento\Backend\App\Action\Context;
 use Magento\Framework\Registry;
 use Magento\Framework\Controller\ResultFactory;
 use GoMage\Core\Helper\Data as coreHelper;
+use GoMage\Feed\Model\FeedFactory;
+use Magento\Framework\Json\Helper\Data as jsonHelper;
+use Magento\Backend\Model\Session;
 class Edit extends FeedController
 {
     /**
@@ -36,11 +39,20 @@ class Edit extends FeedController
      */
     public function __construct(
         Context $context,
-        Registry $coreRegistry,
-        coreHelper $coreHelper
+        FeedFactory $feed,
+        jsonHelper $jsonHelper,
+        Session $session,
+        coreHelper $coreHelper,
+        Registry $coreRegistry
     ) {
         $this->_coreRegistry = $coreRegistry;
-        parent::__construct($context,$coreHelper);
+        parent::__construct(
+            $context,
+            $feed,
+            $jsonHelper,
+            $session,
+            $coreHelper
+        );
     }
 
     /**
@@ -49,7 +61,7 @@ class Edit extends FeedController
     public function execute()
     {
         $id    = $this->getRequest()->getParam('id');
-        $model = $this->_objectManager->create('GoMage\Feed\Model\Feed');
+        $model = $this->feed->create();
 
         if ($id) {
             $model->load($id);
@@ -63,7 +75,7 @@ class Edit extends FeedController
         }
 
         // set entered data if was error when we do save
-        $data = $this->_objectManager->get('Magento\Backend\Model\Session')->getPageData(true);
+        $data = $this->session->getPageData(true);
         if (!empty($data)) {
             $model->addData($data);
         }

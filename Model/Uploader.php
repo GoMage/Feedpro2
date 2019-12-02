@@ -22,9 +22,9 @@ class Uploader
 {
 
     /**
-     * @var \Magento\Framework\ObjectManagerInterface
+     * @var FeedFactory
      */
-    protected $_objectManager;
+    protected $_feedFactory;
 
     /**
      * @var \Magento\Framework\Stdlib\DateTime\DateTime
@@ -41,14 +41,20 @@ class Uploader
      */
     protected $_protocolFactory;
 
-
+    /**
+     * Uploader constructor.
+     * @param FeedFactory $feedFactory
+     * @param \Magento\Framework\Stdlib\DateTime\DateTime $date
+     * @param \GoMage\Feed\Helper\Data $helper
+     * @param Protocol\Factory $protocolFactory
+     */
     public function __construct(
-        \Magento\Framework\ObjectManagerInterface $objectManager,
+        \GoMage\Feed\Model\FeedFactory $feedFactory,
         \Magento\Framework\Stdlib\DateTime\DateTime $date,
         \GoMage\Feed\Helper\Data $helper,
         \GoMage\Feed\Model\Protocol\Factory $protocolFactory
     ) {
-        $this->_objectManager   = $objectManager;
+        $this->_feedFactory   = $feedFactory;
         $this->_dateTime        = $date;
         $this->_helper          = $helper;
         $this->_protocolFactory = $protocolFactory;
@@ -57,7 +63,7 @@ class Uploader
     public function upload($feedId)
     {
         /** @var \GoMage\Feed\Model\Feed $feed */
-        $feed = $this->_objectManager->create('GoMage\Feed\Model\Feed')->load($feedId);
+        $feed = $this->_feedFactory->create()->load($feedId);
         if ($this->_validate($feed)) {
             $protocol = $this->_protocolFactory->create($feed->getFtpProtocol(),
                 [
