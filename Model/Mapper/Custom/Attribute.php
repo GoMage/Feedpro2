@@ -41,6 +41,11 @@ class Attribute implements CustomMapperInterface
     protected $_type;
 
     /**
+     * @var string
+     */
+    protected $_code;
+
+    /**
      * Attribute constructor.
      * @param $value
      * @param $type
@@ -147,6 +152,7 @@ class Attribute implements CustomMapperInterface
      */
     protected function _getParentProduct(\Magento\Framework\DataObject $object)
     {
+        $attributes = !empty($this->getUsedAttributes()) ? $this->getUsedAttributes() : $this->_code;
         $parentId = $this->_connection
             ->select()
             ->from($this->_resource->getTableName('catalog_product_relation'), 'parent_id')
@@ -156,7 +162,7 @@ class Attribute implements CustomMapperInterface
             ->fetchColumn();
         if ($parentId) {
             $collection = $this->_productCollectionFactory->create();
-            return $collection->addAttributeToSelect($this->_code)
+            return $collection->addAttributeToSelect($attributes)
                 ->addIdFilter($parentId)
                 ->getFirstItem();
         }
