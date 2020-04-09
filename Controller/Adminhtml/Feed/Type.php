@@ -18,8 +18,11 @@ namespace GoMage\Feed\Controller\Adminhtml\Feed;
 
 use GoMage\Feed\Controller\Adminhtml\Feed as FeedController;
 use Magento\Backend\App\Action\Context;
+use Magento\Backend\Model\Session;
+use Magento\Framework\Json\Helper\Data as jsonHelper;
 use Magento\Framework\Registry;
-use Magento\Framework\Controller\ResultFactory;
+use GoMage\Core\Helper\Data as coreHelper;
+use GoMage\Feed\Model\FeedFactory;
 
 class Type extends FeedController
 {
@@ -28,12 +31,23 @@ class Type extends FeedController
      */
     protected $_coreRegistry;
 
+    /**
+     * Type constructor.
+     * @param Context $context
+     * @param Registry $coreRegistry
+     * @param coreHelper $coreHelper
+     */
     public function __construct(
         Context $context,
-        Registry $coreRegistry
-    ) {
+        Registry $coreRegistry,
+        FeedFactory $feed,
+        jsonHelper $jsonHelper,
+        Session $session,
+        coreHelper $coreHelper
+    )
+    {
         $this->_coreRegistry = $coreRegistry;
-        parent::__construct($context);
+        parent::__construct($context, $feed, $jsonHelper, $session, $coreHelper);
     }
 
     /**
@@ -41,7 +55,7 @@ class Type extends FeedController
      */
     public function execute()
     {
-        $model = $this->_objectManager->create('GoMage\Feed\Model\Feed');
+        $model = $this->feed->create();
         $this->_coreRegistry->register('current_feed', $model);
 
         $resultPage = $this->createPage();

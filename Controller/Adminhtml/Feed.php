@@ -16,11 +16,56 @@
 
 namespace GoMage\Feed\Controller\Adminhtml;
 
+use GoMage\Feed\Helper\Data as Helper;
 use Magento\Backend\App\Action;
+use Magento\Backend\App\Action\Context;
 use Magento\Framework\Controller\ResultFactory;
+use GoMage\Core\Helper\Data as coreHelper;
+use GoMage\Feed\Model\FeedFactory;
+use Magento\Framework\Json\Helper\Data as jsonHelper;
+use Magento\Backend\Model\Session;
 
 abstract class Feed extends Action
 {
+    /**
+     * @var FeedFactory
+     */
+    protected $feed;
+
+    /**
+     * @var jsonHelper
+     */
+    protected $jsonHelper;
+
+    /**
+     * @var Session
+     */
+    protected $session;
+    /**
+     * @var coreHelper
+     */
+    private  $coreHelper;
+
+    /**
+     * Feed constructor.
+     * @param Context $context
+     * @param coreHelper $coreHelper
+     */
+    public function __construct(
+        Action\Context $context,
+        FeedFactory $feed,
+        jsonHelper $jsonHelper,
+        Session $session,
+        coreHelper $coreHelper
+    )
+    {
+        $this->coreHelper = $coreHelper;
+        $this->feed = $feed;
+        $this->jsonHelper = $jsonHelper;
+        $this->session = $session;
+        parent::__construct($context);
+    }
+
     /**
      * @return \Magento\Backend\Model\View\Result\Page
      */
@@ -38,9 +83,7 @@ abstract class Feed extends Action
      */
     protected function _isAllowed()
     {
-        $info = $this->_objectManager->get('GoMage\Feed\Helper\Data')->ga();
-
-        if (isset($info['d']) && isset($info['c']) && (int)$info['c']) {
+        if ($this->coreHelper->isA(Helper::MODULE_NAME)) {
             return $this->_authorization->isAllowed('GoMage_Feed::feeds');
         }
         $this->messageManager->addError('Please activate GoMage Feed Pro');

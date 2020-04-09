@@ -31,7 +31,7 @@ class Delete extends FeedController
         $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
         if ($id) {
             try {
-                $model = $this->_objectManager->create('GoMage\Feed\Model\Feed');
+                $model = $this->feed->create();
                 $model->setId($id);
                 $model->delete();
                 $this->messageManager->addSuccess(__('You deleted the feed.'));

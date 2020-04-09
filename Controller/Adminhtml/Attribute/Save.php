@@ -34,7 +34,7 @@ class Save extends AttributeController
         if ($data) {
             try {
                 /** @var \GoMage\Feed\Model\Attribute $model */
-                $model = $this->_objectManager->create('GoMage\Feed\Model\Attribute');
+                $model = $this->attribute->create();
                 $id    = $this->getRequest()->getPost('id');
                 if ($id) {
                     $model->load($id);
@@ -42,7 +42,7 @@ class Save extends AttributeController
                 if (isset($data['content']) && $data['content']) {
                     $contentArray = $data['content'];
                     $data['content'] = $this->_prepareData($data['content']);
-                    $data['content'] = $this->_objectManager->get('Magento\Framework\Json\Helper\Data')
+                    $data['content'] = $this->jsonHelper
                         ->jsonEncode($data['content']);
                     $this->validateContent($contentArray);
                 }
