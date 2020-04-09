@@ -77,6 +77,11 @@
                 <item name="category_subcategory" xsi:type="string">GoMage\Feed\Model\Mapper\Custom\CategorySubcategory</item>
                 <item name="category_ids" xsi:type="string">GoMage\Feed\Model\Mapper\Custom\CategoryIds</item>
                 <item name="category" xsi:type="string">GoMage\Feed\Model\Mapper\Custom\Category</item>
+                <item name="image_0" xsi:type="string">GoMage\Feed\Model\Mapper\Custom\Image</item>
+                <item name="image_1" xsi:type="string">GoMage\Feed\Model\Mapper\Custom\Image2</item>
+                <item name="image_2" xsi:type="string">GoMage\Feed\Model\Mapper\Custom\Image3</item>
+                <item name="image_3" xsi:type="string">GoMage\Feed\Model\Mapper\Custom\Image4</item>
+                <item name="image_4" xsi:type="string">GoMage\Feed\Model\Mapper\Custom\Image5</item>
             </argument>
         </arguments>
     </type>
