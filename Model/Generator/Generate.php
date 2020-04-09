@@ -19,16 +19,17 @@ namespace GoMage\Feed\Model\Generator;
 use GoMage\Feed\Model\Config\Source\FeedType;
 use GoMage\Feed\Model\Content\Factory as ContentFactory;
 use GoMage\Feed\Model\Feed;
-use GoMage\Feed\Model\Feed\ResultModel;
 use GoMage\Feed\Model\Feed\ResultModelFactory;
 use GoMage\Feed\Model\Reader\CollectionFactory as ReaderCollectionFactory;
 use GoMage\Feed\Model\Reader\Factory as ReaderFactory;
 use GoMage\Feed\Model\Reader\ParamsFactory;
 use GoMage\Feed\Model\Writer\Factory as WriterFactory;
 use Psr\Log\LoggerInterface;
-use Magento\Store\Model\StoreManagerInterface;
-use Magento\Framework\Math\Calculator;
 
+/**
+ * Class Generate
+ * @package GoMage\Feed\Model\Generator
+ */
 class Generate
 {
     /**
@@ -47,11 +48,6 @@ class Generate
     private $paramsFactory;
 
     /**
-     * @var StoreManagerInterface
-     */
-    private $storeManager;
-
-    /**
      * @var ReaderCollectionFactory
      */
     private $readerCollectionFactory;
@@ -65,7 +61,6 @@ class Generate
      * @var ResultModelFactory
      */
     private $resultModelFactory;
-    private $calculator;
 
     /**
      * Generate constructor.
@@ -75,7 +70,6 @@ class Generate
      * @param ReaderCollectionFactory $readerCollectionFactory
      * @param ContentFactory $contentFactory
      * @param ResultModelFactory $resultModelFactory
-     * @param StoreManagerInterface $storeManager
      */
     public function __construct(
         ReaderFactory $readerFactory,
@@ -83,12 +77,8 @@ class Generate
         ParamsFactory $paramsFactory,
         ReaderCollectionFactory $readerCollectionFactory,
         ContentFactory $contentFactory,
-        ResultModelFactory $resultModelFactory,
-        StoreManagerInterface $storeManager,
-        Calculator $calculator
+        ResultModelFactory $resultModelFactory
     ) {
-        $this->calculator = $calculator;
-        $this->storeManager = $storeManager;
         $this->readerFactory = $readerFactory;
         $this->writerFactory = $writerFactory;
         $this->paramsFactory = $paramsFactory;
@@ -100,9 +90,10 @@ class Generate
     /**
      * @param Feed $feed
      * @param LoggerInterface $logger
-     * @param int|null $page
-     * @param string $fileMode
-     * @return ResultModel
+     * @param $page
+     * @param $fileMode
+     * @return Feed\ResultModel
+     * @throws \Exception
      */
     public function execute(Feed $feed, LoggerInterface $logger, $page,  $fileMode)
     {
@@ -138,11 +129,6 @@ class Generate
         while ($items = $reader->read($page, $limit)) {
             $logger->info(__('Page - %1', $page));
             foreach ($items as $item) {
-                if($feed->getCurrencyCode()) {
-                    $store = $this->storeManager->getStore($feed->getStoreId());
-                    $rates = $store->getBaseCurrency()->getRate($feed->getCurrencyCode());
-                    $item->setPrice($this->calculator->deltaRound($item->getPrice() * $rates));
-                }
                 $data = $content->getRows()->calc($item);
                 $writer->write($data);
             }
