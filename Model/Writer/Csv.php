@@ -16,9 +16,9 @@
 
 namespace GoMage\Feed\Model\Writer;
 
-use GoMage\Feed\Model\Config\Source\Csv\Enclosure;
 use GoMage\Feed\Model\Config\Source\Csv\Delimiter;
-use Magento\Framework\App\RequestInterface;
+use GoMage\Feed\Model\Config\Source\Csv\Enclosure;
+
 class Csv extends AbstractWriter
 {
     /**
@@ -37,14 +37,14 @@ class Csv extends AbstractWriter
     protected $_isHeader;
 
     /**
+     * @var string
+     */
+    protected $_page;
+
+    /**
      * @var array
      */
     protected $_headerCols = null;
-
-    /**
-     * @var RequestInterface
-     */
-    protected $request;
 
     /**
      * Csv constructor.
@@ -52,12 +52,11 @@ class Csv extends AbstractWriter
      * @param Enclosure $enclosureModel
      * @param Delimiter $delimiterModel
      * @param $fileName
-     * @param $fileMode
      * @param int $delimiter
      * @param int $enclosure
      * @param bool $isHeader
      * @param string $additionHeader
-     * @param RequestInterface $request
+     * @param $page
      * @throws \Magento\Framework\Exception\FileSystemException
      */
     public function __construct(
@@ -69,16 +68,16 @@ class Csv extends AbstractWriter
         $enclosure = Enclosure::DOUBLE_QUOTE,
         $isHeader = true,
         $additionHeader = '',
-        RequestInterface $request
+        $page
     ) {
         parent::__construct($filesystem, $fileName);
         $this->_delimiter = $delimiterModel->getSymbol($delimiter);
         $this->_enclosure = $enclosureModel->getSymbol($enclosure);
-        $this->_isHeader  = $isHeader;
+        $this->_isHeader = $isHeader;
+        $this->_page = $page;
         if ($additionHeader) {
             $this->_fileHandler->write($additionHeader);
         }
-        $this->request = $request;
     }
 
     /**
@@ -96,15 +95,14 @@ class Csv extends AbstractWriter
             foreach ($headerColumns as $columnName) {
                 $this->_headerCols[$columnName] = false;
             }
-            $page = $this->request->getParam('page');
-            if ($this->_isHeader && ($page == 1 || $page === null)) {
+            if ($this->_isHeader && ($this->_page == 1 || $this->_page === null)) {
                 $this->_fileHandler->writeCsv(array_keys($this->_headerCols), $this->_delimiter, $this->_enclosure);
             }
         }
     }
 
     /**
-     * @param  array $data
+     * @param array $data
      */
     public function write(array $data)
     {

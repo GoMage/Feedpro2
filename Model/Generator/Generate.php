@@ -48,6 +48,11 @@ class Generate
     private $paramsFactory;
 
     /**
+     * @var StoreManagerInterface
+     */
+    private $storeManager;
+
+    /**
      * @var ReaderCollectionFactory
      */
     private $readerCollectionFactory;
@@ -188,7 +193,8 @@ class Generate
                     'delimiter' => $feed->getDelimiter(),
                     'enclosure' => $feed->getEnclosure(),
                     'isHeader' => boolval($feed->getIsHeader()),
-                    'additionHeader' => $feed->getIsAdditionHeader() ? $feed->getAdditionHeader() : ''
+                    'additionHeader' => $feed->getIsAdditionHeader() ? $feed->getAdditionHeader() : '',
+                    'page' => $page
                 ]
             );
         } else {
