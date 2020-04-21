@@ -16,7 +16,7 @@
 
 namespace GoMage\Feed\Model\Mapper\Custom;
 
-class ProductId implements CustomMapperInterface
+class ProductId extends Attribute implements CustomMapperInterface
 {
 
     /**
@@ -25,7 +25,7 @@ class ProductId implements CustomMapperInterface
      */
     public function map(\Magento\Framework\DataObject $object)
     {
-        return $object->getId();
+        return parent::map($object);
     }
 
     /**

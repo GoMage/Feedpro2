@@ -39,9 +39,10 @@ class ParentAttribute extends Attribute implements MapperInterface
         $value,
         \Magento\Catalog\Api\ProductAttributeRepositoryInterface $attributeRepository,
         \Magento\Framework\App\ResourceConnection $resource,
-        \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory
+        \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory,
+        \Magento\CatalogInventory\Api\StockItemRepositoryInterface $stockItemRepository
     ) {
-        parent::__construct($value, $attributeRepository);
+        parent::__construct($value, $attributeRepository, $stockItemRepository);
         $this->_resource                 = $resource;
         $this->_connection               = $resource->getConnection();
         $this->_productCollectionFactory = $productCollectionFactory;
@@ -73,14 +74,12 @@ class ParentAttribute extends Attribute implements MapperInterface
             ->where('parent_id != ?', $object->getId())
             ->query()
             ->fetchColumn();
-
         if ($parentId) {
             $collection = $this->_productCollectionFactory->create();
             return $collection->addAttributeToSelect($this->_code)
                 ->addIdFilter($parentId)
-                ->fetchItem();
+                ->getFirstItem();
         }
         return false;
     }
-
 }

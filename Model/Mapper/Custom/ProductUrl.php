@@ -15,17 +15,16 @@
  */
 
 namespace GoMage\Feed\Model\Mapper\Custom;
-
-class ProductUrl implements CustomMapperInterface
+use GoMage\Feed\Model\Config\Source\Field\TypeInterface;
+class ProductUrl extends Attribute implements CustomMapperInterface
 {
-
     /**
-     * @param  \Magento\Framework\DataObject $object
+     * @param \Magento\Framework\DataObject $object
      * @return mixed
      */
     public function map(\Magento\Framework\DataObject $object)
     {
-        return $object->getProductUrl();
+       return parent::map($object);
     }
 
     /**
@@ -43,5 +42,4 @@ class ProductUrl implements CustomMapperInterface
     {
         return __('Product Url');
     }
-
 }
