@@ -179,7 +179,7 @@ class Generate
      *
      * @return \GoMage\Feed\Model\Writer\WriterInterface
      */
-    private function getWriter(Feed $feed,  $fileMode, $page, $totalPages)
+    private function getWriter(Feed $feed, $fileMode, $page, $totalPages)
     {
         $arguments = [
             'fileName' => $feed->getFullFileName(),

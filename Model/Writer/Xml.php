@@ -44,11 +44,12 @@ class Xml extends AbstractWriter
     public function __construct(
         \Magento\Framework\Filesystem $filesystem,
         $fileName,
+        $fileMode,
         \GoMage\Feed\Model\Content\Xml $content,
         $page,
         $totalPages
     ) {
-        parent::__construct($filesystem, $fileName);
+        parent::__construct($filesystem, $fileName, $fileMode);
         $this->_content = $content;
         $this->page = $page;
         $this->totalPages = $totalPages;
@@ -62,7 +63,8 @@ class Xml extends AbstractWriter
      */
     public function __destruct()
     {
-        if ($this->totalPages / $this->page <= 1) {
+        // if $this->page is not set generating was run by cron (need to process all data at once)
+        if (!isset($this->page) || ($this->totalPages / $this->page <= 1)) {
             $this->_fileHandler->write($this->_content->getFooter());
         }
         parent::__destruct();
