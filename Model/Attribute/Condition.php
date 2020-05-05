@@ -18,7 +18,6 @@ namespace GoMage\Feed\Model\Attribute;
 
 class Condition
 {
-
     /**
      * @var \GoMage\Feed\Model\Feed\Field
      */
@@ -34,19 +33,39 @@ class Condition
      */
     protected $_value;
 
+    /**
+     * @var string
+     */
+    protected $attrCode;
+
+    /**
+     * @var \Magento\Eav\Api\AttributeRepositoryInterface
+     */
+    protected $attributeRepository;
+
+    /**
+     * Condition constructor.
+     * @param Condition\Data $conditionData
+     * @param \GoMage\Feed\Model\Operator\Factory $operatorFactory
+     * @param \GoMage\Feed\Model\Feed\FieldFactory $fieldFactory
+     * @param \Magento\Eav\Api\AttributeRepositoryInterface $attributeRepository
+     */
     public function __construct(
         \GoMage\Feed\Model\Attribute\Condition\Data $conditionData,
         \GoMage\Feed\Model\Operator\Factory $operatorFactory,
-        \Magento\Framework\ObjectManagerInterface $objectManager
+        \GoMage\Feed\Model\Feed\FieldFactory $fieldFactory,
+        \Magento\Eav\Api\AttributeRepositoryInterface $attributeRepository
     ) {
         $this->_operator = $operatorFactory->get($conditionData->getOperator());
-        $this->_field    = $objectManager->create('GoMage\Feed\Model\Feed\Field',
+        $this->_field    = $fieldFactory->create(
             [
                 'type'  => \GoMage\Feed\Model\Config\Source\Field\TypeInterface::ATTRIBUTE,
                 'value' => $conditionData->getCode()
             ]
         );
         $this->_value    = $conditionData->getValue();
+        $this->attrCode  = $conditionData->getCode();
+        $this->attributeRepository = $attributeRepository;
     }
 
     /**
@@ -56,7 +75,26 @@ class Condition
     public function verify(\Magento\Framework\DataObject $object)
     {
         $testable = $this->_field->map($object);
-        return $this->_operator->compare($testable, $this->_value);
+        try {
+            $conditionAttribute = $this->attributeRepository->get(\Magento\Catalog\Model\Product::ENTITY, $this->attrCode);
+        } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
+            $conditionAttribute = null;
+        }
+        $label = false;
+        if ($conditionAttribute) {
+            $frontendInput = $conditionAttribute->getFrontendInput();
+            if ($frontendInput == 'select' || $frontendInput == 'multiselect') {
+                foreach ($conditionAttribute->getOptions() as $option) {
+                    if ($option->getValue() == $this->_value) {
+                        $label = $option->getLabel();
+                        break;
+                    }
+                }
+            }
+
+        }
+        $value = (false !== $label) ? $label : $this->_value;
+        return $this->_operator->compare($testable, $value);
     }
 
     /**
@@ -66,6 +104,4 @@ class Condition
     {
         return $this->_field->getUsedAttributes();
     }
-
-
 }
