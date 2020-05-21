@@ -85,6 +85,16 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
         $this->buttonList->update('save', 'level', -1);
         $this->buttonList->update('delete', 'level', 1);
         $this->buttonList->update('reset', 'level', 0);
+
+        $this->addDuplicateBtn();
+    }
+
+    /**
+     * @return Feed|null
+     */
+    private function getCurrentFeed()
+    {
+        return $this->_coreRegistry->registry('current_feed');
     }
 
     /**
@@ -92,11 +102,30 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
      */
     public function getHeaderText()
     {
-        if ($this->_coreRegistry->registry('current_feed')->getId()) {
-            $name = $this->escapeHtml($this->_coreRegistry->registry('current_feed')->getName());
+        $currentFeed = $this->getCurrentFeed();
+        if ($currentFeed instanceof Feed && $currentFeed->getId()) {
+            $name = $this->escapeHtml($currentFeed->getName());
             return __("Edit Feed '%1'", $name);
         } else {
             return __('New Feed');
         }
+    }
+
+    private function addDuplicateBtn()
+    {
+        $currentFeed = $this->getCurrentFeed();
+
+        $url = $this->getUrl('gomage_feed/feed/duplicate', [
+            'id' => $currentFeed->getId()
+        ]);
+
+        $this->buttonList->add(
+            'duplicate',
+            [
+                'label' => __('Duplicate'),
+                'onclick' => "setLocation('$url')",
+                'class' => 'generate'
+            ]
+        );
     }
 }

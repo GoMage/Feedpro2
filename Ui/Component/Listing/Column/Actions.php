@@ -43,12 +43,14 @@ class Actions extends Column
         UrlInterface $urlBuilder,
         $editUrl = '',
         $deleteUrl = '',
+        $duplicateUrl = '',
         array $components = [],
         array $data = []
     ) {
         $this->_urlBuilder = $urlBuilder;
-        $this->_editUrl    = $editUrl;
-        $this->_deleteUrl  = $deleteUrl;
+        $this->_editUrl = $editUrl;
+        $this->_deleteUrl = $deleteUrl;
+        $this->_duplicateUrl = $duplicateUrl;
         parent::__construct($context, $uiComponentFactory, $components, $data);
     }
 
@@ -68,6 +70,12 @@ class Actions extends Column
                         'href'  => $this->_urlBuilder->getUrl($this->_editUrl, ['id' => $item['id']]),
                         'label' => __('Edit')
                     ];
+                    if ($this->_duplicateUrl) {
+                        $item[$name]['duplicate'] = [
+                            'href' => $this->_urlBuilder->getUrl($this->_duplicateUrl, ['id' => $item['id']]),
+                            'label' => __('Duplicate')
+                        ];
+                    }
                     $item[$name]['delete'] = [
                         'href'    => $this->_urlBuilder->getUrl($this->_deleteUrl, ['id' => $item['id']]),
                         'label'   => __('Delete'),

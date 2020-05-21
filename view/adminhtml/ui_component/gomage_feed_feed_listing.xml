@@ -234,6 +234,7 @@
                 </item>
             </argument>
             <argument name="editUrl" xsi:type="string">gomage_feed/feed/edit</argument>
+            <argument name="duplicateUrl" xsi:type="string">gomage_feed/feed/duplicate</argument>
             <argument name="deleteUrl" xsi:type="string">gomage_feed/feed/delete</argument>
         </actionsColumn>
     </columns>
