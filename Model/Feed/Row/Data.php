@@ -68,7 +68,11 @@ class Data extends \Magento\Framework\DataObject
         if ($this->getPrefixValue()) {
             $data[] = ['type' => $this->getPrefixType(), 'value' => $this->getPrefixValue()];
         }
-        $data[] = ['type' => $this->getType(), 'value' => $this->getValue()];
+        $data[] = [
+            'type' => $this->getType(),
+            'value' => $this->getValue(),
+            'additionalData' => $this->getData('additionalData')
+        ];
         if ($this->getSuffixValue()) {
             $data[] = ['type' => $this->getSuffixType(), 'value' => $this->getSuffixValue()];
         }

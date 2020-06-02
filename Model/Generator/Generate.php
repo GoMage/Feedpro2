@@ -108,6 +108,7 @@ class Generate
             $feed->getType(),
             [
                 'content' => $feed->getContent(),
+                'feed'    => $feed
             ]
         );
 

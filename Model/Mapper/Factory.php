@@ -43,13 +43,13 @@ class Factory
      * @param  string $value
      * @return \GoMage\Feed\Model\Mapper\MapperInterface
      */
-    public function create($type, $value)
+    public function create($type, $value, $additionalData)
     {
         $className = $this->_getCustomMapper($value);
         if (!$className) {
             $className = $this->_getMapper($type);
         }
-        return $this->_objectManager->create($className, ['value' => $value,'type'=>$type]);
+        return $this->_objectManager->create($className, ['value' => $value,'type' => $type, 'additionalData' => $additionalData]);
     }
 
     /**

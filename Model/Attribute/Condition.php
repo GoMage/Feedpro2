@@ -54,13 +54,15 @@ class Condition
         \GoMage\Feed\Model\Attribute\Condition\Data $conditionData,
         \GoMage\Feed\Model\Operator\Factory $operatorFactory,
         \GoMage\Feed\Model\Feed\FieldFactory $fieldFactory,
-        \Magento\Eav\Api\AttributeRepositoryInterface $attributeRepository
+        \Magento\Eav\Api\AttributeRepositoryInterface $attributeRepository,
+        $additionalData
     ) {
         $this->_operator = $operatorFactory->get($conditionData->getOperator());
         $this->_field    = $fieldFactory->create(
             [
                 'type'  => \GoMage\Feed\Model\Config\Source\Field\TypeInterface::ATTRIBUTE,
-                'value' => $conditionData->getCode()
+                'value' => $conditionData->getCode(),
+                'additionalData' => $additionalData
             ]
         );
         $this->_value    = $conditionData->getValue();

@@ -35,11 +35,11 @@ class Field
     protected $_mapper;
 
 
-    public function __construct($type, $value, \GoMage\Feed\Model\Mapper\Factory $mapperFactory)
+    public function __construct($type, $value, $additionalData, \GoMage\Feed\Model\Mapper\Factory $mapperFactory)
     {
         $this->_type   = $type;
         $this->_value  = $value;
-        $this->_mapper = $mapperFactory->create($type, $value);
+        $this->_mapper = $mapperFactory->create($type, $value, $additionalData);
     }
 
     /**

@@ -102,6 +102,8 @@ class Xml extends AbstractContent
                         }
                     }
 
+                    if (is_array($data)) $data['additionalData'] = $this->setAdditionalData();
+
                     /** @var \GoMage\Feed\Model\Feed\Row\Data $rowData */
                     $rowData = $this->_dataRow->create(['data' => $data]);
 

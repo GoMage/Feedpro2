@@ -31,6 +31,7 @@ class DynamicAttribute implements MapperInterface
 
     public function __construct(
         $value,
+        $additionalData,
         \Magento\Framework\Json\Helper\Data $jsonHelper,
         \Magento\Framework\ObjectManagerInterface $objectManager
     ) {
@@ -39,7 +40,8 @@ class DynamicAttribute implements MapperInterface
 
         $this->_default = $objectManager->create('GoMage\Feed\Model\Feed\Field', [
                 'type'  => \GoMage\Feed\Model\Config\Source\Field\TypeInterface::ATTRIBUTE,
-                'value' => $attribute->getDefaultValue()
+                'value' => $attribute->getDefaultValue(),
+                'additionalData' => $additionalData
             ]
         );
 
@@ -47,6 +49,8 @@ class DynamicAttribute implements MapperInterface
 
         $content = $jsonHelper->jsonDecode($attribute->getContent());
         foreach ($content as $data) {
+            if (is_array($data)) $data['additionalData'] = $additionalData;
+
             /** @var \GoMage\Feed\Model\Attribute\Row\Data $rowData */
             $rowData = $objectManager->create('GoMage\Feed\Model\Attribute\Row\Data', ['data' => $data]);
 

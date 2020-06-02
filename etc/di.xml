@@ -82,6 +82,7 @@
                 <item name="image_2" xsi:type="string">GoMage\Feed\Model\Mapper\Custom\Image3</item>
                 <item name="image_3" xsi:type="string">GoMage\Feed\Model\Mapper\Custom\Image4</item>
                 <item name="image_4" xsi:type="string">GoMage\Feed\Model\Mapper\Custom\Image5</item>
+                <item name="price" xsi:type="string">GoMage\Feed\Model\Mapper\Custom\Price</item>
             </argument>
         </arguments>
     </type>

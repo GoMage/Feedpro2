@@ -37,14 +37,20 @@ class Row
 
         foreach ($rowData->getConditions() as $data) {
             $conditionData = $objectManager->create('GoMage\Feed\Model\Attribute\Condition\Data', ['data' => $data]);
-            $condition     = $objectManager->create('GoMage\Feed\Model\Attribute\Condition', ['conditionData' => $conditionData]);
+            $condition     = $objectManager->create('GoMage\Feed\Model\Attribute\Condition',
+                [
+                    'conditionData' => $conditionData,
+                    'additionalData' => $rowData->getData('additionalData')
+                ]
+            );
             $this->_conditions->add($condition);
         }
 
         $this->_field = $objectManager->create('GoMage\Feed\Model\Feed\Field',
             [
                 'type'  => $rowData->getType(),
-                'value' => $rowData->getValue()
+                'value' => $rowData->getValue(),
+                'additionalData' => $rowData->getData('additionalData')
             ]
         );
 

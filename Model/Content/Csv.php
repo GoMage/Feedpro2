@@ -30,6 +30,7 @@ class Csv extends AbstractContent
 
             $content = $this->_jsonHelper->jsonDecode($this->_content);
             foreach ($content as $data) {
+                if (is_array($data)) $data['additionalData'] = $this->setAdditionalData();
 
                 /** @var \GoMage\Feed\Model\Feed\Row\Data $rowData */
                 $rowData = $this->_dataRow->create(['data' => $data]);

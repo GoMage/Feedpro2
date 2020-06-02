@@ -50,6 +50,11 @@ abstract class AbstractContent implements ContentInterface
     protected $_rows;
 
     /**
+     * @var \GoMage\Feed\Model\Feed
+     */
+    protected $_feed;
+
+    /**
      * AbstractContent constructor.
      * @param \GoMage\Feed\Model\Feed\Row\Collection $collection
      * @param \GoMage\Feed\Model\Feed\Row\Data $dataRow
@@ -62,12 +67,22 @@ abstract class AbstractContent implements ContentInterface
         \GoMage\Feed\Model\Feed\Row\DataFactory $dataRow,
         \GoMage\Feed\Model\Feed\RowFactory $row,
         \Magento\Framework\Json\Helper\Data $jsonHelper,
-        $content
+        $content,
+        \GoMage\Feed\Model\Feed $feed
     ) {
         $this->_collection = $collection;
         $this->_dataRow = $dataRow;
         $this->_row = $row;
         $this->_jsonHelper = $jsonHelper;
-        $this->_content       = $content;
+        $this->_content = $content;
+        $this->_feed = $feed;
+    }
+
+    /**
+     * @return array
+     */
+    protected function setAdditionalData()
+    {
+        return ['currencyCode' => $this->_feed->getCurrencyCode()];
     }
 }

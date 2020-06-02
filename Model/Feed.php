@@ -19,6 +19,7 @@ namespace GoMage\Feed\Model;
 /**
  * Class Feed
  *
+ * @method string getCurrencyCode()
  * @method string getContent()
  * @method string getType()
  * @method int getLimit()

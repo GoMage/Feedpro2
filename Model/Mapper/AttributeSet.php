@@ -26,6 +26,7 @@ class AttributeSet implements MapperInterface
 
     public function __construct(
         $value,
+        $additionalData,
         \Magento\Framework\ObjectManagerInterface $objectManager
     ) {
         $this->_fields = $objectManager->create('GoMage\Feed\Model\Collection');
@@ -34,7 +35,8 @@ class AttributeSet implements MapperInterface
             $field = $objectManager->create('GoMage\Feed\Model\Attribute\Field', [
                     'type'   => \GoMage\Feed\Model\Config\Source\Field\TypeInterface::ATTRIBUTE,
                     'value'  => $data['code'],
-                    'prefix' => $data['prefix']
+                    'prefix' => $data['prefix'],
+                    'additionalData' => $additionalData
                 ]
             );
             $this->_fields->add($field);
