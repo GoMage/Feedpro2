@@ -66,7 +66,11 @@ class Data extends \Magento\Framework\DataObject
     {
         $data = [];
         if ($this->getPrefixValue()) {
-            $data[] = ['type' => $this->getPrefixType(), 'value' => $this->getPrefixValue()];
+            $data[] = [
+                'type' => $this->getPrefixType(),
+                'value' => $this->getPrefixValue(),
+                'additionalData' => $this->getData('additionalData')
+            ];
         }
         $data[] = [
             'type' => $this->getType(),
@@ -74,10 +78,13 @@ class Data extends \Magento\Framework\DataObject
             'additionalData' => $this->getData('additionalData')
         ];
         if ($this->getSuffixValue()) {
-            $data[] = ['type' => $this->getSuffixType(), 'value' => $this->getSuffixValue()];
+            $data[] = [
+                'type' => $this->getSuffixType(),
+                'value' => $this->getSuffixValue(),
+                'additionalData' => $this->getData('additionalData')
+            ];
         }
 
         return $data;
     }
-
 }
