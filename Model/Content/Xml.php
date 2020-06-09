@@ -45,6 +45,7 @@ class Xml extends AbstractContent
      * @param \GoMage\Feed\Model\Feed\RowFactory $row
      * @param \Magento\Framework\Json\Helper\Data $jsonHelper
      * @param $content
+     * @param \GoMage\Feed\Model\Feed $feed
      * @throws \Exception
      */
     public function __construct(
@@ -52,9 +53,10 @@ class Xml extends AbstractContent
         \GoMage\Feed\Model\Feed\Row\DataFactory $dataRow,
         \GoMage\Feed\Model\Feed\RowFactory $row,
         \Magento\Framework\Json\Helper\Data $jsonHelper,
-        $content
+        $content,
+        \GoMage\Feed\Model\Feed $feed
     ) {
-        parent::__construct($collection,$dataRow,$row,$jsonHelper, $content);
+        parent::__construct($collection, $dataRow, $row, $jsonHelper, $content, $feed);
 
         $match = [];
         preg_match(self::BLOCK_PATTERN, $this->_content, $match);

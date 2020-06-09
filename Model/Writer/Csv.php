@@ -51,12 +51,13 @@ class Csv extends AbstractWriter
      * @param \Magento\Framework\Filesystem $filesystem
      * @param Enclosure $enclosureModel
      * @param Delimiter $delimiterModel
-     * @param $fileName
+     * @param string $fileName
+     * @param string $fileMode
      * @param int $delimiter
      * @param int $enclosure
      * @param bool $isHeader
      * @param string $additionHeader
-     * @param $page
+     * @param int $page
      * @throws \Magento\Framework\Exception\FileSystemException
      */
     public function __construct(

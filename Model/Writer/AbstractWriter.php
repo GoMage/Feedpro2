@@ -33,7 +33,7 @@ abstract class AbstractWriter implements WriterInterface
 
     /**
      * @param Filesystem $filesystem
-     * @param $fileName
+     * @param string $fileName
      * @param string $mode
      */
     public function __construct(

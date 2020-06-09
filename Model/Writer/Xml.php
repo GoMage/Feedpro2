@@ -34,12 +34,14 @@ class Xml extends AbstractWriter
     private $totalPages;
 
     /**
+     * Xml constructor.
      * @param \Magento\Framework\Filesystem $filesystem
-     * @param $fileName
+     * @param string $fileName
      * @param string $fileMode
      * @param \GoMage\Feed\Model\Content\Xml $content
-     * @param $page
-     * @param $totalPages
+     * @param int $page
+     * @param float|int $totalPages
+     * @throws \Magento\Framework\Exception\FileSystemException
      */
     public function __construct(
         \Magento\Framework\Filesystem $filesystem,

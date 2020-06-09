@@ -42,6 +42,7 @@ class ParentDynamicAttribute extends DynamicAttribute implements MapperInterface
      */
     public function __construct(
         $value,
+        $additionalData,
         \Magento\Framework\Json\Helper\Data $jsonHelper,
         \Magento\Framework\ObjectManagerInterface $objectManager,
         \Magento\Catalog\Api\ProductAttributeRepositoryInterface $attributeRepository,
@@ -52,7 +53,7 @@ class ParentDynamicAttribute extends DynamicAttribute implements MapperInterface
         $this->connection = $resource->getConnection();
         $this->productCollectionFactory = $productCollectionFactory;
 
-        parent::__construct($value, $jsonHelper, $objectManager);
+        parent::__construct($value, $additionalData, $jsonHelper, $objectManager);
     }
 
     /**

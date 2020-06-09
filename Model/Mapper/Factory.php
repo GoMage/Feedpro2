@@ -49,7 +49,7 @@ class Factory
         if (!$className) {
             $className = $this->_getMapper($type);
         }
-        return $this->_objectManager->create($className, ['value' => $value,'type' => $type, 'additionalData' => $additionalData]);
+        return $this->_objectManager->create($className, ['value' => $value, 'type' => $type, 'additionalData' => $additionalData]);
     }
 
     /**
