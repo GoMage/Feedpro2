@@ -85,7 +85,7 @@ class Condition
         $label = false;
         if ($conditionAttribute) {
             $frontendInput = $conditionAttribute->getFrontendInput();
-            if ($frontendInput == 'select' || $frontendInput == 'multiselect') {
+            if (in_array($frontendInput, ['boolean', 'multiselect', 'select'])) {
                 foreach ($conditionAttribute->getOptions() as $option) {
                     if ($option->getValue() == $this->_value) {
                         $label = $option->getLabel();
