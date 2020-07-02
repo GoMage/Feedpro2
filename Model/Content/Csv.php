@@ -6,11 +6,11 @@
  * GoMage Feed Pro M2
  *
  * @category     Extension
- * @copyright    Copyright (c) 2010-2018 GoMage.com (https://www.gomage.com)
+ * @copyright    Copyright (c) 2010-2020 GoMage.com (https://www.gomage.com)
  * @author       GoMage.com
  * @license      https://www.gomage.com/licensing  Single domain license
  * @terms of use https://www.gomage.com/terms-of-use
- * @version      Release: 1.2.0
+ * @version      Release: 1.3.0
  * @since        Class available since Release 1.0.0
  */
 
@@ -20,36 +20,23 @@ class Csv extends AbstractContent
 {
 
     /**
-     * @var \Magento\Framework\Json\Helper\Data
-     */
-    protected $_jsonHelper;
-
-    public function __construct(
-        \Magento\Framework\ObjectManagerInterface $objectManager,
-        $content,
-        \Magento\Framework\Json\Helper\Data $jsonHelper
-    ) {
-        $this->_jsonHelper = $jsonHelper;
-        parent::__construct($objectManager, $content);
-    }
-
-    /**
      * @return \GoMage\Feed\Model\Feed\Row\Collection
      */
     public function getRows()
     {
         if (is_null($this->_rows)) {
 
-            $this->_rows = $this->_objectManager->create('GoMage\Feed\Model\Feed\Row\Collection');
+            $this->_rows = $this->_collection->create();
 
             $content = $this->_jsonHelper->jsonDecode($this->_content);
             foreach ($content as $data) {
+                if (is_array($data)) $data['additionalData'] = $this->setAdditionalData();
 
                 /** @var \GoMage\Feed\Model\Feed\Row\Data $rowData */
-                $rowData = $this->_objectManager->create('GoMage\Feed\Model\Feed\Row\Data', ['data' => $data]);
+                $rowData = $this->_dataRow->create(['data' => $data]);
 
                 /** @var \GoMage\Feed\Model\Feed\Row $row */
-                $row = $this->_objectManager->create('GoMage\Feed\Model\Feed\Row', ['rowData' => $rowData]);
+                $row = $this->_row->create(['rowData' => $rowData]);
 
                 $this->_rows->add($row);
             }

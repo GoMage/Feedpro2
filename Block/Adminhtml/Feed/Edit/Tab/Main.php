@@ -6,11 +6,11 @@
  * GoMage Feed Pro M2
  *
  * @category     Extension
- * @copyright    Copyright (c) 2010-2018 GoMage.com (https://www.gomage.com)
+ * @copyright    Copyright (c) 2010-2020 GoMage.com (https://www.gomage.com)
  * @author       GoMage.com
  * @license      https://www.gomage.com/licensing  Single domain license
  * @terms of use https://www.gomage.com/terms-of-use
- * @version      Release: 1.2.0
+ * @version      Release: 1.3.0
  * @since        Class available since Release 1.0.0
  */
 
@@ -112,13 +112,14 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
         );
 
         $url = $this->_helper->getFeedUrl($model->getFullFileName(), $model->getStoreId());
+        $openNewTab = $model->getType() == \GoMage\Feed\Model\Config\Source\FeedType::XML_TYPE ? 'target="_blank"' : '';
         $fieldset->addField(
             'comments',
             'note',
             [
                 'label' => __('Access Url'),
                 'title' => __('Access Url'),
-                'text'  => '<a href="' . $url . '" target="_blank">' . $url . '</a>',
+                'text'  => '<a href="' . $url . '" ' . $openNewTab . '>' . $url . '</a>',
             ]
         );
 

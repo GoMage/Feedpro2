@@ -6,11 +6,11 @@
  * GoMage Feed Pro M2
  *
  * @category     Extension
- * @copyright    Copyright (c) 2010-2018 GoMage.com (https://www.gomage.com)
+ * @copyright    Copyright (c) 2010-2020 GoMage.com (https://www.gomage.com)
  * @author       GoMage.com
  * @license      https://www.gomage.com/licensing  Single domain license
  * @terms of use https://www.gomage.com/terms-of-use
- * @version      Release: 1.2.0
+ * @version      Release: 1.3.0
  * @since        Class available since Release 1.0.0
  */
 
@@ -18,7 +18,6 @@ namespace GoMage\Feed\Model\Mapper;
 
 class AttributePercent extends Attribute implements MapperInterface
 {
-
     /**
      * @var float
      */
@@ -26,10 +25,11 @@ class AttributePercent extends Attribute implements MapperInterface
 
     public function __construct(
         $value,
-        \Magento\Catalog\Api\ProductAttributeRepositoryInterface $attributeRepository
+        \Magento\Catalog\Api\ProductAttributeRepositoryInterface $attributeRepository,
+        \Magento\CatalogInventory\Api\StockItemRepositoryInterface $stockItemRepository
     ) {
         $this->_percent = floatval($value['percent']);
-        parent::__construct($value['code'], $attributeRepository);
+        parent::__construct($value['code'], $attributeRepository, $stockItemRepository);
     }
 
     /**
@@ -40,5 +40,4 @@ class AttributePercent extends Attribute implements MapperInterface
     {
         return floatval(parent::map($object)) * $this->_percent / 100;
     }
-
 }

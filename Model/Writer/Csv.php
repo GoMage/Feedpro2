@@ -6,18 +6,18 @@
  * GoMage Feed Pro M2
  *
  * @category     Extension
- * @copyright    Copyright (c) 2010-2018 GoMage.com (https://www.gomage.com)
+ * @copyright    Copyright (c) 2010-2020 GoMage.com (https://www.gomage.com)
  * @author       GoMage.com
  * @license      https://www.gomage.com/licensing  Single domain license
  * @terms of use https://www.gomage.com/terms-of-use
- * @version      Release: 1.2.0
+ * @version      Release: 1.3.0
  * @since        Class available since Release 1.0.0
  */
 
 namespace GoMage\Feed\Model\Writer;
 
-use GoMage\Feed\Model\Config\Source\Csv\Enclosure;
 use GoMage\Feed\Model\Config\Source\Csv\Delimiter;
+use GoMage\Feed\Model\Config\Source\Csv\Enclosure;
 
 class Csv extends AbstractWriter
 {
@@ -37,20 +37,28 @@ class Csv extends AbstractWriter
     protected $_isHeader;
 
     /**
+     * @var string
+     */
+    protected $_page;
+
+    /**
      * @var array
      */
     protected $_headerCols = null;
 
     /**
+     * Csv constructor.
      * @param \Magento\Framework\Filesystem $filesystem
      * @param Enclosure $enclosureModel
      * @param Delimiter $delimiterModel
-     * @param $fileName
+     * @param string $fileName
      * @param string $fileMode
      * @param int $delimiter
      * @param int $enclosure
      * @param bool $isHeader
      * @param string $additionHeader
+     * @param int $page
+     * @throws \Magento\Framework\Exception\FileSystemException
      */
     public function __construct(
         \Magento\Framework\Filesystem $filesystem,
@@ -61,12 +69,14 @@ class Csv extends AbstractWriter
         $delimiter = Delimiter::COMMA,
         $enclosure = Enclosure::DOUBLE_QUOTE,
         $isHeader = true,
-        $additionHeader = ''
+        $additionHeader = '',
+        $page
     ) {
         parent::__construct($filesystem, $fileName, $fileMode);
         $this->_delimiter = $delimiterModel->getSymbol($delimiter);
         $this->_enclosure = $enclosureModel->getSymbol($enclosure);
-        $this->_isHeader  = $isHeader;
+        $this->_isHeader = $isHeader;
+        $this->_page = $page;
         if ($additionHeader) {
             $this->_fileHandler->write($additionHeader);
         }
@@ -87,14 +97,14 @@ class Csv extends AbstractWriter
             foreach ($headerColumns as $columnName) {
                 $this->_headerCols[$columnName] = false;
             }
-            if ($this->_isHeader) {
+            if ($this->_isHeader && ($this->_page == 1 || $this->_page === null)) {
                 $this->_fileHandler->writeCsv(array_keys($this->_headerCols), $this->_delimiter, $this->_enclosure);
             }
         }
     }
 
     /**
-     * @param  array $data
+     * @param array $data
      */
     public function write(array $data)
     {

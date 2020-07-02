@@ -6,11 +6,11 @@
  * GoMage Feed Pro M2
  *
  * @category     Extension
- * @copyright    Copyright (c) 2010-2018 GoMage.com (https://www.gomage.com)
+ * @copyright    Copyright (c) 2010-2020 GoMage.com (https://www.gomage.com)
  * @author       GoMage.com
  * @license      https://www.gomage.com/licensing  Single domain license
  * @terms of use https://www.gomage.com/terms-of-use
- * @version      Release: 1.2.0
+ * @version      Release: 1.3.0
  * @since        Class available since Release 1.0.0
  */
 
@@ -34,7 +34,7 @@ class Save extends FeedController
         if ($data) {
             try {
                 /** @var \GoMage\Feed\Model\Feed $model */
-                $model = $this->_objectManager->create('GoMage\Feed\Model\Feed');
+                $model = $this->feed->create();
                 $id    = $this->getRequest()->getPost('id');
 
                 if ($id) {
@@ -45,7 +45,7 @@ class Save extends FeedController
 
                 if (isset($data['content']) && is_array($data['content'])) {
                     $data['content'] = $this->_prepareData($data['content']);
-                    $data['content'] = $this->_objectManager->get('Magento\Framework\Json\Helper\Data')
+                    $data['content'] = $this->jsonHelper
                         ->jsonEncode($data['content']);
                 }
 
@@ -114,8 +114,8 @@ class Save extends FeedController
         $redirectResult = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
         return $redirectResult->setPath('gomage_feed/feed/edit',
             ['id' => $this->getRequest()->getPost('id', null),
-             'switch_type' => $this->getRequest()->getPost('switch_type', null),
-             'type' =>   $this->getRequest()->getPost('type', null)
+                'switch_type' => $this->getRequest()->getPost('switch_type', null),
+                'type' =>   $this->getRequest()->getPost('type', null)
             ]
         );
     }

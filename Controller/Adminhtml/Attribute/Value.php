@@ -6,19 +6,22 @@
  * GoMage Feed Pro M2
  *
  * @category     Extension
- * @copyright    Copyright (c) 2010-2018 GoMage.com (https://www.gomage.com)
+ * @copyright    Copyright (c) 2010-2020 GoMage.com (https://www.gomage.com)
  * @author       GoMage.com
  * @license      https://www.gomage.com/licensing  Single domain license
  * @terms of use https://www.gomage.com/terms-of-use
- * @version      Release: 1.2.0
+ * @version      Release: 1.3.0
  * @since        Class available since Release 1.0.0
  */
 
 namespace GoMage\Feed\Controller\Adminhtml\Attribute;
 
 use GoMage\Feed\Controller\Adminhtml\Attribute as AttributeController;
+use GoMage\Feed\Model\AttributeFactory;
+use Magento\Backend\Model\Session;
 use Magento\Framework\DataObject;
-
+use GoMage\Core\Helper\Data as coreHelper;
+use Magento\Framework\Json\Helper\Data as jsonHelper;
 class Value extends AttributeController
 {
 
@@ -32,13 +35,23 @@ class Value extends AttributeController
      */
     protected $_productAttributeRepository;
 
-
+    /**
+     * Value constructor.
+     * @param \Magento\Backend\App\Action\Context $context
+     * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
+     * @param \Magento\Catalog\Model\Product\Attribute\Repository $productAttributeRepository
+     * @param coreHelper $coreHelper
+     */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
         \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory,
-        \Magento\Catalog\Model\Product\Attribute\Repository $productAttributeRepository
+        \Magento\Catalog\Model\Product\Attribute\Repository $productAttributeRepository,
+        coreHelper $coreHelper,
+        AttributeFactory $attribute,
+        Session $session,
+        jsonHelper $jsonHelper
     ) {
-        parent::__construct($context);
+        parent::__construct($context, $coreHelper,$attribute,$session,$jsonHelper);
         $this->_resultJsonFactory          = $resultJsonFactory;
         $this->_productAttributeRepository = $productAttributeRepository;
     }

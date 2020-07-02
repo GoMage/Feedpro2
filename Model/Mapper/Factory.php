@@ -6,11 +6,11 @@
  * GoMage Feed Pro M2
  *
  * @category     Extension
- * @copyright    Copyright (c) 2010-2018 GoMage.com (https://www.gomage.com)
+ * @copyright    Copyright (c) 2010-2020 GoMage.com (https://www.gomage.com)
  * @author       GoMage.com
  * @license      https://www.gomage.com/licensing  Single domain license
  * @terms of use https://www.gomage.com/terms-of-use
- * @version      Release: 1.2.0
+ * @version      Release: 1.3.0
  * @since        Class available since Release 1.0.0
  */
 
@@ -43,13 +43,13 @@ class Factory
      * @param  string $value
      * @return \GoMage\Feed\Model\Mapper\MapperInterface
      */
-    public function create($type, $value)
+    public function create($type, $value, $additionalData)
     {
         $className = $this->_getCustomMapper($value);
         if (!$className) {
             $className = $this->_getMapper($type);
         }
-        return $this->_objectManager->create($className, ['value' => $value]);
+        return $this->_objectManager->create($className, ['value' => $value, 'type' => $type, 'additionalData' => $additionalData]);
     }
 
     /**

@@ -6,11 +6,11 @@
  * GoMage Feed Pro M2
  *
  * @category     Extension
- * @copyright    Copyright (c) 2010-2018 GoMage.com (https://www.gomage.com)
+ * @copyright    Copyright (c) 2010-2020 GoMage.com (https://www.gomage.com)
  * @author       GoMage.com
  * @license      https://www.gomage.com/licensing  Single domain license
  * @terms of use https://www.gomage.com/terms-of-use
- * @version      Release: 1.2.0
+ * @version      Release: 1.3.0
  * @since        Class available since Release 1.0.0
  */
 
@@ -19,10 +19,14 @@ namespace GoMage\Feed\Controller\Adminhtml\Feed;
 use GoMage\Feed\Controller\Adminhtml\Feed as FeedController;
 use GoMage\Feed\Model\Generator;
 use Magento\Backend\App\Action;
+use Magento\Backend\Model\Session;
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\Controller\Result\Json;
 use Magento\Framework\Controller\Result\JsonFactory as ResultJsonFactory;
 use Magento\Framework\Controller\ResultInterface;
+use GoMage\Core\Helper\Data as coreHelper;
+use Magento\Framework\Json\Helper\Data as jsonHelper;
+use GoMage\Feed\Model\FeedFactory;
 
 class Generate extends FeedController
 {
@@ -37,19 +41,26 @@ class Generate extends FeedController
     private $generator;
 
     /**
+     * Generate constructor.
      * @param Action\Context $context
      * @param ResultJsonFactory $resultJsonFactory
      * @param Generator $generator
+     * @param coreHelper $coreHelper
      */
     public function __construct(
         Action\Context $context,
         ResultJsonFactory $resultJsonFactory,
-        Generator $generator
-    ) {
+        Generator $generator,
+        FeedFactory $feed,
+        jsonHelper $jsonHelper,
+        Session $session,
+        coreHelper $coreHelper
+    )
+    {
         $this->resultJsonFactory = $resultJsonFactory;
         $this->generator = $generator;
 
-        parent::__construct($context);
+        parent::__construct($context, $feed, $jsonHelper, $session, $coreHelper);
     }
 
     /**
@@ -58,7 +69,7 @@ class Generate extends FeedController
     public function execute()
     {
         $id = $this->getRequest()->getParam('id');
-        $page = $this->getRequest()->getParam('page') ?: 1;
+        $page = (int)$this->getRequest()->getParam('page') ?: 1;
 
         $result = $this->resultJsonFactory->create();
         if ($id) {

@@ -6,26 +6,25 @@
  * GoMage Feed Pro M2
  *
  * @category     Extension
- * @copyright    Copyright (c) 2010-2018 GoMage.com (https://www.gomage.com)
+ * @copyright    Copyright (c) 2010-2020 GoMage.com (https://www.gomage.com)
  * @author       GoMage.com
  * @license      https://www.gomage.com/licensing  Single domain license
  * @terms of use https://www.gomage.com/terms-of-use
- * @version      Release: 1.2.0
+ * @version      Release: 1.3.0
  * @since        Class available since Release 1.0.0
  */
 
 namespace GoMage\Feed\Model\Mapper\Custom;
-
-class ProductUrl implements CustomMapperInterface
+use GoMage\Feed\Model\Config\Source\Field\TypeInterface;
+class ProductUrl extends Attribute implements CustomMapperInterface
 {
-
     /**
-     * @param  \Magento\Framework\DataObject $object
+     * @param \Magento\Framework\DataObject $object
      * @return mixed
      */
     public function map(\Magento\Framework\DataObject $object)
     {
-        return $object->getProductUrl();
+       return parent::map($object);
     }
 
     /**
@@ -43,5 +42,4 @@ class ProductUrl implements CustomMapperInterface
     {
         return __('Product Url');
     }
-
 }

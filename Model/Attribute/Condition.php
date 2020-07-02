@@ -6,11 +6,11 @@
  * GoMage Feed Pro M2
  *
  * @category     Extension
- * @copyright    Copyright (c) 2010-2018 GoMage.com (https://www.gomage.com)
+ * @copyright    Copyright (c) 2010-2020 GoMage.com (https://www.gomage.com)
  * @author       GoMage.com
  * @license      https://www.gomage.com/licensing  Single domain license
  * @terms of use https://www.gomage.com/terms-of-use
- * @version      Release: 1.2.0
+ * @version      Release: 1.3.0
  * @since        Class available since Release 1.0.0
  */
 
@@ -18,7 +18,6 @@ namespace GoMage\Feed\Model\Attribute;
 
 class Condition
 {
-
     /**
      * @var \GoMage\Feed\Model\Feed\Field
      */
@@ -34,19 +33,41 @@ class Condition
      */
     protected $_value;
 
+    /**
+     * @var string
+     */
+    protected $attrCode;
+
+    /**
+     * @var \Magento\Eav\Api\AttributeRepositoryInterface
+     */
+    protected $attributeRepository;
+
+    /**
+     * Condition constructor.
+     * @param Condition\Data $conditionData
+     * @param \GoMage\Feed\Model\Operator\Factory $operatorFactory
+     * @param \GoMage\Feed\Model\Feed\FieldFactory $fieldFactory
+     * @param \Magento\Eav\Api\AttributeRepositoryInterface $attributeRepository
+     */
     public function __construct(
         \GoMage\Feed\Model\Attribute\Condition\Data $conditionData,
         \GoMage\Feed\Model\Operator\Factory $operatorFactory,
-        \Magento\Framework\ObjectManagerInterface $objectManager
+        \GoMage\Feed\Model\Feed\FieldFactory $fieldFactory,
+        \Magento\Eav\Api\AttributeRepositoryInterface $attributeRepository,
+        $additionalData
     ) {
         $this->_operator = $operatorFactory->get($conditionData->getOperator());
-        $this->_field    = $objectManager->create('GoMage\Feed\Model\Feed\Field',
+        $this->_field    = $fieldFactory->create(
             [
                 'type'  => \GoMage\Feed\Model\Config\Source\Field\TypeInterface::ATTRIBUTE,
-                'value' => $conditionData->getCode()
+                'value' => $conditionData->getCode(),
+                'additionalData' => $additionalData
             ]
         );
         $this->_value    = $conditionData->getValue();
+        $this->attrCode  = $conditionData->getCode();
+        $this->attributeRepository = $attributeRepository;
     }
 
     /**
@@ -56,7 +77,26 @@ class Condition
     public function verify(\Magento\Framework\DataObject $object)
     {
         $testable = $this->_field->map($object);
-        return $this->_operator->compare($testable, $this->_value);
+        try {
+            $conditionAttribute = $this->attributeRepository->get(\Magento\Catalog\Model\Product::ENTITY, $this->attrCode);
+        } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
+            $conditionAttribute = null;
+        }
+        $label = false;
+        if ($conditionAttribute) {
+            $frontendInput = $conditionAttribute->getFrontendInput();
+            if (in_array($frontendInput, ['boolean', 'multiselect', 'select'])) {
+                foreach ($conditionAttribute->getOptions() as $option) {
+                    if ($option->getValue() == $this->_value) {
+                        $label = $option->getLabel();
+                        break;
+                    }
+                }
+            }
+
+        }
+        $value = (false !== $label) ? $label : $this->_value;
+        return $this->_operator->compare($testable, $value);
     }
 
     /**
@@ -66,6 +106,4 @@ class Condition
     {
         return $this->_field->getUsedAttributes();
     }
-
-
 }

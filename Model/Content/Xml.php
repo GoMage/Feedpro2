@@ -6,11 +6,11 @@
  * GoMage Feed Pro M2
  *
  * @category     Extension
- * @copyright    Copyright (c) 2010-2018 GoMage.com (https://www.gomage.com)
+ * @copyright    Copyright (c) 2010-2020 GoMage.com (https://www.gomage.com)
  * @author       GoMage.com
  * @license      https://www.gomage.com/licensing  Single domain license
  * @terms of use https://www.gomage.com/terms-of-use
- * @version      Release: 1.2.0
+ * @version      Release: 1.3.0
  * @since        Class available since Release 1.0.0
  */
 
@@ -38,12 +38,25 @@ class Xml extends AbstractContent
      */
     protected $_block;
 
-
+    /**
+     * Xml constructor.
+     * @param \GoMage\Feed\Model\Feed\Row\CollectionFactory $collection
+     * @param \GoMage\Feed\Model\Feed\Row\DataFactory $dataRow
+     * @param \GoMage\Feed\Model\Feed\RowFactory $row
+     * @param \Magento\Framework\Json\Helper\Data $jsonHelper
+     * @param $content
+     * @param \GoMage\Feed\Model\Feed $feed
+     * @throws \Exception
+     */
     public function __construct(
-        \Magento\Framework\ObjectManagerInterface $objectManager,
-        $content
+        \GoMage\Feed\Model\Feed\Row\CollectionFactory $collection,
+        \GoMage\Feed\Model\Feed\Row\DataFactory $dataRow,
+        \GoMage\Feed\Model\Feed\RowFactory $row,
+        \Magento\Framework\Json\Helper\Data $jsonHelper,
+        $content,
+        \GoMage\Feed\Model\Feed $feed
     ) {
-        parent::__construct($objectManager, $content);
+        parent::__construct($collection, $dataRow, $row, $jsonHelper, $content, $feed);
 
         $match = [];
         preg_match(self::BLOCK_PATTERN, $this->_content, $match);
@@ -62,7 +75,7 @@ class Xml extends AbstractContent
     public function getRows()
     {
         if (is_null($this->_rows)) {
-            $this->_rows = $this->_objectManager->create('GoMage\Feed\Model\Feed\Row\Collection');
+            $this->_rows = $this->_collection->create();
             $match       = [];
             preg_match_all(self::ROW_PATTERN, $this->_block, $match);
             if (isset($match[1])) {
@@ -91,11 +104,13 @@ class Xml extends AbstractContent
                         }
                     }
 
+                    if (is_array($data)) $data['additionalData'] = $this->setAdditionalData();
+
                     /** @var \GoMage\Feed\Model\Feed\Row\Data $rowData */
-                    $rowData = $this->_objectManager->create('GoMage\Feed\Model\Feed\Row\Data', ['data' => $data]);
+                    $rowData = $this->_dataRow->create(['data' => $data]);
 
                     /** @var \GoMage\Feed\Model\Feed\Row $row */
-                    $row = $this->_objectManager->create('GoMage\Feed\Model\Feed\Row', ['rowData' => $rowData]);
+                    $row = $this->_row->create(['rowData' => $rowData]);
 
                     $this->_rows->add($row);
                 }

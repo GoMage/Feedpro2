@@ -6,11 +6,11 @@
  * GoMage Feed Pro M2
  *
  * @category     Extension
- * @copyright    Copyright (c) 2010-2018 GoMage.com (https://www.gomage.com)
+ * @copyright    Copyright (c) 2010-2020 GoMage.com (https://www.gomage.com)
  * @author       GoMage.com
  * @license      https://www.gomage.com/licensing  Single domain license
  * @terms of use https://www.gomage.com/terms-of-use
- * @version      Release: 1.2.0
+ * @version      Release: 1.3.0
  * @since        Class available since Release 1.0.0
  */
 
@@ -20,7 +20,10 @@ use GoMage\Feed\Controller\Adminhtml\Feed as FeedController;
 use Magento\Backend\App\Action\Context;
 use Magento\Framework\Registry;
 use Magento\Framework\Controller\ResultFactory;
-
+use GoMage\Core\Helper\Data as coreHelper;
+use GoMage\Feed\Model\FeedFactory;
+use Magento\Framework\Json\Helper\Data as jsonHelper;
+use Magento\Backend\Model\Session;
 class Edit extends FeedController
 {
     /**
@@ -28,12 +31,28 @@ class Edit extends FeedController
      */
     protected $_coreRegistry;
 
+    /**
+     * Edit constructor.
+     * @param Context $context
+     * @param Registry $coreRegistry
+     * @param coreHelper $coreHelper
+     */
     public function __construct(
         Context $context,
+        FeedFactory $feed,
+        jsonHelper $jsonHelper,
+        Session $session,
+        coreHelper $coreHelper,
         Registry $coreRegistry
     ) {
         $this->_coreRegistry = $coreRegistry;
-        parent::__construct($context);
+        parent::__construct(
+            $context,
+            $feed,
+            $jsonHelper,
+            $session,
+            $coreHelper
+        );
     }
 
     /**
@@ -42,7 +61,7 @@ class Edit extends FeedController
     public function execute()
     {
         $id    = $this->getRequest()->getParam('id');
-        $model = $this->_objectManager->create('GoMage\Feed\Model\Feed');
+        $model = $this->feed->create();
 
         if ($id) {
             $model->load($id);
@@ -56,7 +75,7 @@ class Edit extends FeedController
         }
 
         // set entered data if was error when we do save
-        $data = $this->_objectManager->get('Magento\Backend\Model\Session')->getPageData(true);
+        $data = $this->session->getPageData(true);
         if (!empty($data)) {
             $model->addData($data);
         }
