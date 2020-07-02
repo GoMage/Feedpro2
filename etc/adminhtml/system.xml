@@ -23,7 +23,17 @@
             <label>Feed Pro</label>
             <tab>gomage</tab>
             <resource>GoMage_Feed::config_feed</resource>
-            <group id="server" translate="label" type="text" sortOrder="10" showInDefault="1">
+            <group id="general" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1"
+                   showInStore="1">
+                <label>General</label>
+                <field id="greetings" type="text" translate="label" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <frontend_model>GoMage\Feed\Block\Adminhtml\Config\General\Greetings</frontend_model>
+                </field>
+                <field id="feedback" type="text" translate="label" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <frontend_model>GoMage\Feed\Block\Adminhtml\Config\General\Feedback</frontend_model>
+                </field>
+            </group>
+            <group id="server" translate="label" type="text" sortOrder="30" showInDefault="1">
                 <label>Server Configurations</label>
                 <field id="memory_limit" translate="label comment" type="text" sortOrder="10" showInDefault="1">
                     <label>Memory Limit, Mb</label>
@@ -43,7 +53,7 @@
                     <frontend_class>validate-number</frontend_class>
                 </field>
             </group>
-            <group id="image" translate="label" type="text" sortOrder="20" showInDefault="1">
+            <group id="image" translate="label" type="text" sortOrder="60" showInDefault="1">
                 <label>Image Settings</label>
                 <field id="resize" translate="label" type="select" sortOrder="10" showInDefault="1">
                     <label>Resize Image</label>
