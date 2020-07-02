@@ -16,10 +16,13 @@
 
 namespace GoMage\Feed\Controller\Adminhtml\Feed;
 
+use GoMage\Core\Helper\Data as coreHelper;
 use GoMage\Feed\Controller\Adminhtml\Feed as FeedController;
 use GoMage\Feed\Model\FeedFactory;
 use Magento\Backend\App\Action;
+use Magento\Backend\Model\Session;
 use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\Json\Helper\Data as jsonHelper;
 
 /**
  * Class Duplicate
@@ -36,10 +39,18 @@ class Duplicate extends FeedController
      * Duplicate constructor.
      * @param Action\Context $context
      * @param FeedFactory $feedFactory
+     * @param jsonHelper $jsonHelper
+     * @param Session $session
+     * @param coreHelper $coreHelper
      */
-    public function __construct(Action\Context $context, FeedFactory $feedFactory)
-    {
-        parent::__construct($context);
+    public function __construct(
+        Action\Context $context,
+        FeedFactory $feedFactory,
+        jsonHelper $jsonHelper,
+        Session $session,
+        coreHelper $coreHelper
+    ) {
+        parent::__construct($context, $feedFactory, $jsonHelper, $session, $coreHelper);
         $this->feedFactory = $feedFactory;
     }
 
@@ -76,7 +87,6 @@ class Duplicate extends FeedController
             $duplicatedFeedId = (int)$duplicatedFeed->getId();
 
             if ($duplicatedFeedId) {
-
                 $this->messageManager->addSuccess(__('You duplicated the feed.'));
                 return $redirectResult->setPath(
                     'gomage_feed/feed/edit',
