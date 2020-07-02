@@ -28,8 +28,6 @@
                     <resource id="Magento_Backend::stores_settings">
                         <resource id="Magento_Config::config">
                             <resource id="GoMage_Feed::config_feed" title="GoMage Feed Pro Configuration" translate="title" sortOrder="100"/>
-                            <resource id="GoMage_Feed::settings_feed" title="GoMage Feed Pro Activation" translate="title" sortOrder="110"/>
-                            <resource id="GoMage_Notification::notification" title="GoMage Feed Pro Notifications" translate="title" sortOrder="120"/>
                         </resource>
                     </resource>
                 </resource>

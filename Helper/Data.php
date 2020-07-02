@@ -83,11 +83,6 @@ class Data
     protected $_coreHelper;
 
     /**
-     * @var \Magento\AdminNotification\Model\InboxFactory
-     */
-    protected $_inboxFactory;
-
-    /**
      * @var \Magento\Config\Model\ConfigFactory
      */
     protected $_configFactory;
@@ -105,7 +100,6 @@ class Data
      * @param \Magento\Framework\Encryption\Encryptor $encryptor
      * @param \GoMage\Feed\Model\Mapper\Factory $mapperFactory
      * @param \Magento\Framework\App\Config $config
-     * @param \Magento\AdminNotification\Model\InboxFactory $inboxFactory
      * @param \Magento\Config\Model\ConfigFactory $configFactory
      * @param coreHelper $coreHelper
      */
@@ -121,7 +115,6 @@ class Data
         \Magento\Framework\Encryption\Encryptor $encryptor,
         \GoMage\Feed\Model\Mapper\Factory $mapperFactory,
         \Magento\Framework\App\Config $config,
-        \Magento\AdminNotification\Model\InboxFactory $inboxFactory,
         \Magento\Config\Model\ConfigFactory $configFactory,
         coreHelper $coreHelper
     ) {
@@ -137,7 +130,6 @@ class Data
         $this->_mapperFactory              = $mapperFactory;
         $this->_scopeConfig                = $config;
         $this->_coreHelper                 = $coreHelper;
-        $this->_inboxFactory               = $inboxFactory;
         $this->_configFactory              = $configFactory;
     }
 
@@ -296,77 +288,6 @@ class Data
     private function _getVersion()
     {
         return $this->_moduleList->getOne(self::MODULE_NAME)['setup_version'];
-    }
-
-    /**
-     * @return bool
-     */
-    public function notify()
-    {
-        $frequency = (int)$this->_scopeConfig->getValue('gomage_notification/notification/frequency');
-        if (!$frequency) {
-            $frequency = 24;
-        }
-        $last_update = (int)$this->_scopeConfig->getValue('gomage_notification/notification/last_update');
-
-        if (($frequency * 60 * 60 + $last_update) > $this->_dateTime->gmtTimestamp()) {
-            return false;
-        }
-
-        $timestamp = $last_update;
-        if (!$timestamp) {
-            $timestamp = $this->_dateTime->gmtTimestamp();
-        }
-
-        try {
-            $ch = curl_init();
-            curl_setopt($ch, CURLOPT_URL, sprintf('https://www.gomage.com/index.php/gomage_notification/index/data'));
-            curl_setopt($ch, CURLOPT_POST, true);
-            curl_setopt($ch, CURLOPT_POSTFIELDS, 'sku=feed-pro-m2&timestamp=' . $timestamp . '&ver=' . urlencode($this->_getVersion()));
-            curl_setopt($ch, CURLOPT_TIMEOUT, 30);
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-
-            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
-            curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
-
-            $content = curl_exec($ch);
-
-            try {
-                $result = $this->_jsonHelper->jsonDecode($content);
-            } catch (\Exception $e) {
-                $result = false;
-            }
-
-            if ($result && isset($result['frequency']) && ($result['frequency'] != $frequency)) {
-                $frequency = $result['frequency'];
-            }
-
-            if ($result && isset($result['data'])) {
-                if (!empty($result['data'])) {
-                    /** @var \Magento\AdminNotification\Model\Inbox $inbox */
-                    $inbox = $this->_inboxFactory->create();
-                    $inbox->parse($result['data']);
-                }
-            }
-        } catch (\Exception $e) {
-        }
-
-        $groups = [
-            'notification' => [
-                'fields' => [
-                    'frequency'   => ['value' => $frequency],
-                    'last_update' => ['value' => $this->_dateTime->gmtTimestamp()]
-                ]
-            ]
-        ];
-
-        /** @var \Magento\Config\Model\Config $config */
-        $config = $this->_configFactory->create();
-
-        $config->setSection('gomage_notification')
-            ->setGroups($groups)
-            ->save();
-
     }
 
     /**

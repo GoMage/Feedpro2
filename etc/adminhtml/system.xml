@@ -58,49 +58,6 @@
                     <frontend_class>validate-number</frontend_class>
                 </field>
             </group>
-            <group id="notification" translate="label" type="text" sortOrder="30" showInDefault="1">
-                <label>Feed Pro Notifications</label>
-                <field id="enable" translate="label" type="select" sortOrder="10" showInDefault="1">
-                    <label>Enabled</label>
-                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                </field>
-                <field id="receiver" translate="label" type="select" sortOrder="20" showInDefault="1">
-                    <label>Email Receiver</label>
-                    <source_model>Magento\Config\Model\Config\Source\Email\Identity</source_model>
-                </field>
-                <field id="sender" translate="label" type="select" sortOrder="30" showInDefault="1">
-                    <label>Email Sender</label>
-                    <source_model>Magento\Config\Model\Config\Source\Email\Identity</source_model>
-                </field>
-                <field id="template" translate="label comment" type="select" sortOrder="40" showInDefault="1">
-                    <label>Email Template</label>
-                    <source_model>Magento\Config\Model\Config\Source\Email\Template</source_model>
-                </field>
-                <field id="notify" translate="label comment" type="multiselect" sortOrder="50" showInDefault="1">
-                    <label>Notify About</label>
-                    <source_model>GoMage\Feed\Model\Config\Source\Notify</source_model>
-                </field>
-                <field id="copy_to" translate="label comment" type="text" sortOrder="60" showInDefault="1">
-                    <label>Send Email Copy To</label>
-                    <comment>Comma-separated.</comment>
-                </field>
-                <field id="copy_method" translate="label comment" type="select" sortOrder="70" showInDefault="1">
-                    <label>Send Email Copy Method</label>
-                    <source_model>Magento\Config\Model\Config\Source\Email\Method</source_model>
-                </field>
-            </group>
-        </section>
-        <section id="gomage_notification" translate="label" type="text" sortOrder="1100" showInDefault="1">
-            <label>Notifications</label>
-            <tab>gomage</tab>
-            <resource>GoMage_Notification::notification</resource>
-            <group id="notification" translate="label" type="text" sortOrder="10" showInDefault="1">
-                <label>Notifications</label>
-                <field id="enable" translate="label comment" type="select" sortOrder="10" showInDefault="1">
-                    <label>I'd like to get advertising by GoMage</label>
-                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                </field>
-            </group>
         </section>
     </system>
 </config>
