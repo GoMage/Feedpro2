@@ -41,8 +41,7 @@ class Product extends \Magento\CatalogRule\Model\Rule\Condition\Product
         \Magento\Catalog\Model\Product\Type $productType,
         array $data = [],
         ProductCategoryList $categoryList = null
-    )
-    {
+    ) {
         $this->productType = $productType;
         parent::__construct($context, $backendData, $config, $productFactory, $productRepository, $productResource, $attrSetCollection, $localeFormat, $data, $categoryList);
     }
@@ -54,6 +53,8 @@ class Product extends \Magento\CatalogRule\Model\Rule\Condition\Product
     {
         if ($this->getAttribute() == 'type_id') {
             $name = __('Product Type');
+        } elseif ($this->getAttribute() === 'qty') {
+            $name = __('Quantity (per Default Stock)');
         } else {
             $name = $this->getAttributeOption($this->getAttribute());
         }
@@ -70,7 +71,7 @@ class Product extends \Magento\CatalogRule\Model\Rule\Condition\Product
             $selectOptions = $this->getAllProductTypesOptionsArray();
             $this->setData('value_select_options', $selectOptions);
 
-            $hashedOptions = array();
+            $hashedOptions = [];
             foreach ($selectOptions as $o) {
                 if (is_array($o['value'])) {
                     continue; // We cannot use array as index
@@ -120,6 +121,8 @@ class Product extends \Magento\CatalogRule\Model\Rule\Condition\Product
     {
         if ($this->getAttribute() === 'type_id') {
             return 'select';
+        } elseif ($this->getAttribute() === 'qty') {
+            return 'numeric';
         }
 
         return parent::getInputType();

@@ -1,8 +1,8 @@
 <?php
 
-
 namespace GoMage\Feed\Model\Rule\Condition;
 
+use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use Magento\CatalogRule\Model\Rule\Condition\Product;
 use Magento\Rule\Model\Condition\Context;
 
@@ -26,8 +26,8 @@ class Combine extends \Magento\Rule\Model\Condition\Combine
     public function __construct(
         \Magento\CatalogRule\Model\Rule\Condition\ProductFactory $conditionFactory,
         Context $context,
-        array $data = [])
-    {
+        array $data = []
+    ) {
         $this->_productFactory = $conditionFactory;
         parent::__construct($context, $data);
         $this->setType(\GoMage\Feed\Model\Rule\Condition\Combine::class);
@@ -43,11 +43,22 @@ class Combine extends \Magento\Rule\Model\Condition\Combine
         $productAttributes = $this->_productFactory->create()->loadAttributeOptions()->getAttributeOption();
         $attributes = [];
         foreach ($productAttributes as $code => $label) {
-            $attributes[] = [
-                'value' => 'Magento\CatalogRule\Model\Rule\Condition\Product|' . $code,
-                'label' => $label,
-            ];
+            if ($code === 'quantity_and_stock_status') {
+                $attributes[] = [
+                    'value' => 'Magento\CatalogRule\Model\Rule\Condition\Product|' . $code,
+                    'label' => 'Stock Status',
+                ];
+            } else {
+                $attributes[] = [
+                    'value' => 'Magento\CatalogRule\Model\Rule\Condition\Product|' . $code,
+                    'label' => $label,
+                ];
+            }
         }
+        $attributes[] = [
+            'value' => 'GoMage\Feed\Model\Rule\Condition\Product|qty',
+            'label' => __('Quantity (per Default Stock)')
+        ];
         $attributes[] = [
             'value' => 'GoMage\Feed\Model\Rule\Condition\Product|type_id',
             'label' => __('Product Type')
@@ -67,7 +78,7 @@ class Combine extends \Magento\Rule\Model\Condition\Combine
     }
 
     /**
-     * @param \Magento\Catalog\Model\ResourceModel\Product\Collection $productCollection
+     * @param Collection $productCollection
      * @return $this
      */
     public function collectValidatedAttributes($productCollection)
@@ -76,12 +87,14 @@ class Combine extends \Magento\Rule\Model\Condition\Combine
 
         foreach ($this->getConditions() as $key => $condition) {
             /** @var Product|\Magento\CatalogRule\Model\Rule\Condition\Combine $condition */
-            if ($condition->getAttribute() == 'type_id') {
+            if ($condition->getAttribute() === 'type_id') {
                 if ($condition->getOperator() == '==') {
                     $productCollection->addAttributeToFilter($condition->getAttribute(), ['eq' => $condition->getValue()]);
                 } else {
                     $productCollection->addAttributeToFilter($condition->getAttribute(), ['neq' => $condition->getValue()]);
                 }
+            } elseif ($condition->getAttribute() === 'qty') {
+                $this->addQtyFilter($productCollection, $condition);
             } else {
                 $correctedConditions[] = $condition;
             }
@@ -95,5 +108,53 @@ class Combine extends \Magento\Rule\Model\Condition\Combine
         }
 
         return $this;
+    }
+
+    /**
+     * @param Collection $productCollection
+     * @param Product $condition
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    public function addQtyFilter(Collection $productCollection, Product $condition)
+    {
+        $productCollection->joinField(
+            'qty',
+            'cataloginventory_stock_item',
+            'qty',
+            'product_id=entity_id',
+            '{{table}}.stock_id=1',
+            'left'
+        );
+        switch ($condition->getOperator()) {
+            case '==':
+                $operator = 'eq';
+                break;
+            case '!=':
+                $operator = 'neq';
+                break;
+            case '>=':
+                $operator = 'gteq';
+                break;
+            case '>':
+                $operator = 'gt';
+                break;
+            case '<=':
+                $operator = 'lteq';
+                break;
+            case '<':
+                $operator = 'lt';
+                break;
+            case '()':
+                $operator = 'in';
+                break;
+            case '!()':
+                $operator = 'nin';
+                break;
+            default:
+                $operator = false;
+        }
+        if (false !== $operator) {
+            $productCollection->addAttributeToFilter('qty', [$operator => $condition->getValue()]);
+        }
     }
 }
