@@ -125,12 +125,7 @@ class Feed extends \Magento\Rule\Model\AbstractModel
         if ($this->hasConditionsSerialized()) {
             $conditions = $this->getConditionsSerialized();
             if (!empty($conditions)) {
-                //magento verision <= 2.1.x
-                $conditionsOutput = @unserialize($conditions);
-                if ($conditionsOutput === false) {
-                    // magento version >= 2.2
-                    $conditionsOutput = $this->serializer->unserialize($conditions);
-                }
+                $conditionsOutput = $this->serializer->unserialize($conditions);
                 if (is_array($conditionsOutput) && !empty($conditionsOutput)) {
                     $this->_resetConditions();
                     $this->_conditions->loadArray($conditionsOutput);

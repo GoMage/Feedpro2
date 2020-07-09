@@ -11,5 +11,30 @@
         "psr-4": {
             "GoMage\\Feed\\": ""
         }
+    },
+    "repositories": [
+        {
+            "type": "package",
+            "package": {
+                "name": "gomage/core",
+                "version": "2.0",
+                "dist": {
+                    "type": "zip",
+                    "url": "https://www.gomage.com/media/extensions/activation/Activation.zip"
+                },
+                "autoload": {
+                    "files": [
+                        "registration.php"
+                    ],
+                    "psr-4": {
+                        "GoMage\\Core\\": ""
+                    }
+                }
+            }
+        }
+    ],
+    "require": {
+        "GoMage/Core": "*"
     }
 }
+
