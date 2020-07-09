@@ -54,7 +54,7 @@ class Product extends \Magento\CatalogRule\Model\Rule\Condition\Product
         if ($this->getAttribute() == 'type_id') {
             $name = __('Product Type');
         } elseif ($this->getAttribute() === 'qty') {
-            $name = __('Quantity (per Default Stock)');
+            $name = __('Quantity');
         } else {
             $name = $this->getAttributeOption($this->getAttribute());
         }

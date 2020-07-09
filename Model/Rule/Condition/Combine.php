@@ -57,7 +57,7 @@ class Combine extends \Magento\Rule\Model\Condition\Combine
         }
         $attributes[] = [
             'value' => 'GoMage\Feed\Model\Rule\Condition\Product|qty',
-            'label' => __('Quantity (per Default Stock)')
+            'label' => __('Quantity')
         ];
         $attributes[] = [
             'value' => 'GoMage\Feed\Model\Rule\Condition\Product|type_id',
