@@ -6,10 +6,6 @@ use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use Magento\CatalogRule\Model\Rule\Condition\Product;
 use Magento\Rule\Model\Condition\Context;
 
-/**
- * Class Combine
- * @package GoMage\Feed\Model\Rule\Condition
- */
 class Combine extends \Magento\Rule\Model\Condition\Combine
 {
     /**
@@ -34,7 +30,7 @@ class Combine extends \Magento\Rule\Model\Condition\Combine
     }
 
     /**
-     * Adding Product Type condition
+     * Adding custom conditions
      *
      * @return array
      */
@@ -45,7 +41,7 @@ class Combine extends \Magento\Rule\Model\Condition\Combine
         foreach ($productAttributes as $code => $label) {
             if ($code === 'quantity_and_stock_status') {
                 $attributes[] = [
-                    'value' => 'Magento\CatalogRule\Model\Rule\Condition\Product|' . $code,
+                    'value' => 'GoMage\Feed\Model\Rule\Condition\Product|' . $code,
                     'label' => 'Stock Status',
                 ];
             } else {
@@ -78,33 +74,18 @@ class Combine extends \Magento\Rule\Model\Condition\Combine
     }
 
     /**
-     * @param Collection $productCollection
+     * @param $productCollection
      * @return $this
      */
     public function collectValidatedAttributes($productCollection)
     {
-        $correctedConditions = [];
-
         foreach ($this->getConditions() as $key => $condition) {
             /** @var Product|\Magento\CatalogRule\Model\Rule\Condition\Combine $condition */
-            if ($condition->getAttribute() === 'type_id') {
-                if ($condition->getOperator() == '==') {
-                    $productCollection->addAttributeToFilter($condition->getAttribute(), ['eq' => $condition->getValue()]);
-                } else {
-                    $productCollection->addAttributeToFilter($condition->getAttribute(), ['neq' => $condition->getValue()]);
-                }
-            } elseif ($condition->getAttribute() === 'qty') {
-                $this->addQtyFilter($productCollection, $condition);
-            } else {
-                $correctedConditions[] = $condition;
+            if ($condition->getAttribute() === 'qty') {
+                $this->addQtyFilter($productCollection);
+            } elseif ($condition->getAttribute() === 'quantity_and_stock_status') {
+                $this->addStockStatusFilter($productCollection);
             }
-        }
-
-        $this->setConditions($correctedConditions); // change to new array in order to get rid product type_id condition
-
-        foreach ($this->getConditions() as $condition) {
-            /** @var Product|\Magento\CatalogRule\Model\Rule\Condition\Combine $condition */
-            $condition->collectValidatedAttributes($productCollection);
         }
 
         return $this;
@@ -112,10 +93,9 @@ class Combine extends \Magento\Rule\Model\Condition\Combine
 
     /**
      * @param Collection $productCollection
-     * @param Product $condition
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function addQtyFilter(Collection $productCollection, Product $condition)
+    public function addQtyFilter(Collection $productCollection)
     {
         $productCollection->joinField(
             'qty',
@@ -125,36 +105,21 @@ class Combine extends \Magento\Rule\Model\Condition\Combine
             '{{table}}.stock_id=1',
             'left'
         );
-        switch ($condition->getOperator()) {
-            case '==':
-                $operator = 'eq';
-                break;
-            case '!=':
-                $operator = 'neq';
-                break;
-            case '>=':
-                $operator = 'gteq';
-                break;
-            case '>':
-                $operator = 'gt';
-                break;
-            case '<=':
-                $operator = 'lteq';
-                break;
-            case '<':
-                $operator = 'lt';
-                break;
-            case '()':
-                $operator = 'in';
-                break;
-            case '!()':
-                $operator = 'nin';
-                break;
-            default:
-                $operator = false;
-        }
-        if (false !== $operator) {
-            $productCollection->addAttributeToFilter('qty', [$operator => $condition->getValue()]);
-        }
+    }
+
+    /**
+     * @param Collection $productCollection
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    public function addStockStatusFilter(Collection $productCollection)
+    {
+        $productCollection->joinField(
+            'is_in_stock',
+            'cataloginventory_stock_item',
+            'is_in_stock',
+            'product_id=entity_id',
+            '{{table}}.stock_id=1',
+            'left'
+        );
     }
 }
