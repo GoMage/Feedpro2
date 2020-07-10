@@ -4,10 +4,6 @@ namespace GoMage\Feed\Model\Rule\Condition;
 
 use Magento\Catalog\Model\ProductCategoryList;
 
-/**
- * Class Product
- * @package GoMage\Feed\Model\Rule\Condition
- */
 class Product extends \Magento\CatalogRule\Model\Rule\Condition\Product
 {
     /**
@@ -53,8 +49,10 @@ class Product extends \Magento\CatalogRule\Model\Rule\Condition\Product
     {
         if ($this->getAttribute() == 'type_id') {
             $name = __('Product Type');
-        } elseif ($this->getAttribute() === 'qty') {
+        } elseif ($this->getAttribute() == 'qty') {
             $name = __('Quantity');
+        } elseif ($this->getAttribute() == 'quantity_and_stock_status') {
+            $name = __('Stock Status');
         } else {
             $name = $this->getAttributeOption($this->getAttribute());
         }
@@ -126,5 +124,24 @@ class Product extends \Magento\CatalogRule\Model\Rule\Condition\Product
         }
 
         return parent::getInputType();
+    }
+
+    /**
+     * Get mapped sql field
+     *
+     * @return string
+     */
+    public function getMappedSqlField()
+    {
+        if ($this->getAttribute() == 'type_id') {
+            $mappedSqlField = 'e.type_id';
+        } elseif ($this->getAttribute() == 'quantity_and_stock_status') {
+            $mappedSqlField = 'at_is_in_stock.is_in_stock';
+        } elseif ($this->getAttribute() == 'qty') {
+            $mappedSqlField = 'at_qty.qty';
+        } else {
+            $mappedSqlField = parent::getMappedSqlField();
+        }
+        return $mappedSqlField;
     }
 }
