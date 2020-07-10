@@ -34,16 +34,16 @@ class Delete extends AttributeController
                 $model = $this->attribute->create();
                 $model->setId($id);
                 $model->delete();
-                $this->messageManager->addSuccess(__('You deleted the attribute.'));
+                $this->messageManager->addSuccessMessage(__('You deleted the attribute.'));
                 $resultRedirect->setPath('gomage_feed/attribute/index');
                 return $resultRedirect;
             } catch (\Exception $e) {
-                $this->messageManager->addError($e->getMessage());
+                $this->messageManager->addErrorMessage($e->getMessage());
                 $resultRedirect->setPath('gomage_feed/attribute/edit', ['id' => $this->getRequest()->getParam('id')]);
                 return $resultRedirect;
             }
         }
-        $this->messageManager->addError(__('We can\'t find a attribute to delete.'));
+        $this->messageManager->addErrorMessage(__('We can\'t find a attribute to delete.'));
         $resultRedirect->setPath('gomage_feed/attribute/index');
         return $resultRedirect;
     }

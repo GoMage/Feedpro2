@@ -87,7 +87,7 @@ class Duplicate extends FeedController
             $duplicatedFeedId = (int)$duplicatedFeed->getId();
 
             if ($duplicatedFeedId) {
-                $this->messageManager->addSuccess(__('You duplicated the feed.'));
+                $this->messageManager->addSuccessMessage(__('You duplicated the feed.'));
                 return $redirectResult->setPath(
                     'gomage_feed/feed/edit',
                     [

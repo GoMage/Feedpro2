@@ -69,9 +69,9 @@ class Save extends FeedController
 
                 $model->loadPost($data);
                 $model->save();
-                $this->messageManager->addSuccess(__('You saved the feed.'));
+                $this->messageManager->addSuccessMessage(__('You saved the feed.'));
             } catch (LocalizedException $e) {
-                $this->messageManager->addError($e->getMessage());
+                $this->messageManager->addErrorMessage($e->getMessage());
                 return $this->_proceedToEdit($data);
             } catch (\Exception $e) {
                 $this->messageManager->addException($e, __('Something went wrong while saving the feed.'));

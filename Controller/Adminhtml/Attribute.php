@@ -90,7 +90,7 @@ abstract class Attribute extends Action
         if ($this->coreHelper->isA(Helper::MODULE_NAME)) {
             return $this->_authorization->isAllowed('GoMage_Feed::attributes');
         }
-        $this->messageManager->addError('Please activate GoMage Feed Pro');
+        $this->messageManager->addErrorMessage('Please activate GoMage Feed Pro');
         return false;
     }
 }

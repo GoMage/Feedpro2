@@ -34,16 +34,16 @@ class Delete extends FeedController
                 $model = $this->feed->create();
                 $model->setId($id);
                 $model->delete();
-                $this->messageManager->addSuccess(__('You deleted the feed.'));
+                $this->messageManager->addSuccessMessage(__('You deleted the feed.'));
                 $resultRedirect->setPath('gomage_feed/feed/index');
                 return $resultRedirect;
             } catch (\Exception $e) {
-                $this->messageManager->addError($e->getMessage());
+                $this->messageManager->addErrorMessage($e->getMessage());
                 $resultRedirect->setPath('gomage_feed/feed/edit', ['id' => $this->getRequest()->getParam('id')]);
                 return $resultRedirect;
             }
         }
-        $this->messageManager->addError(__('We can\'t find a feed to delete.'));
+        $this->messageManager->addErrorMessage(__('We can\'t find a feed to delete.'));
         $resultRedirect->setPath('gomage_feed/feed/index');
         return $resultRedirect;
     }

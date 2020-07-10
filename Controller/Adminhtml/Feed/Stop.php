@@ -35,16 +35,16 @@ class Stop extends FeedController
                 $model = $this->feed->create()->load($id);
                 $model->setStatus(\GoMage\Feed\Model\Config\Source\Status::STOPPED);
 
-                $this->messageManager->addSuccess(__('Feed has been successfully stopped.'));
+                $this->messageManager->addSuccessMessage(__('Feed has been successfully stopped.'));
                 $resultRedirect->setPath('gomage_feed/feed/edit', ['id' => $id]);
                 return $resultRedirect;
             } catch (\Exception $e) {
-                $this->messageManager->addError($e->getMessage());
+                $this->messageManager->addErrorMessage($e->getMessage());
                 $resultRedirect->setPath('gomage_feed/feed/edit', ['id' => $this->getRequest()->getParam('id')]);
                 return $resultRedirect;
             }
         }
-        $this->messageManager->addError(__('We can\'t find a feed to stop.'));
+        $this->messageManager->addErrorMessage(__('We can\'t find a feed to stop.'));
         $resultRedirect->setPath('gomage_feed/feed/index');
         return $resultRedirect;
     }

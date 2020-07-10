@@ -66,7 +66,7 @@ class Edit extends FeedController
         if ($id) {
             $model->load($id);
             if (!$model->getId()) {
-                $this->messageManager->addError(__('This feed no exists.'));
+                $this->messageManager->addErrorMessage(__('This feed no exists.'));
                 /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
                 $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
                 $resultRedirect->setPath('gomage_feed/feed/index');

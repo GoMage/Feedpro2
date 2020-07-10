@@ -48,9 +48,9 @@ class Save extends AttributeController
                 }
                 $model->addData($data);
                 $model->save();
-                $this->messageManager->addSuccess(__('You saved the attribute.'));
+                $this->messageManager->addSuccessMessage(__('You saved the attribute.'));
             } catch (LocalizedException $e) {
-                $this->messageManager->addError($e->getMessage());
+                $this->messageManager->addErrorMessage($e->getMessage());
                 return $this->_proceedToEdit($data);
             } catch (\Exception $e) {
                 $this->messageManager->addException($e, __('Something went wrong while saving the attribute.'));
