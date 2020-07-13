@@ -51,7 +51,8 @@ class Csv extends AbstractWriter
      * @param \Magento\Framework\Filesystem $filesystem
      * @param Enclosure $enclosureModel
      * @param Delimiter $delimiterModel
-     * @param string $fileName
+     * @param string $filePath
+     * @param string $directoryWright
      * @param string $fileMode
      * @param int $delimiter
      * @param int $enclosure
@@ -64,7 +65,8 @@ class Csv extends AbstractWriter
         \Magento\Framework\Filesystem $filesystem,
         Enclosure $enclosureModel,
         Delimiter $delimiterModel,
-        $fileName,
+        $filePath,
+        $directoryWright,
         $fileMode,
         $delimiter = Delimiter::COMMA,
         $enclosure = Enclosure::DOUBLE_QUOTE,
@@ -72,7 +74,7 @@ class Csv extends AbstractWriter
         $additionHeader = '',
         $page
     ) {
-        parent::__construct($filesystem, $fileName, $fileMode);
+        parent::__construct($filesystem, $filePath, $directoryWright, $fileMode);
         $this->_delimiter = $delimiterModel->getSymbol($delimiter);
         $this->_enclosure = $enclosureModel->getSymbol($enclosure);
         $this->_isHeader = $isHeader;

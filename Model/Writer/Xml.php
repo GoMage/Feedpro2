@@ -36,7 +36,8 @@ class Xml extends AbstractWriter
     /**
      * Xml constructor.
      * @param \Magento\Framework\Filesystem $filesystem
-     * @param string $fileName
+     * @param string $filePath
+     * @param string $directoryWright
      * @param string $fileMode
      * @param \GoMage\Feed\Model\Content\Xml $content
      * @param int $page
@@ -45,13 +46,14 @@ class Xml extends AbstractWriter
      */
     public function __construct(
         \Magento\Framework\Filesystem $filesystem,
-        $fileName,
+        $filePath,
+        $directoryWright,
         $fileMode,
         \GoMage\Feed\Model\Content\Xml $content,
         $page,
         $totalPages
     ) {
-        parent::__construct($filesystem, $fileName, $fileMode);
+        parent::__construct($filesystem, $filePath, $directoryWright, $fileMode);
         $this->_content = $content;
         $this->page = $page;
         $this->totalPages = $totalPages;

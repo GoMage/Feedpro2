@@ -16,6 +16,7 @@
 
 namespace GoMage\Feed\Model\Generator;
 
+use GoMage\Feed\Helper\Data;
 use GoMage\Feed\Model\Config\Source\FeedType;
 use GoMage\Feed\Model\Content\Factory as ContentFactory;
 use GoMage\Feed\Model\Feed;
@@ -68,6 +69,11 @@ class Generate
     private $resultModelFactory;
 
     /**
+     * @var Data
+     */
+    private $helper;
+
+    /**
      * Generate constructor.
      * @param ReaderFactory $readerFactory
      * @param WriterFactory $writerFactory
@@ -82,7 +88,8 @@ class Generate
         ParamsFactory $paramsFactory,
         ReaderCollectionFactory $readerCollectionFactory,
         ContentFactory $contentFactory,
-        ResultModelFactory $resultModelFactory
+        ResultModelFactory $resultModelFactory,
+        Data $helper
     ) {
         $this->readerFactory = $readerFactory;
         $this->writerFactory = $writerFactory;
@@ -90,6 +97,7 @@ class Generate
         $this->readerCollectionFactory = $readerCollectionFactory;
         $this->contentFactory = $contentFactory;
         $this->resultModelFactory = $resultModelFactory;
+        $this->helper = $helper;
     }
 
     /**
@@ -184,6 +192,8 @@ class Generate
     {
         $arguments = [
             'fileName' => $feed->getFullFileName(),
+            'filePath' => $this->helper->getFeedPath($feed->getFullFileName()),
+            'directoryWright' => $this->helper->getDirectoryWright(),
             'fileMode'  => $fileMode,
         ];
 
