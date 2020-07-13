@@ -16,35 +16,41 @@
 
 namespace GoMage\Feed\Model\Writer;
 
-use Magento\Framework\Filesystem;
-use Magento\Framework\App\Filesystem\DirectoryList;
-
 abstract class AbstractWriter implements WriterInterface
 {
     /**
      * @var string
      */
-    protected $_fileName;
+    protected $_filePath;
+
+    /**
+     * @var string
+     */
+    protected $_directoryWrite;
 
     /**
      * @var \Magento\Framework\Filesystem\File\Write
      */
     protected $_fileHandler;
 
+
     /**
-     * @param Filesystem $filesystem
-     * @param string $fileName
+     * AbstractWriter constructor.
+     * @param \Magento\Framework\Filesystem $filesystem
+     * @param string $filePath
+     * @param string $directorWrite
      * @param string $mode
+     * @throws \Magento\Framework\Exception\FileSystemException
      */
     public function __construct(
         \Magento\Framework\Filesystem $filesystem,
-        $fileName,
+        $filePath,
+        $directorWrite,
         $mode = WriterInterface::DEFAULT_MODE
     ) {
-        $this->_fileName = $fileName;
-        $filePath        = WriterInterface::DIRECTORY . '/' . $this->_fileName;
-
-        $directoryHandle    = $filesystem->getDirectoryWrite(DirectoryList::MEDIA);
+        $this->_filePath = $filePath;
+        $this->_directoryWrite =$directorWrite;
+        $directoryHandle    = $filesystem->getDirectoryWrite($directorWrite);
         $this->_fileHandler = $directoryHandle->openFile($filePath, $mode);
         $this->_fileHandler->flush();
     }

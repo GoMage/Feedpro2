@@ -48,6 +48,11 @@ class Data
     protected $_directory;
 
     /**
+     * @var \Magento\Framework\Filesystem\Directory\ReadInterface
+     */
+    protected $_customDirectory;
+
+    /**
      * @var \Magento\Framework\Stdlib\DateTime\DateTime
      */
     protected $_dateTime;
@@ -121,6 +126,7 @@ class Data
         $this->_attributeCollectionFactory = $attributeCollectionFactory;
         $this->_dynamicAttributeCollection = $dynamicAttributeCollection;
         $this->_directory                  = $filesystem->getDirectoryRead(DirectoryList::MEDIA);
+        $this->_customDirectory            = $filesystem->getDirectoryRead(DirectoryList::PUB);
         $this->_storeManager               = $storeManager;
         $this->_systemStore                = $systemStore;
         $this->_dateTime                   = $dateTime;
@@ -196,34 +202,65 @@ class Data
     }
 
     /**
-     * @param  string $fileName
-     * @param  int $storeId
+     * @param string $fileName
+     * @param int $storeId
      * @return string
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function getFeedUrl($fileName = '', $storeId = 0)
     {
         if ($fileName && $storeId) {
             $path = $this->getFeedPath($fileName);
+            $customFolder = $this->getCustomFeedDirectory();
             if ($path) {
-                return $this->_storeManager->getStore($storeId)->getBaseUrl(
+                if ($customFolder == '') {return $this->_storeManager->getStore($storeId)->getBaseUrl(
                         \Magento\Framework\UrlInterface::URL_TYPE_MEDIA
-                    ) . $path;
+                    ) . $path;}
+                else{
+                    return $this->_storeManager->getStore($storeId)->getBaseUrl(
+                            \Magento\Framework\UrlInterface::URL_TYPE_WEB
+                        ) . $this->getDirectoryWright(). "/".$path;
+                }
             }
         }
         return '';
     }
 
     /**
-     * @param  string $fileName
+     * @param string $fileName
+     * @param bool $absolute
      * @return string
      */
     public function getFeedPath($fileName, $absolute = false)
     {
-        $path = \GoMage\Feed\Model\Writer\WriterInterface::DIRECTORY . '/' . $fileName;
-        if ($this->_directory->isExist($path)) {
+        $feedDirectory = $this->getCustomFeedDirectory();
+        if ($feedDirectory == '') {
+            $path = \GoMage\Feed\Model\Writer\WriterInterface::DIRECTORY . '/' . $fileName;
             return $absolute ? $this->_directory->getAbsolutePath($path) : $path;
+        }else{
+            $path = $feedDirectory. '/' .\GoMage\Feed\Model\Writer\WriterInterface::DIRECTORY . '/' . $fileName;
+            return $absolute ? $this->_customDirectory->getAbsolutePath($path) : $path;
         }
-        return '';
+    }
+
+    /**
+     * @return string
+     */
+    public function getCustomFeedDirectory()
+    {
+        $feedDirectory = $this->_scopeConfig->getValue('gomage_feed/server/feed_folder');
+        $feedDirectory = trim($feedDirectory, " \t\n\r\0\x0B/\\");
+        return $feedDirectory;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDirectoryWright()
+    {
+        $feedDirectory = $this->getCustomFeedDirectory();
+        return $feedDirectory == '' ? $directoryWright = \Magento\Framework\App\Filesystem\DirectoryList::MEDIA
+            : $directoryWright = \Magento\Framework\App\Filesystem\DirectoryList::PUB;
     }
 
     /**
