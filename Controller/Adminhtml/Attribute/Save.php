@@ -53,7 +53,7 @@ class Save extends AttributeController
                 $this->messageManager->addErrorMessage($e->getMessage());
                 return $this->_proceedToEdit($data);
             } catch (\Exception $e) {
-                $this->messageManager->addException($e, __('Something went wrong while saving the attribute.'));
+                $this->messageManager->addExceptionMessage($e, __('Something went wrong while saving the attribute.'));
                 return $this->_proceedToEdit($data);
             }
             if ($id) {

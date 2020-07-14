@@ -96,7 +96,7 @@ class Duplicate extends FeedController
                 );
             }
         } catch (\Exception $e) {
-            $this->messageManager->addException($e, __('Something went wrong while duplicate the feed.'));
+            $this->messageManager->addExceptionMessage($e, __('Something went wrong while duplicate the feed.'));
         }
 
         return $redirectResult->setPath('gomage_feed/feed/index');
