@@ -24,15 +24,9 @@ abstract class AbstractWriter implements WriterInterface
     protected $_filePath;
 
     /**
-     * @var string
-     */
-    protected $_directoryWrite;
-
-    /**
      * @var \Magento\Framework\Filesystem\File\Write
      */
     protected $_fileHandler;
-
 
     /**
      * AbstractWriter constructor.
@@ -49,7 +43,6 @@ abstract class AbstractWriter implements WriterInterface
         $mode = WriterInterface::DEFAULT_MODE
     ) {
         $this->_filePath = $filePath;
-        $this->_directoryWrite =$directorWrite;
         $directoryHandle    = $filesystem->getDirectoryWrite($directorWrite);
         $this->_fileHandler = $directoryHandle->openFile($filePath, $mode);
         $this->_fileHandler->flush();
