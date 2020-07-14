@@ -74,7 +74,7 @@ class Save extends FeedController
                 $this->messageManager->addErrorMessage($e->getMessage());
                 return $this->_proceedToEdit($data);
             } catch (\Exception $e) {
-                $this->messageManager->addException($e, __('Something went wrong while saving the feed.'));
+                $this->messageManager->addExceptionMessage($e, __('Something went wrong while saving the feed.'));
                 return $this->_proceedToEdit($data);
             }
             if ($id) {
