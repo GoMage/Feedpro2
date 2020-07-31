@@ -1,19 +1,19 @@
 <?xml version="1.0"?>
 <!--
-/**
- * GoMage.com
- *
- * GoMage Feed Pro M2
- *
- * @category     Extension
- * @copyright    Copyright (c) 2010-2020 GoMage.com (https://www.gomage.com)
- * @author       GoMage.com
- * @license      https://www.gomage.com/licensing  Single domain license
- * @terms of use https://www.gomage.com/terms-of-use
- * @version      Release: 1.3.0
- * @since        Class available since Release 1.0.0
- */
--->
+    /**
+     * GoMage.com
+     *
+     * GoMage Feed Pro M2
+     *
+     * @category     Extension
+     * @copyright    Copyright (c) 2010-2020 GoMage.com (https://www.gomage.com)
+     * @author       GoMage.com
+     * @license      https://www.gomage.com/licensing  Single domain license
+     * @terms of use https://www.gomage.com/terms-of-use
+     * @version      Release: 1.3.0
+     * @since        Class available since Release 1.0.0
+     */
+     -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="admin-2columns-left" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <head>
         <script src="GoMage_Feed::js/feed.js"/>
@@ -23,6 +23,7 @@
         <referenceContainer name="content">
             <block class="GoMage\Feed\Block\Adminhtml\Feed\Edit" name="gomage.feed.edit"/>
             <block class="Magento\Framework\View\Element\Template" name="gomage.feed.edit.tools" template="GoMage_Feed::feed/edit/tools.phtml"/>
+            <block class="GoMage\Feed\Block\Adminhtml\Feed\Edit\Tab\Ftp" name="gomage.feed.edit.ftp" template="GoMage_Feed::feed/edit/ftp.phtml"/>
         </referenceContainer>
         <referenceContainer name="left">
             <block class="GoMage\Feed\Block\Adminhtml\Feed\Edit\Tabs" name="gomage_feed_edit_tabs">

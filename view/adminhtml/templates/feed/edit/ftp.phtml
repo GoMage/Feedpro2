@@ -1,0 +1,48 @@
+<?php
+
+/**
+ * GoMage.com
+ *
+ * GoMage Feed Pro M2
+ *
+ * @category     Extension
+ * @copyright    Copyright (c) 2010-2020 GoMage.com (https://www.gomage.com)
+ * @author       GoMage.com
+ * @license      https://www.gomage.com/licensing  Single domain license
+ * @terms of use https://www.gomage.com/terms-of-use
+ * @version      Release: 1.3.0
+ * @since        Class available since Release 1.0.0
+ */
+
+// @codingStandardsIgnoreFile
+
+/* @var $block \GoMage\Feed\Block\Adminhtml\Feed\Edit\Tab\Ftp */
+?>
+<div id="connection-success-modal" style="display:none;">
+    <div class="ftpSuccessConnectionWrapper">
+        <h1 align="center"><?= __('Connection Successful!') ?></h1>
+    </div>
+</div>
+<div id="connection-fail-modal" style="display:none;">
+    <div class="ftpFailConnectionWrapper">
+        <h1 align="center"><?= __('Connection Error!') ?></h1>
+        <h5><?= __('Unable to connect to specified Host. Please verify that the settings are correct or contact your Administrator for help') ?></h5>
+    </div>
+</div>
+<script type="text/x-magento-init">
+    {
+        "#ftp_connection": {
+            "GoMage_Feed/js/ftp": {
+                "ajaxUrl":"<?= $block->getUrl('gomage_feed/ajax/ftp') ?>",
+                "ftpProtocol": "<?= $block->getForm()->getElement('ftp_protocol')->getValue() ?>",
+                "ftpHost": "<?= $block->getForm()->getElement('ftp_host')->getValue() ?>",
+                "ftpPort": "<?= $block->getForm()->getElement('ftp_port')->getValue() ?>",
+                "ftpUser": "<?= $block->getForm()->getElement('ftp_user_name')->getValue() ?>",
+                "ftpPassword": "<?= $block->getForm()->getElement('ftp_password')->getValue() ?>",
+                "ftpPassiveMode": "<?= $block->getForm()->getElement('is_ftp_passive')->getValue() ?>"
+            }
+        }
+    }
+</script>
+
+

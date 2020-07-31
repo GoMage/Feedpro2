@@ -171,6 +171,16 @@ class Ftp extends \Magento\Backend\Block\Widget\Form\Generic implements \Magento
             ]
         );
 
+        $ftp_connection = $fieldset->addField(
+            'ftp_connection',
+            'note',
+            [
+                'name' => 'password',
+                'title' => __('Test Connection'),
+                'text'  => '<a href="#" id="ftp_connection">Test Connection</a>',
+            ]
+        );
+
         $this->setChild(
             'form_after',
             $this->getLayout()->createBlock('\Magento\Backend\Block\Widget\Form\Element\Dependence')
@@ -182,6 +192,7 @@ class Ftp extends \Magento\Backend\Block\Widget\Form\Generic implements \Magento
                 ->addFieldMap($ftp_password->getHtmlId(), $ftp_password->getName())
                 ->addFieldMap($ftp_dir->getHtmlId(), $ftp_dir->getName())
                 ->addFieldMap($is_ftp_passive->getHtmlId(), $is_ftp_passive->getName())
+                ->addFieldMap($ftp_connection->getHtmlId(), $ftp_connection->getName())
                 ->addFieldDependence($ftp_protocol->getName(), $is_ftp->getName(), 1)
                 ->addFieldDependence($ftp_host->getName(), $is_ftp->getName(), 1)
                 ->addFieldDependence($ftp_port->getName(), $is_ftp->getName(), 1)
@@ -189,6 +200,7 @@ class Ftp extends \Magento\Backend\Block\Widget\Form\Generic implements \Magento
                 ->addFieldDependence($ftp_password->getName(), $is_ftp->getName(), 1)
                 ->addFieldDependence($ftp_dir->getName(), $is_ftp->getName(), 1)
                 ->addFieldDependence($is_ftp_passive->getName(), $is_ftp->getName(), 1)
+                ->addFieldDependence($ftp_connection->getName(), $is_ftp->getName(), 1)
         );
         $form->setValues($model->getData());
         $this->setForm($form);
