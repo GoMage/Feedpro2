@@ -5,9 +5,9 @@ define([
 ], function ($, modal) {
     'use strict';
 
-     function main (config, element) {
-        var $element = $(element);
+     function main (config) {
         var ajaxUrl = config.ajaxUrl;
+        var isFtp = config.isFtp;
         var ftpProtocol = config.ftpProtocol;
         var ftpHost = config.ftpHost;
         var ftpPort = config.ftpPort;
@@ -35,6 +35,7 @@ define([
                     type: 'POST',
                     dataType: 'json',
                     data: {
+                        isFtp:isFtp,
                         ftpProtocol:ftpProtocol,
                         ftpHost:ftpHost,
                         ftpPort:ftpPort,
