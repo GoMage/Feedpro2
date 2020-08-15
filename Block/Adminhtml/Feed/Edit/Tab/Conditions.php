@@ -151,9 +151,7 @@ class Conditions extends \Magento\Backend\Block\Widget\Form\Generic implements \
         $conditions->setJsFormObject($formName);
         if ($conditions->getConditions() && is_array($conditions->getConditions())) {
             foreach ($conditions->getConditions() as $condition) {
-                if ($condition->getAttributeObject()->getData('is_used_for_price_rules')) {
                     $this->setConditionFormName($condition, $formName);
-                }
             }
         }
     }
