@@ -31,6 +31,7 @@ namespace GoMage\Feed\Model;
  */
 class Feed extends \Magento\Rule\Model\AbstractModel
 {
+    const NOT_ATTRIBUTE_CODE = 'attribute_set_id';
     /**
      * @var Rule\Condition\CombineFactory
      */
@@ -49,6 +50,11 @@ class Feed extends \Magento\Rule\Model\AbstractModel
     protected $serializer;
 
     /**
+     * @var \Magento\Catalog\Api\ProductAttributeRepositoryInterface
+     */
+    private $attributeRepository;
+
+    /**
      * Feed constructor.
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
@@ -58,6 +64,7 @@ class Feed extends \Magento\Rule\Model\AbstractModel
      * @param \Magento\CatalogRule\Model\Rule\Action\CollectionFactory $actionCollectionFactory
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource|null $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb|null $resourceCollection
+     * @param \Magento\Catalog\Api\ProductAttributeRepositoryInterface $attributeRepository
      * @param array $data
      */
     public function __construct(
@@ -69,10 +76,12 @@ class Feed extends \Magento\Rule\Model\AbstractModel
         \Magento\CatalogRule\Model\Rule\Action\CollectionFactory $actionCollectionFactory,
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        \Magento\Catalog\Api\ProductAttributeRepositoryInterface $attributeRepository,
         array $data = []
     ) {
         $this->_combineFactory          = $combineFactory;
         $this->_actionCollectionFactory = $actionCollectionFactory;
+        $this->attributeRepository = $attributeRepository;
 
         parent::__construct(
             $context,
@@ -128,6 +137,19 @@ class Feed extends \Magento\Rule\Model\AbstractModel
                 $conditionsOutput = $this->serializer->unserialize($conditions);
                 if (is_array($conditionsOutput) && !empty($conditionsOutput)) {
                     $this->_resetConditions();
+                    if (array_key_exists('conditions', $conditionsOutput)) {
+                        $usedForPromoRuleAttributes = [];
+                        foreach ($conditionsOutput['conditions'] as $oneCondition) {
+                            $attributeCode = $oneCondition['attribute'];
+                            if ($attributeCode && $attributeCode != self::NOT_ATTRIBUTE_CODE) {
+                                $attribute = $this->attributeRepository->get($attributeCode);
+                                if ($attribute->getIsUsedForPromoRules()) {
+                                    $usedForPromoRuleAttributes[] = $oneCondition;
+                                }
+                            }
+                        }
+                        $conditionsOutput['conditions'] = $usedForPromoRuleAttributes;
+                    }
                     $this->_conditions->loadArray($conditionsOutput);
                 }
             }
