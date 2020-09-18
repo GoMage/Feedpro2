@@ -16,6 +16,8 @@
 
 namespace GoMage\Feed\Model\Mapper;
 
+use Magento\CatalogInventory\Api\Data\StockItemInterface;
+
 class Attribute implements MapperInterface
 {
 
@@ -59,8 +61,9 @@ class Attribute implements MapperInterface
     public function map(\Magento\Framework\DataObject $object)
     {
         if ($this->_code == 'quantity_and_stock_status') {
+            /** @var StockItemInterface $stockItem */
             $stockItem = $this->stockItemRepository->get($object->getId());
-            $value = $stockItem->getIsInStock() ? 'In Stock' : 'Out of Stock';
+            $value = (string) $stockItem->getQty();
             return $value;
         }
         return $this->_attribute->getFrontendModel() == 'Magento\Catalog\Model\Product\Attribute\Frontend\Image' ?
