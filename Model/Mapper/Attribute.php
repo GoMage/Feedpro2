@@ -35,12 +35,12 @@ class Attribute implements MapperInterface
     /**
      * @var ResourceConnection
      */
-    private $resource;
+    protected $resource;
 
     /**
      * @var LoggerInterface
      */
-    private $logger;
+    protected $logger;
 
     /**
      * Attribute constructor.
