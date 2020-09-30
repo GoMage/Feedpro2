@@ -16,9 +16,12 @@
 
 namespace GoMage\Feed\Model\Mapper;
 
+use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
+use Magento\Framework\App\ResourceConnection;
+use Psr\Log\LoggerInterface;
+
 class Attribute implements MapperInterface
 {
-
     /**
      * @var string
      */
@@ -30,37 +33,53 @@ class Attribute implements MapperInterface
     protected $_attribute;
 
     /**
-     * @var \Magento\CatalogInventory\Api\StockItemRepositoryInterface
+     * @var ResourceConnection
      */
-    private $stockItemRepository;
+    protected $resource;
+
+    /**
+     * @var LoggerInterface
+     */
+    protected $logger;
 
     /**
      * Attribute constructor.
      * @param $value
-     * @param \Magento\Catalog\Api\ProductAttributeRepositoryInterface $attributeRepository
-     * @param \Magento\CatalogInventory\Api\StockItemRepositoryInterface $stockItemRepository
+     * @param ProductAttributeRepositoryInterface $attributeRepository
+     * @param ResourceConnection $resource
+     * @param LoggerInterface $logger
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function __construct(
         $value,
-        \Magento\Catalog\Api\ProductAttributeRepositoryInterface $attributeRepository,
-        \Magento\CatalogInventory\Api\StockItemRepositoryInterface $stockItemRepository
+        ProductAttributeRepositoryInterface $attributeRepository,
+        ResourceConnection $resource,
+        LoggerInterface $logger
     ) {
         $this->_code      = $value;
         $this->_attribute = $attributeRepository->get($this->_code);
-        $this->stockItemRepository = $stockItemRepository;
+        $this->resource = $resource;
+        $this->logger = $logger;
     }
 
     /**
      * @param \Magento\Framework\DataObject $object
-     * @return mixed
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @return mixed|string
      */
     public function map(\Magento\Framework\DataObject $object)
     {
         if ($this->_code == 'quantity_and_stock_status') {
-            $stockItem = $this->stockItemRepository->get($object->getId());
-            $value = $stockItem->getIsInStock() ? 'In Stock' : 'Out of Stock';
+            try {
+                $productId = $object->getId();
+                $tableName = $this->resource->getTableName('cataloginventory_stock_item');
+                $connection = $this->resource->getConnection();
+                $select = $connection->select()->from($tableName, 'qty')->where('product_id = ?', $productId);
+                $value = $connection->fetchOne($select);
+            } catch (\Exception $exception) {
+                $this->logger->error($exception->getMessage());
+                $value = '';
+            }
+
             return $value;
         }
         return $this->_attribute->getFrontendModel() == 'Magento\Catalog\Model\Product\Attribute\Frontend\Image' ?

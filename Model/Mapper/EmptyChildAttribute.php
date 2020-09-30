@@ -16,43 +16,44 @@
 
 namespace GoMage\Feed\Model\Mapper;
 
+use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
+use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
+use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\DataObject;
+use Psr\Log\LoggerInterface;
+
 class EmptyChildAttribute extends Attribute implements MapperInterface
 {
+    /**
+     * @var CollectionFactory
+     */
+    protected $productCollectionFactory;
 
     /**
-     * @var \Magento\Framework\App\ResourceConnection
+     * EmptyChildAttribute constructor.
+     * @param $value
+     * @param ProductAttributeRepositoryInterface $attributeRepository
+     * @param CollectionFactory $productCollectionFactory
+     * @param ResourceConnection $resource
+     * @param LoggerInterface $logger
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
-    protected $_resource;
-
-    /**
-     * @var \Magento\Framework\DB\Adapter\AdapterInterface
-     */
-    protected $_connection;
-
-    /**
-     * @var \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory
-     */
-    protected $_productCollectionFactory;
-
-
     public function __construct(
         $value,
-        \Magento\Catalog\Api\ProductAttributeRepositoryInterface $attributeRepository,
-        \Magento\Framework\App\ResourceConnection $resource,
-        \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory,
-        \Magento\CatalogInventory\Api\StockItemRepositoryInterface $stockItemRepository
+        ProductAttributeRepositoryInterface $attributeRepository,
+        ResourceConnection $resource,
+        LoggerInterface $logger,
+        CollectionFactory $productCollectionFactory
     ) {
-        parent::__construct($value, $attributeRepository, $stockItemRepository);
-        $this->_resource                 = $resource;
-        $this->_connection               = $resource->getConnection();
-        $this->_productCollectionFactory = $productCollectionFactory;
+        parent::__construct($value, $attributeRepository, $resource, $logger);
+        $this->productCollectionFactory = $productCollectionFactory;
     }
 
     /**
-     * @param  \Magento\Framework\DataObject $object
+     * @param  DataObject $object
      * @return mixed
      */
-    public function map(\Magento\Framework\DataObject $object)
+    public function map(DataObject $object)
     {
         $result = parent::map($object);
         if (!empty($result)) {
@@ -66,26 +67,25 @@ class EmptyChildAttribute extends Attribute implements MapperInterface
     }
 
     /**
-     * @param \Magento\Framework\DataObject $object
-     * @return bool|\Magento\Framework\DataObject
+     * @param DataObject $object
+     * @return bool|DataObject
      */
-    protected function _getParentProduct(\Magento\Framework\DataObject $object)
+    protected function _getParentProduct(DataObject $object)
     {
-        $parentId = $this->_connection
+        $parentId = $this->resource->getConnection()
             ->select()
-            ->from($this->_resource->getTableName('catalog_product_relation'), 'parent_id')
+            ->from($this->resource->getTableName('catalog_product_relation'), 'parent_id')
             ->where('child_id = ?', $object->getId())
             ->where('parent_id != ?', $object->getId())
             ->query()
             ->fetchColumn();
 
         if ($parentId) {
-            $collection = $this->_productCollectionFactory->create();
+            $collection = $this->productCollectionFactory->create();
             return $collection->addAttributeToSelect($this->_code)
                 ->addIdFilter($parentId)
                 ->fetchItem();
         }
         return false;
     }
-
 }
