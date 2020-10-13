@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace GoMage\Feed\Model\Rule\Condition;
 
@@ -85,6 +86,8 @@ class Combine extends \Magento\Rule\Model\Condition\Combine
                 $this->addQtyFilter($productCollection);
             } elseif ($condition->getAttribute() === 'quantity_and_stock_status') {
                 $this->addStockStatusFilter($productCollection);
+            }else{
+                $condition->collectValidatedAttributes($productCollection);
             }
         }
 
