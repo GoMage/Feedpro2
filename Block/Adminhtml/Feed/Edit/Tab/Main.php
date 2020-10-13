@@ -160,7 +160,7 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
                 'name'     => 'store_id',
                 'label'    => __('Store View'),
                 'title'    => __('Store View'),
-                'required' => false,
+                'required' => true,
                 'values'   => $this->_helper->getStoreOptionArray(),
             ]
         );
