@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 /**
  * GoMage.com
@@ -42,7 +42,7 @@ class Collection implements ReaderInterface
     protected $_visibility;
 
     /**
-     * @var \Magento\Rule\Model\Condition\Sql\Builder
+     * @var \GoMage\Feed\Model\Condition\Sql\Builder
      */
     protected $_builder;
 
@@ -56,7 +56,7 @@ class Collection implements ReaderInterface
         \GoMage\Feed\Model\Reader\Params $params,
         \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory,
         \GoMage\Feed\Model\Config\Source\Visibility $visibility,
-        \Magento\Rule\Model\Condition\Sql\Builder $builder,
+        \GoMage\Feed\Model\Condition\Sql\Builder $builder,
         \Magento\CatalogInventory\Helper\Stock $stockFilter
     ) {
         $this->_params                   = $params;

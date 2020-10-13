@@ -55,7 +55,7 @@
                 <field id="feed_folder" translate="label comment" type="text" sortOrder="50" showInDefault="1">
                     <label>Folder to store feed files</label>
                     <comment>Inside the document root of Magento. If field is empty 'media' will be used</comment>
-                    <validate>validate-no-html-tags</validate>
+                    <validate>validate-data</validate>
                 </field>
             </group>
             <group id="image" translate="label" type="text" sortOrder="60" showInDefault="1">
