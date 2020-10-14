@@ -151,7 +151,7 @@ class Conditions extends \Magento\Backend\Block\Widget\Form\Generic implements \
         $conditions->setJsFormObject($formName);
         if ($conditions->getConditions() && is_array($conditions->getConditions())) {
             foreach ($conditions->getConditions() as $condition) {
-                $this->setConditionFormName($condition, $formName);
+                    $this->setConditionFormName($condition, $formName);
             }
         }
     }
