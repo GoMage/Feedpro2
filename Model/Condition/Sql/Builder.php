@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace GoMage\Feed\Model\Condition\Sql;
 
 use Magento\Rule\Model\Condition\AbstractCondition;
