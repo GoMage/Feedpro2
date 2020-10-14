@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace GoMage\Feed\Model\Condition\Sql;
 
@@ -52,7 +54,7 @@ class Builder extends CoreBuilder
 
         // If rule hasn't valid argument - prevent incorrect rule behavior.
         if (empty($argument)) {
-            return $this->_expressionFactory->create(['expression' => '1 = -1']);
+            return $this->_expressionFactory->create(['expression' => '1 = -1'])->__toString();
         } elseif (preg_match('/[^a-z0-9\-_\.\`]/i', $argument) > 0) {
             throw new \Magento\Framework\Exception\LocalizedException(__('Invalid field'));
         }
@@ -111,7 +113,7 @@ class Builder extends CoreBuilder
         }
         return $this->_expressionFactory->create(
             ['expression' => $expression]
-        );
+        )->__toString();
     }
 
     /**

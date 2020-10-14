@@ -1,4 +1,4 @@
-<?php declare(strict_types=1);
+<?php
 
 /**
  * GoMage.com
@@ -13,6 +13,8 @@
  * @version      Release: 1.3.0
  * @since        Class available since Release 1.0.0
  */
+
+declare(strict_types=1);
 
 namespace GoMage\Feed\Model\Reader;
 
