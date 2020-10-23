@@ -22,6 +22,7 @@ use Magento\Framework\App\ResourceConnection;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 use GoMage\Feed\Model\Config\Source\Field\TypeInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Psr\Log\LoggerInterface;
 
 class Category extends Attribute implements CustomMapperInterface
 {
@@ -31,23 +32,31 @@ class Category extends Attribute implements CustomMapperInterface
     private $categoryRepository;
 
     /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
      * Category constructor.
      * @param $value
      * @param $type
      * @param ResourceConnection $resource
      * @param CollectionFactory $productCollectionFactory
      * @param CategoryRepositoryInterface $categoryRepository
+     * @param LoggerInterface $logger
      */
     public function __construct(
         $value,
         $type,
         ResourceConnection $resource,
         CollectionFactory $productCollectionFactory,
-        CategoryRepositoryInterface $categoryRepository
+        CategoryRepositoryInterface $categoryRepository,
+        LoggerInterface $logger
     )
     {
         parent::__construct($value, $type, $resource, $productCollectionFactory);
         $this->categoryRepository = $categoryRepository;
+        $this->logger = $logger;
     }
 
     /**
@@ -89,9 +98,10 @@ class Category extends Attribute implements CustomMapperInterface
             $categoryId = max($categoryIds);
             try {
                 $category = $this->categoryRepository->get($categoryId);
+                $categoryName = $category->getName();
             } catch (NoSuchEntityException $e) {
+                $this->logger->error($e, ['module' => 'GoMage_Feed']);
             }
-            $categoryName = $category->getName();
         }
 
         return $categoryName;
