@@ -43,6 +43,13 @@ class Product extends \Magento\CatalogRule\Model\Rule\Condition\Product
     }
 
     /**
+     * Custom attribute list (not form eav_attribute table)
+     *
+     * @const string[]
+     */
+    const CUSTOM_ATTRIBUTE_LIST = ['type_id', 'qty'];
+
+    /**
      * @return string
      */
     public function getAttributeName()

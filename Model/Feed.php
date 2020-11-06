@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 /**
@@ -16,6 +17,8 @@ declare(strict_types=1);
  */
 
 namespace GoMage\Feed\Model;
+
+use GoMage\Feed\Model\Rule\Condition\Product;
 
 /**
  * Class Feed
@@ -143,8 +146,12 @@ class Feed extends \Magento\Rule\Model\AbstractModel
                         foreach ($conditionsOutput['conditions'] as $oneCondition) {
                             $attributeCode = $oneCondition['attribute'];
                             if ($attributeCode && $attributeCode != self::NOT_ATTRIBUTE_CODE) {
-                                $attribute = $this->attributeRepository->get($attributeCode);
-                                if ($attribute->getIsUsedForPromoRules()) {
+                                if (!in_array($attributeCode, Product::CUSTOM_ATTRIBUTE_LIST, true)) {
+                                    $attribute = $this->attributeRepository->get($attributeCode);
+                                    if ($attribute->getIsUsedForPromoRules()) {
+                                        $usedForPromoRuleAttributes[] = $oneCondition;
+                                    }
+                                } else {
                                     $usedForPromoRuleAttributes[] = $oneCondition;
                                 }
                             }

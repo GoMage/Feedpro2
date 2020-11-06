@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace GoMage\Feed\Model\Condition\Sql;
 
+use GoMage\Feed\Model\Rule\Condition\Product as RuleConditionProduct;
 use Magento\Rule\Model\Condition\AbstractCondition;
 use Magento\Eav\Api\AttributeRepositoryInterface;
 use Magento\Rule\Model\Condition\Sql\Builder as CoreBuilder;
@@ -123,6 +124,9 @@ class Builder extends CoreBuilder
      */
     public function isAttributeGlobal($attributeCode)
     {
+        if (in_array($attributeCode, RuleConditionProduct::CUSTOM_ATTRIBUTE_LIST)) {
+            return true;
+        }
         $attribute = $this->attributeRepository->get(ProductAttributeInterface::ENTITY_TYPE_CODE,
                 $attributeCode);
         return $attribute->getData('is_global');
