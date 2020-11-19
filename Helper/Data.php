@@ -16,14 +16,17 @@
 
 namespace GoMage\Feed\Helper;
 
-use Magento\Framework\App\Filesystem\DirectoryList;
 use GoMage\Core\Helper\Data as coreHelper;
+use Magento\Framework\App\Filesystem\DirectoryList;
+
+use Magento\Framework\ObjectManagerInterface;
+
 class Data
 {
     const MODULE_NAME = 'GoMage_Feed';
 
     /**
-     * @var \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory
+     * @var CollectionFactory
      */
     protected $_attributeCollectionFactory;
 
@@ -93,8 +96,13 @@ class Data
     protected $_configFactory;
 
     /**
+     * @var ObjectManagerInterface
+     */
+    protected $objectManager;
+
+    /**
      * Data constructor.
-     * @param \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory $attributeCollectionFactory
+     * @param \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory $_attributeCollectionFactory
      * @param \GoMage\Feed\Model\ResourceModel\Attribute\Collection $dynamicAttributeCollection
      * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\Store\Model\StoreManager $storeManager
@@ -107,9 +115,10 @@ class Data
      * @param \Magento\Framework\App\Config $config
      * @param \Magento\Config\Model\ConfigFactory $configFactory
      * @param coreHelper $coreHelper
+     * @param ObjectManagerInterface $objectManager
      */
     public function __construct(
-        \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory $attributeCollectionFactory,
+        \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory $_attributeCollectionFactory,
         \GoMage\Feed\Model\ResourceModel\Attribute\Collection $dynamicAttributeCollection,
         \Magento\Framework\Filesystem $filesystem,
         \Magento\Store\Model\StoreManager $storeManager,
@@ -121,9 +130,10 @@ class Data
         \GoMage\Feed\Model\Mapper\Factory $mapperFactory,
         \Magento\Framework\App\Config $config,
         \Magento\Config\Model\ConfigFactory $configFactory,
-        coreHelper $coreHelper
+        coreHelper $coreHelper,
+        ObjectManagerInterface $objectManager
     ) {
-        $this->_attributeCollectionFactory = $attributeCollectionFactory;
+        $this->_attributeCollectionFactory = $_attributeCollectionFactory;
         $this->_dynamicAttributeCollection = $dynamicAttributeCollection;
         $this->_directory                  = $filesystem->getDirectoryRead(DirectoryList::MEDIA);
         $this->_customDirectory            = $filesystem->getDirectoryRead(DirectoryList::PUB);
@@ -137,10 +147,12 @@ class Data
         $this->_scopeConfig                = $config;
         $this->_coreHelper                 = $coreHelper;
         $this->_configFactory              = $configFactory;
+        $this->objectManager               = $objectManager;
     }
 
     /**
      * @return array
+     * Получение списка атрибутов
      */
     public function getProductAttributes()
     {
@@ -170,12 +182,56 @@ class Data
             ];
         }
 
-        usort($attributeList, function ($a, $b) {
-            return strcmp($a['label'], $b['label']);
-        }
+        usort(
+            $attributeList,
+            function ($a, $b) {
+                return strcmp($a['label'], $b['label']);
+            }
         );
 
         return $attributeList;
+    }
+
+    /**
+     * @return array
+     */
+    public function msiInventory()
+    {
+        $resultInventory = [];
+        $inventorySourceCollection = $this->objectManager->get('\Magento\Inventory\Model\ResourceModel\Source\CollectionFactory');
+
+        foreach ($inventorySourceCollection->create() as $source) {
+            $resultInventory[] = [
+                'value' => $source->getSourceCode(),
+                'label' => __('Inventory: ') . $source->getName()
+            ];
+        }
+
+        return $resultInventory;
+    }
+
+    /**
+     * @return array
+     */
+    public function msiStock()
+    {
+        $resultStock = [];
+        $inventoryStockCollection = $this->objectManager->get('\Magento\Inventory\Model\ResourceModel\Stock\CollectionFactory');
+
+        foreach ($inventoryStockCollection->create() as $stock) {
+            $resultStock[] = [
+                'value' => $stock->getStockId(),
+                'label' => __('MSI Stock: ') . $stock->getName()
+            ];
+        }
+
+        usort(
+            $resultStock,
+            function ($a, $b) {
+                return strcmp($a['label'], $b['label']);
+            }
+        );
+        return $resultStock;
     }
 
     /**
@@ -185,17 +241,21 @@ class Data
     {
         $attributes = $this->_dynamicAttributeCollection->load()->getItems();
 
-        $attributes = array_map(function (\GoMage\Feed\Model\Attribute $attribute) {
-            return [
-                'value' => $attribute->getCode(),
-                'label' => $attribute->getName()
-            ];
-        }, $attributes
+        $attributes = array_map(
+            function (\GoMage\Feed\Model\Attribute $attribute) {
+                return [
+                    'value' => $attribute->getCode(),
+                    'label' => $attribute->getName()
+                ];
+            },
+            $attributes
         );
 
-        usort($attributes, function ($a, $b) {
-            return strcmp($a['label'], $b['label']);
-        }
+        usort(
+            $attributes,
+            function ($a, $b) {
+                return strcmp($a['label'], $b['label']);
+            }
         );
 
         return $attributes;
@@ -213,13 +273,14 @@ class Data
             $path = $this->getFeedPath($fileName);
             $customFolder = $this->getCustomFeedDirectory();
             if ($path) {
-                if ($customFolder == '') {return $this->_storeManager->getStore($storeId)->getBaseUrl(
-                        \Magento\Framework\UrlInterface::URL_TYPE_MEDIA
-                    ) . $path;}
-                else{
+                if ($customFolder == '') {
                     return $this->_storeManager->getStore($storeId)->getBaseUrl(
-                            \Magento\Framework\UrlInterface::URL_TYPE_WEB
-                        ) . $this->getDirectoryWright(). "/".$path;
+                        \Magento\Framework\UrlInterface::URL_TYPE_MEDIA
+                    ) . $path;
+                } else {
+                    return $this->_storeManager->getStore($storeId)->getBaseUrl(
+                        \Magento\Framework\UrlInterface::URL_TYPE_WEB
+                    ) . $this->getDirectoryWright() . "/" . $path;
                 }
             }
         }
@@ -237,8 +298,8 @@ class Data
         if ($feedDirectory == '') {
             $path = \GoMage\Feed\Model\Writer\WriterInterface::DIRECTORY . '/' . $fileName;
             return $absolute ? $this->_directory->getAbsolutePath($path) : $path;
-        }else{
-            $path = $feedDirectory. '/' .\GoMage\Feed\Model\Writer\WriterInterface::DIRECTORY . '/' . $fileName;
+        } else {
+            $path = $feedDirectory . '/' . \GoMage\Feed\Model\Writer\WriterInterface::DIRECTORY . '/' . $fileName;
             return $absolute ? $this->_customDirectory->getAbsolutePath($path) : $path;
         }
     }
@@ -334,8 +395,8 @@ class Data
     {
         $modulesAvailableStores =  $this->_coreHelper->getAvailableStores($this->_coreHelper->getN());
         $options = [];
-        if(isset($modulesAvailableStores[self::MODULE_NAME])){
-            foreach ( explode(',',$modulesAvailableStores[self::MODULE_NAME]) as $k => $id) {
+        if (isset($modulesAvailableStores[self::MODULE_NAME])) {
+            foreach (explode(',', $modulesAvailableStores[self::MODULE_NAME]) as $k => $id) {
                 $options[$k]['value'] = $id;
                 $options[$k]['label'] =  $this->_storeManager->getStore($id)->getName();
             }

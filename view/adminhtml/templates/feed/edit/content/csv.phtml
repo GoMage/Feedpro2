@@ -27,6 +27,8 @@ $_extendedTypes     = $block->getExtendedTypes();
 $_outputs           = $block->getOutputs();
 $_attributes        = $block->getProductAttributes();
 $_dynamicAttributes = $block->getDynamicAttributes();
+$_msiStock          = $block->msiStock();
+$_msiInventory      = $block->msiInventory();
 ?>
 
 <div id="rows-container" data-role="rows-container"></div>
@@ -94,8 +96,7 @@ $_dynamicAttributes = $block->getDynamicAttributes();
                         <select class="admin__control-select" data-validate="{required:true, minlength:1}"
                                 name="<?php echo $_htmlName ?>[<%- data.row_id %>][value]"
                         </select>
-                        <input type="text" class="admin__control-text"
-                               name="<?php echo $_htmlName ?>[<%- data.row_id %>][value]" value="<%- data.value %>"/>
+                        <input type="text" class="admin__control-text" name="<?php echo $_htmlName ?>[<%- data.row_id %>][value]" value="<%- data.value %>"/>
                     </div>
                 </div>
             </fieldset>
@@ -188,6 +189,8 @@ $_dynamicAttributes = $block->getDynamicAttributes();
                 "rowsData": <?php /* @noEscape */ echo $block->getValue(); ?>,
                 "attributes": <?php /* @noEscape */ echo json_encode($_attributes); ?>,
                 "dynamicAttributes": <?php /* @noEscape */ echo json_encode($_dynamicAttributes); ?>,
+                "msiStock": <?php /* @noEscape */ echo json_encode($_msiStock); ?>,
+                "msiInventory": <?php /* @noEscape */ echo json_encode($_msiInventory); ?>,
                 "htmlName": "<?php echo $_htmlName ?>"
             }
         }
