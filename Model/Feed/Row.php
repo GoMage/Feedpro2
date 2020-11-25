@@ -16,6 +16,8 @@
 
 namespace GoMage\Feed\Model\Feed;
 
+use GoMage\Feed\Model\Config\Source\Field\TypeInterface;
+
 class Row
 {
 
@@ -123,9 +125,10 @@ class Row
      */
     protected function getReformattedValue($field, $object)
     {
-        if (!$field->getType()) {
+        if ($field->getType() != TypeInterface::STATIC_VALUE) {
             return $this->format($field->map($object));
         }
         return $field->map($object);
     }
 }
+

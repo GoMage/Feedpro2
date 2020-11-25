@@ -16,8 +16,8 @@
 
 namespace GoMage\Feed\Model\Mapper\Custom;
 
-use Magento\Framework\App\ResourceConnection;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
+use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DataObject;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 
@@ -49,8 +49,7 @@ class Price extends Attribute
         CollectionFactory $productCollectionFactory,
         $additionalData,
         PriceCurrencyInterface $priceCurrency
-    )
-    {
+    ) {
         parent::__construct($value, $type, $resource, $productCollectionFactory);
         $this->currencyCode = $additionalData['currencyCode'];
         $this->priceCurrency = $priceCurrency;
@@ -62,7 +61,12 @@ class Price extends Attribute
      */
     public function map(DataObject $object)
     {
-        $price = $this->priceCurrency->convert(parent::map($object), null, $this->currencyCode);
+        $price = number_format(
+            $this->priceCurrency->convert(parent::map($object), null, $this->currencyCode),
+            6,
+            '.',
+            ''
+        );
         return $price;
     }
 
