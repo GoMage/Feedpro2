@@ -61,6 +61,14 @@ class Factory
         if (!is_array($value) && isset($this->_customMappers[$value])) {
             return $this->_customMappers[$value];
         }
+        if (is_string($value)) {
+            $ar = explode(',', $value);
+            if (!empty($ar) && $ar[0] === 'msiStock') {
+                return $this->_customMappers['msiStock'];
+            }
+        }
+
+
         return false;
     }
 

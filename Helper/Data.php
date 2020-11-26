@@ -181,13 +181,13 @@ class Data
                 $inventoryStockCollection = $this->objectManager->get('\Magento\Inventory\Model\ResourceModel\Stock\CollectionFactory');
                 foreach ($inventoryStockCollection->create() as $stock) {
                     $attributeList[] = [
-                        'value' => $stock->getStockId(),
+                        'value' => 'msiStock,' . $stock->getStockId(),
                         'label' => __('MSI Stock: ') . $stock->getName()
                     ];
                 }
                 return $attributeList;
             }
-           
+
             $attributeList[] = [
                 'value' => $value,
                 'label' => $class::getLabel()
