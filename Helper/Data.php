@@ -161,6 +161,7 @@ class Data
 
         foreach ($attributes as $key => $attribute) {
             if (isset($customMappers[$attribute->getAttributeCode()])) {
+                var_dump([$attribute->getAttributeCode()]);
                 unset($attributes[$key]);
             }
         }
@@ -176,6 +177,17 @@ class Data
         }
 
         foreach ($customMappers as $value => $class) {
+            if ('GoMage\Feed\Model\Mapper\Custom\msiStock' === $class) {
+                $inventoryStockCollection = $this->objectManager->get('\Magento\Inventory\Model\ResourceModel\Stock\CollectionFactory');
+                foreach ($inventoryStockCollection->create() as $stock) {
+                    $attributeList[] = [
+                        'value' => $stock->getStockId(),
+                        'label' => __('MSI Stock: ') . $stock->getName()
+                    ];
+                }
+                return $attributeList;
+            }
+           
             $attributeList[] = [
                 'value' => $value,
                 'label' => $class::getLabel()
@@ -190,48 +202,6 @@ class Data
         );
 
         return $attributeList;
-    }
-
-    /**
-     * @return array
-     */
-    public function msiInventory()
-    {
-        $resultInventory = [];
-        $inventorySourceCollection = $this->objectManager->get('\Magento\Inventory\Model\ResourceModel\Source\CollectionFactory');
-
-        foreach ($inventorySourceCollection->create() as $source) {
-            $resultInventory[] = [
-                'value' => $source->getSourceCode(),
-                'label' => __('Inventory: ') . $source->getName()
-            ];
-        }
-
-        return $resultInventory;
-    }
-
-    /**
-     * @return array
-     */
-    public function msiStock()
-    {
-        $resultStock = [];
-        $inventoryStockCollection = $this->objectManager->get('\Magento\Inventory\Model\ResourceModel\Stock\CollectionFactory');
-
-        foreach ($inventoryStockCollection->create() as $stock) {
-            $resultStock[] = [
-                'value' => $stock->getStockId(),
-                'label' => __('MSI Stock: ') . $stock->getName()
-            ];
-        }
-
-        usort(
-            $resultStock,
-            function ($a, $b) {
-                return strcmp($a['label'], $b['label']);
-            }
-        );
-        return $resultStock;
     }
 
     /**

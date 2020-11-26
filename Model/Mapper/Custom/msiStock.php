@@ -2,23 +2,16 @@
 
 namespace GoMage\Feed\Model\Mapper\Custom;
 
-use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
-use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DataObject;
 use Magento\Framework\ObjectManagerInterface;
 
-class msiStock extends Attribute
+class msiStock implements \GoMage\Feed\Model\Mapper\Custom\CustomMapperInterface
 {
     protected $objectManager;
 
     public function __construct(
-        $value,
-        $type,
-        ResourceConnection $resource,
-        CollectionFactory $productCollectionFactory,
         ObjectManagerInterface $objectManager
     ) {
-        parent::__construct($value, $type, $resource, $productCollectionFactory);
         $this->objectManager = $objectManager;
     }
 
@@ -35,7 +28,7 @@ class msiStock extends Attribute
 
     public static function getLabel()
     {
-        return __('MSI Stock');
+        return __('');
     }
 
     public function getUsedAttributes()

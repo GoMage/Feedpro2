@@ -90,9 +90,7 @@ define([
                 var elementName = typeField.readAttribute('data-value');
                 var input = jQuery("input[name='" + elementName + "']"),
                     select = jQuery("select[name='" + elementName + "']"),
-                    values = [],
-                    msiInventoryValues = [],
-                    msiStockValues = [];
+                    values = []
                 switch (parseInt(typeField.getValue())) {
                     case 2:
                         values = [];
@@ -103,8 +101,6 @@ define([
                         break;
                     default:
                         values = config.attributes;
-                        msiInventoryValues = config.msiInventory;
-                        msiStockValues = config.msiStock;
                 }
 
                 if (values.length) {
@@ -118,20 +114,6 @@ define([
                             .attr("value", data.value)
                             .text(data.label));
                     });
-                    if (msiStockValues.length){
-                        msiStockValues.forEach(function (data) {
-                            select.append(jQuery("<option></option>")
-                                .attr("value", data.value)
-                                .text(data.label));
-                        });
-                    }
-                    if (msiInventoryValues.length){
-                        msiInventoryValues.forEach(function (data) {
-                            select.append(jQuery("<option></option>")
-                                .attr("value", data.value)
-                                .text(data.label));
-                        });
-                    }
                     if (input.val()) {
                         select.val(input.val());
                         input.val('');
