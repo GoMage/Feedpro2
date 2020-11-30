@@ -18,8 +18,8 @@ namespace GoMage\Feed\Helper;
 
 use GoMage\Core\Helper\Data as coreHelper;
 use Magento\Framework\App\Filesystem\DirectoryList;
-
-use Magento\Framework\ObjectManagerInterface;
+use Magento\Inventory\Model\ResourceModel\Source\CollectionFactory as CollectionFactorySource;
+use Magento\Inventory\Model\ResourceModel\Stock\CollectionFactory as CollectionFactoryStock;
 
 class Data
 {
@@ -96,9 +96,14 @@ class Data
     protected $_configFactory;
 
     /**
-     * @var ObjectManagerInterface
+     * @var \Magento\Inventory\Model\ResourceModel\Stock\CollectionFactory
      */
-    protected $objectManager;
+    protected $collectionFactoryStock;
+
+    /**
+     * @var \Magento\Inventory\Model\ResourceModel\Source\CollectionFactory
+     */
+    protected $collectionFactorySource;
 
     /**
      * Data constructor.
@@ -114,8 +119,9 @@ class Data
      * @param \GoMage\Feed\Model\Mapper\Factory $mapperFactory
      * @param \Magento\Framework\App\Config $config
      * @param \Magento\Config\Model\ConfigFactory $configFactory
+     * @param \Magento\Inventory\Model\ResourceModel\Stock\CollectionFactory $collectionFactoryStock
+     * @param \Magento\Inventory\Model\ResourceModel\Source\CollectionFactory $collectionFactorySource
      * @param coreHelper $coreHelper
-     * @param ObjectManagerInterface $objectManager
      */
     public function __construct(
         \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory $_attributeCollectionFactory,
@@ -130,8 +136,9 @@ class Data
         \GoMage\Feed\Model\Mapper\Factory $mapperFactory,
         \Magento\Framework\App\Config $config,
         \Magento\Config\Model\ConfigFactory $configFactory,
-        coreHelper $coreHelper,
-        ObjectManagerInterface $objectManager
+        CollectionFactoryStock $collectionFactoryStock,
+        CollectionFactorySource $collectionFactorySource,
+        coreHelper $coreHelper
     ) {
         $this->_attributeCollectionFactory = $_attributeCollectionFactory;
         $this->_dynamicAttributeCollection = $dynamicAttributeCollection;
@@ -147,12 +154,12 @@ class Data
         $this->_scopeConfig                = $config;
         $this->_coreHelper                 = $coreHelper;
         $this->_configFactory              = $configFactory;
-        $this->objectManager               = $objectManager;
+        $this->collectionFactoryStock      = $collectionFactoryStock;
+        $this->collectionFactorySource     = $collectionFactorySource;
     }
 
     /**
      * @return array
-     * Получение списка атрибутов
      */
     public function getProductAttributes()
     {
@@ -161,7 +168,6 @@ class Data
 
         foreach ($attributes as $key => $attribute) {
             if (isset($customMappers[$attribute->getAttributeCode()])) {
-                var_dump([$attribute->getAttributeCode()]);
                 unset($attributes[$key]);
             }
         }
@@ -178,16 +184,23 @@ class Data
 
         foreach ($customMappers as $value => $class) {
             if ('GoMage\Feed\Model\Mapper\Custom\msiStock' === $class) {
-                $inventoryStockCollection = $this->objectManager->get('\Magento\Inventory\Model\ResourceModel\Stock\CollectionFactory');
+                $inventoryStockCollection = $this->collectionFactoryStock;
                 foreach ($inventoryStockCollection->create() as $stock) {
                     $attributeList[] = [
-                        'value' => 'msiStock,' . $stock->getStockId(),
+                        'value' =>'msiStock,' . $stock->getStockId(),
                         'label' => __('MSI Stock: ') . $stock->getName()
                     ];
                 }
-                return $attributeList;
             }
-
+            if ('GoMage\Feed\Model\Mapper\Custom\msiSource' === $class) {
+                $inventorySourceCollection = $this->collectionFactorySource;
+                foreach ($inventorySourceCollection->create() as $source) {
+                    $attributeList[] = [
+                        'value' =>'msiSource,' . $source->getSourceCode(),
+                        'label' => __('MSI Inventory: ') . $source->getName()
+                    ];
+                }
+            }
             $attributeList[] = [
                 'value' => $value,
                 'label' => $class::getLabel()

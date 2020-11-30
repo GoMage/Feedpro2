@@ -219,20 +219,4 @@ class Csv extends Widget implements RendererInterface
         return $this->_helper->getDynamicAttributes();
     }
 
-        /**
-     * @return array
-     */
-    public function msiInventory()
-    {
-        return $this->_helper->msiInventory();
-    }
-
-    /**
-     * @return array
-     */
-    public function msiStock()
-    {
-        return$this->_helper->msiStock();
-    }
-
 }

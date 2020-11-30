@@ -1,5 +1,5 @@
 <?php
-
+declare(strict_types=1);
 /**
  * GoMage.com
  *
@@ -53,8 +53,8 @@ class Factory
     }
 
     /**
-     * @param  string $value
-     * @return bool|string
+     * @param $value
+     * @return false|mixed
      */
     protected function _getCustomMapper($value)
     {
@@ -63,12 +63,13 @@ class Factory
         }
         if (is_string($value)) {
             $ar = explode(',', $value);
-            if (!empty($ar) && $ar[0] === 'msiStock') {
+            if (!empty($ar) && $ar[0]==='msiStock') {
                 return $this->_customMappers['msiStock'];
             }
+            if (!empty($ar) && $ar[0]==='msiSource') {
+                return $this->_customMappers['msiSource'];
+            }
         }
-
-
         return false;
     }
 

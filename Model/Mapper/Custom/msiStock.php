@@ -1,52 +1,68 @@
 <?php
-
+declare(strict_types=1);
 namespace GoMage\Feed\Model\Mapper\Custom;
 
 use Magento\Framework\DataObject;
-use Magento\Framework\ObjectManagerInterface;
+use Magento\InventorySalesApi\Api\GetProductSalableQtyInterface;
 
-class msiStock implements \GoMage\Feed\Model\Mapper\Custom\CustomMapperInterface
+class msiStock implements CustomMapperInterface
 {
-    protected $objectManager;
-
-    private $value;
+    /**
+     * @var
+     */
+    protected $value;
 
     /**
      * @var \Magento\InventorySalesApi\Api\GetProductSalableQtyInterface
      */
-    private $getProductSalableQty;
+    protected $getProductSalableQty;
 
+    /**
+     * msiStock constructor.
+     * @param $value
+     * @param GetProductSalableQtyInterface $getProductSalableQty
+     */
     public function __construct(
         $value,
-        ObjectManagerInterface $objectManager,
-        \Magento\InventorySalesApi\Api\GetProductSalableQtyInterface $getProductSalableQty
+        GetProductSalableQtyInterface $getProductSalableQty
     ) {
         $this->value = $value;
-        $this->objectManager = $objectManager;
         $this->getProductSalableQty = $getProductSalableQty;
     }
 
+    /**
+     * @param DataObject $object
+     * @return float|int
+     * @throws \Magento\Framework\Exception\InputException
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
     public function map(DataObject $object)
     {
+        $quantity = 0;
         if (is_string($this->value)) {
             $ar = explode(',', $this->value);
-            if (!empty($ar) && $ar[0] === 'msiStock') {
-                $id = $ar[1];
+            if (!empty($ar) && $ar[0]==='msiStock') {
+                $stockId= $ar[1];
             }
         }
-        $quantity = 0;
         if ($object->getTypeId() == \Magento\Catalog\Model\Product\Type::TYPE_SIMPLE) {
-            $quantity = $this->getProductSalableQty->execute($object->getSku(), $id);
+            $quantity = $this->getProductSalableQty->execute($object->getSku(), (int)$stockId);
         }
 
         return $quantity;
     }
 
+    /**
+     * @return \Magento\Framework\Phrase
+     */
     public static function getLabel()
     {
         return __('');
     }
 
+    /**
+     * @return string[]
+     */
     public function getUsedAttributes()
     {
         return ['msiStock'];
