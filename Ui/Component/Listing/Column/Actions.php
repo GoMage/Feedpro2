@@ -80,8 +80,8 @@ class Actions extends Column
                         'href'    => $this->_urlBuilder->getUrl($this->_deleteUrl, ['id' => $item['id']]),
                         'label'   => __('Delete'),
                         'confirm' => [
-                            'title'   => __('Delete ${ $.$data.name }'),
-                            'message' => __('Are you sure you wan\'t to delete a ${ $.$data.name } record?')
+                            'title'   => __('Delete "' . $item['name'] . '"'),
+                            'message' => __('Are you sure you wan\'t to delete a "' . $item['name'] . '" record?')
                         ]
                     ];
                 }
