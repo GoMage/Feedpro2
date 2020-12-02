@@ -10,7 +10,7 @@
  * @author       GoMage.com
  * @license      https://www.gomage.com/licensing  Single domain license
  * @terms of use https://www.gomage.com/terms-of-use
- * @version      Release: 1.3.0
+ * @version      Release: 1.3.2
  * @since        Class available since Release 1.0.0
  */
 
@@ -90,7 +90,10 @@ abstract class Attribute extends Action
         if ($this->coreHelper->isA(Helper::MODULE_NAME)) {
             return $this->_authorization->isAllowed('GoMage_Feed::attributes');
         }
-        $this->messageManager->addErrorMessage('Please activate GoMage Feed Pro');
+        $this->messageManager->addError(__(
+            'Please activate the extension in Stores -> Configuration -> GoMage menu <a href="%1">Back to activation</a> ',
+            $this->getUrl('adminhtml/system_config/edit/section/gomage_core')
+        ));
         return false;
     }
 }

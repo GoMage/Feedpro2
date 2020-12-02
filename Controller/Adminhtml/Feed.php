@@ -10,20 +10,20 @@
  * @author       GoMage.com
  * @license      https://www.gomage.com/licensing  Single domain license
  * @terms of use https://www.gomage.com/terms-of-use
- * @version      Release: 1.3.0
+ * @version      Release: 1.3.2
  * @since        Class available since Release 1.0.0
  */
 
 namespace GoMage\Feed\Controller\Adminhtml;
 
+use GoMage\Core\Helper\Data as coreHelper;
 use GoMage\Feed\Helper\Data as Helper;
+use GoMage\Feed\Model\FeedFactory;
 use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
-use Magento\Framework\Controller\ResultFactory;
-use GoMage\Core\Helper\Data as coreHelper;
-use GoMage\Feed\Model\FeedFactory;
-use Magento\Framework\Json\Helper\Data as jsonHelper;
 use Magento\Backend\Model\Session;
+use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\Json\Helper\Data as jsonHelper;
 
 abstract class Feed extends Action
 {
@@ -44,11 +44,14 @@ abstract class Feed extends Action
     /**
      * @var coreHelper
      */
-    private  $coreHelper;
+    private $coreHelper;
 
     /**
      * Feed constructor.
      * @param Context $context
+     * @param FeedFactory $feed
+     * @param jsonHelper $jsonHelper
+     * @param Session $session
      * @param coreHelper $coreHelper
      */
     public function __construct(
@@ -57,8 +60,7 @@ abstract class Feed extends Action
         jsonHelper $jsonHelper,
         Session $session,
         coreHelper $coreHelper
-    )
-    {
+    ) {
         $this->coreHelper = $coreHelper;
         $this->feed = $feed;
         $this->jsonHelper = $jsonHelper;
@@ -86,7 +88,10 @@ abstract class Feed extends Action
         if ($this->coreHelper->isA(Helper::MODULE_NAME)) {
             return $this->_authorization->isAllowed('GoMage_Feed::feeds');
         }
-        $this->messageManager->addErrorMessage('Please activate GoMage Feed Pro');
+        $this->messageManager->addError(__(
+            'Please activate the extension in Stores -> Configuration -> GoMage menu <a href="%1">Back to activation</a> ',
+            $this->getUrl('adminhtml/system_config/edit/section/gomage_core')
+        ));
         return false;
     }
 }
