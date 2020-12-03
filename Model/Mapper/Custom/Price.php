@@ -10,7 +10,7 @@
  * @author       GoMage.com
  * @license      https://www.gomage.com/licensing  Single domain license
  * @terms of use https://www.gomage.com/terms-of-use
- * @version      Release: 1.2.1
+ * @version      Release: 1.3.2
  * @since        Class available since Release 1.3.0
  */
 
