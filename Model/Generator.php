@@ -105,7 +105,7 @@ class Generator
             if ($feed->getStatus() == Status::IN_PROGRESS) {
                 throw new \Exception(__('Feed already in progress'));
             }
-            $feed->setStatus(Status::IN_PROGRESS);
+//            $feed->setStatus(Status::IN_PROGRESS);
 
             $time = microtime(true);
 
