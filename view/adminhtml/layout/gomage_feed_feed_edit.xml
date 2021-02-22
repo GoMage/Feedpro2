@@ -23,6 +23,7 @@
         <referenceContainer name="content">
             <block class="GoMage\Feed\Block\Adminhtml\Feed\Edit" name="gomage.feed.edit"/>
             <block class="Magento\Framework\View\Element\Template" name="gomage.feed.edit.tools" template="GoMage_Feed::feed/edit/tools.phtml"/>
+            <block class="GoMage\Feed\Block\Adminhtml\Feed\Edit\Tab\Ftp" name="gomage.feed.edit.ftp" template="GoMage_Feed::feed/edit/ftp.phtml"/>
         </referenceContainer>
         <referenceContainer name="left">
             <block class="GoMage\Feed\Block\Adminhtml\Feed\Edit\Tabs" name="gomage_feed_edit_tabs">
