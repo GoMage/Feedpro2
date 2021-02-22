@@ -90,7 +90,7 @@ define([
                 var elementName = typeField.readAttribute('data-value');
                 var input = jQuery("input[name='" + elementName + "']"),
                     select = jQuery("select[name='" + elementName + "']"),
-                    values = [];
+                    values = []
                 switch (parseInt(typeField.getValue())) {
                     case 2:
                         values = [];
@@ -118,6 +118,7 @@ define([
                         select.val(input.val());
                         input.val('');
                     }
+
                 } else {
                     input.removeAttr('disabled').show();
                     select.attr('disabled', 'disabled').hide();
