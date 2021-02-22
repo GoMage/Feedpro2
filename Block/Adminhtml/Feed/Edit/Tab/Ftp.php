@@ -85,7 +85,7 @@ class Ftp extends \Magento\Backend\Block\Widget\Form\Generic implements \Magento
             ['legend' => __('FTP Settings')]
         );
 
-        $fieldset->addField(
+        $is_ftp = $fieldset->addField(
             'is_ftp',
             'select',
             [
@@ -96,7 +96,7 @@ class Ftp extends \Magento\Backend\Block\Widget\Form\Generic implements \Magento
             ]
         );
 
-        $fieldset->addField(
+        $ftp_protocol = $fieldset->addField(
             'ftp_protocol',
             'select',
             [
@@ -107,7 +107,7 @@ class Ftp extends \Magento\Backend\Block\Widget\Form\Generic implements \Magento
             ]
         );
 
-        $fieldset->addField(
+        $ftp_host = $fieldset->addField(
             'ftp_host',
             'text',
             [
@@ -119,7 +119,7 @@ class Ftp extends \Magento\Backend\Block\Widget\Form\Generic implements \Magento
             ]
         );
 
-        $fieldset->addField(
+        $ftp_port = $fieldset->addField(
             'ftp_port',
             'text',
             [
@@ -129,7 +129,7 @@ class Ftp extends \Magento\Backend\Block\Widget\Form\Generic implements \Magento
             ]
         );
 
-        $fieldset->addField(
+        $ftp_user_name = $fieldset->addField(
             'ftp_user_name',
             'text',
             [
@@ -139,7 +139,7 @@ class Ftp extends \Magento\Backend\Block\Widget\Form\Generic implements \Magento
             ]
         );
 
-        $fieldset->addField(
+        $ftp_password = $fieldset->addField(
             'ftp_password',
             'password',
             [
@@ -149,7 +149,7 @@ class Ftp extends \Magento\Backend\Block\Widget\Form\Generic implements \Magento
             ]
         );
 
-        $fieldset->addField(
+        $ftp_dir = $fieldset->addField(
             'ftp_dir',
             'text',
             [
@@ -160,7 +160,7 @@ class Ftp extends \Magento\Backend\Block\Widget\Form\Generic implements \Magento
             ]
         );
 
-        $fieldset->addField(
+        $is_ftp_passive = $fieldset->addField(
             'is_ftp_passive',
             'select',
             [
@@ -171,6 +171,25 @@ class Ftp extends \Magento\Backend\Block\Widget\Form\Generic implements \Magento
             ]
         );
 
+        $this->setChild(
+            'form_after',
+            $this->getLayout()->createBlock('\Magento\Backend\Block\Widget\Form\Element\Dependence')
+                ->addFieldMap($is_ftp->getHtmlId(), $is_ftp->getName())
+                ->addFieldMap($ftp_protocol->getHtmlId(), $ftp_protocol->getName())
+                ->addFieldMap($ftp_host->getHtmlId(), $ftp_host->getName())
+                ->addFieldMap($ftp_port->getHtmlId(), $ftp_port->getName())
+                ->addFieldMap($ftp_user_name->getHtmlId(), $ftp_user_name->getName())
+                ->addFieldMap($ftp_password->getHtmlId(), $ftp_password->getName())
+                ->addFieldMap($ftp_dir->getHtmlId(), $ftp_dir->getName())
+                ->addFieldMap($is_ftp_passive->getHtmlId(), $is_ftp_passive->getName())
+                ->addFieldDependence($ftp_protocol->getName(), $is_ftp->getName(), 1)
+                ->addFieldDependence($ftp_host->getName(), $is_ftp->getName(), 1)
+                ->addFieldDependence($ftp_port->getName(), $is_ftp->getName(), 1)
+                ->addFieldDependence($ftp_user_name->getName(), $is_ftp->getName(), 1)
+                ->addFieldDependence($ftp_password->getName(), $is_ftp->getName(), 1)
+                ->addFieldDependence($ftp_dir->getName(), $is_ftp->getName(), 1)
+                ->addFieldDependence($is_ftp_passive->getName(), $is_ftp->getName(), 1)
+        );
         $form->setValues($model->getData());
         $this->setForm($form);
 
