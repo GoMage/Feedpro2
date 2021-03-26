@@ -26,7 +26,13 @@
 <div id="connection-fail-modal" style="display:none;">
     <div class="ftpFailConnectionWrapper">
         <h1 align="center"><?= __('Connection Error!') ?></h1>
-        <h5><?= __('Unable to connect to specified Host. Please verify that the settings are correct or contact your Administrator for help') ?></h5>
+        <h5><?= __('Unable to connect to specified Host. Please, verify that the settings are correct or contact your Administrator for help') ?></h5>
+    </div>
+</div>
+<div id="validation-fail-modal" style="display:none;">
+    <div class="ftpFailConnectionWrapper">
+        <h1 align="center"><?= __('Error!') ?></h1>
+        <h5><?= __('Please, fill all required fields') ?></h5>
     </div>
 </div>
 <script type="text/x-magento-init">
