@@ -41,14 +41,17 @@ class Ftp extends \Magento\Framework\App\Action\Action implements \Magento\Frame
             $params['user'] = $this->getRequest()->getParam('ftpUser');
             $params['password'] = $this->getRequest()->getParam('ftpPassword');
             $params['passive_mode'] = $this->getRequest()->getParam('ftpPassiveMode');
-
             $exeption = false;
+
+            $resultJson = $this->resultJsonFactory->create();
+            if (in_array(null, $params, true) || in_array('', $params, true)) {
+                return $resultJson->setData(['error' => true, 'value' => 'There is not enough data!']);
+            }
             if (!$params['ftp_protocol']) {
                 $exeption = $this->getFtpConnect($params, $exeption);
             } else {
                 $exeption = $this->getSshConnect($params, $exeption);
             }
-            $resultJson = $this->resultJsonFactory->create();
             if ($exeption) {
                 return $resultJson->setData(['error' => true, 'value' => $exeption]);
             } else {

@@ -115,6 +115,7 @@ class Ftp extends \Magento\Backend\Block\Widget\Form\Generic implements \Magento
                 'label' => __('Host Name'),
                 'title' => __('Host Name'),
                 'note'  => __('e.g. "ftp.domain.com"'),
+                'required' => true,
                 'class' => 'no-whitespace'
             ]
         );
@@ -126,6 +127,7 @@ class Ftp extends \Magento\Backend\Block\Widget\Form\Generic implements \Magento
                 'name'  => 'ftp_port',
                 'label' => __('Port'),
                 'title' => __('Port'),
+                'required' => true,
             ]
         );
 
@@ -136,6 +138,7 @@ class Ftp extends \Magento\Backend\Block\Widget\Form\Generic implements \Magento
                 'name'  => 'ftp_user_name',
                 'label' => __('User Name'),
                 'title' => __('User Name'),
+                'required' => true,
             ]
         );
 
@@ -146,6 +149,7 @@ class Ftp extends \Magento\Backend\Block\Widget\Form\Generic implements \Magento
                 'name'  => 'ftp_password',
                 'label' => __('Password'),
                 'title' => __('Password'),
+                'required' => true,
             ]
         );
 

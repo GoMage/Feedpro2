@@ -44,12 +44,17 @@ define([
                         ftpPassiveMode:ftpPassiveMode
                     },
                     success : function(data) {
-                        if (data.error === true) {
-                            modal(options, $('#connection-fail-modal'));
-                            $("#connection-fail-modal").modal("openModal");
+                        if(data==null){
+                            modal(options, $('#validation-fail-modal'));
+                            $("#validation-fail-modal").modal("openModal");
                         }else{
-                            modal(options, $('#connection-success-modal'));
-                            $("#connection-success-modal").modal("openModal");
+                            if (data.error === true) {
+                                modal(options, $('#connection-fail-modal'));
+                                $("#connection-fail-modal").modal("openModal");
+                            }else{
+                                modal(options, $('#connection-success-modal'));
+                                $("#connection-success-modal").modal("openModal");
+                            }
                         }
                     }
                 });
