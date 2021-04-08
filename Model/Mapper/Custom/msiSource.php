@@ -38,19 +38,19 @@ class msiSource implements CustomMapperInterface
     {
         $quantity = 0;
         if (is_string($this->value)) {
-            $ar = explode(',', $this->value);
-            if (!empty($ar) && $ar[0]==='msiSource') {
-                $sourceId= $ar[1];
+            $msiValueArray = explode(',', $this->value);
+            if (!empty($msiValueArray) && $msiValueArray[0] === 'msiSource') {
+                $sourceCode = $msiValueArray[1];
+                $sourceItemsBySku = $this->getSourceItemsBySku->execute($object->getSku());
+
+                foreach ($sourceItemsBySku as $sourceItem) {
+                    if ($sourceItem->getData('source_code') == $sourceCode) {
+                        $quantity = $sourceItem->getQuantity();
+                        return $quantity;
+                    }
+                }
             }
         }
-        $sourceItemsBySku = $this->getSourceItemsBySku->execute($object->getSku());
-
-        foreach ($sourceItemsBySku as $sourceItem) {
-            if ($sourceItem->getData('source_code') == (int)$sourceId) {
-                $quantity = $sourceItem->getQuantity();
-            }
-        }
-
         return $quantity;
     }
 
