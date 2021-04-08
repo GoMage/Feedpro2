@@ -40,15 +40,14 @@ class msiStock implements CustomMapperInterface
     {
         $quantity = 0;
         if (is_string($this->value)) {
-            $ar = explode(',', $this->value);
-            if (!empty($ar) && $ar[0]==='msiStock') {
-                $stockId= $ar[1];
+            $msiValueArray = explode(',', $this->value);
+            if (!empty($msiValueArray) && $msiValueArray[0] === 'msiStock') {
+                $stockId = (int)$msiValueArray[1];
+                if ($object->getTypeId() == \Magento\Catalog\Model\Product\Type::TYPE_SIMPLE) {
+                    $quantity = $this->getProductSalableQty->execute($object->getSku(), $stockId);
+                }
             }
         }
-        if ($object->getTypeId() == \Magento\Catalog\Model\Product\Type::TYPE_SIMPLE) {
-            $quantity = $this->getProductSalableQty->execute($object->getSku(), (int)$stockId);
-        }
-
         return $quantity;
     }
 
