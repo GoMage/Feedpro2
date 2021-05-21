@@ -23,13 +23,32 @@ class AttributePercent extends Attribute implements MapperInterface
      */
     protected $_percent;
 
+    /**
+     * @var \Magento\Framework\App\ResourceConnection
+     */
+    protected $resource;
+
+    /**
+     * @var \Psr\Log\LoggerInterface
+     */
+    protected $logger;
+
+    /**
+     * AttributePercent constructor.
+     * @param $value
+     * @param \Magento\Catalog\Api\ProductAttributeRepositoryInterface $attributeRepository
+     * @param \Magento\Framework\App\ResourceConnection $resource
+     * @param \Psr\Log\LoggerInterface $logger
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     */
     public function __construct(
         $value,
         \Magento\Catalog\Api\ProductAttributeRepositoryInterface $attributeRepository,
-        \Magento\CatalogInventory\Api\StockItemRepositoryInterface $stockItemRepository
+        \Magento\Framework\App\ResourceConnection $resource,
+        \Psr\Log\LoggerInterface $logger
     ) {
         $this->_percent = floatval($value['percent']);
-        parent::__construct($value['code'], $attributeRepository, $stockItemRepository);
+        parent::__construct($value['code'], $attributeRepository, $resource, $logger);
     }
 
     /**
