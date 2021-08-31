@@ -36,6 +36,7 @@ use GoMage\Feed\Model\Rule\Condition\Product;
 class Feed extends \Magento\Rule\Model\AbstractModel
 {
     const NOT_ATTRIBUTE_CODE = 'attribute_set_id';
+    const COMBINE_CONDITION_TYPE = "Magento\CatalogRule\Model\Rule\Condition\Combine";
     /**
      * @var Rule\Condition\CombineFactory
      */
@@ -127,6 +128,7 @@ class Feed extends \Magento\Rule\Model\AbstractModel
      * Retrieve rule combine conditions model
      *
      * @return \Magento\Rule\Model\Condition\Combine
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function getConditions()
     {
@@ -142,21 +144,7 @@ class Feed extends \Magento\Rule\Model\AbstractModel
                 if (is_array($conditionsOutput) && !empty($conditionsOutput)) {
                     $this->_resetConditions();
                     if (array_key_exists('conditions', $conditionsOutput)) {
-                        $usedForPromoRuleAttributes = [];
-                        foreach ($conditionsOutput['conditions'] as $oneCondition) {
-                            $attributeCode = $oneCondition['attribute'];
-                            if ($attributeCode && $attributeCode != self::NOT_ATTRIBUTE_CODE) {
-                                if (!in_array($attributeCode, Product::CUSTOM_ATTRIBUTE_LIST, true)) {
-                                    $attribute = $this->attributeRepository->get($attributeCode);
-                                    if ($attribute->getIsUsedForPromoRules()) {
-                                        $usedForPromoRuleAttributes[] = $oneCondition;
-                                    }
-                                } else {
-                                    $usedForPromoRuleAttributes[] = $oneCondition;
-                                }
-                            }
-                        }
-                        $conditionsOutput['conditions'] = $usedForPromoRuleAttributes;
+                        $conditionsOutput['conditions'] = $this->getCombineAndPromoRulesConditions($conditionsOutput['conditions']);
                     }
                     $this->_conditions->loadArray($conditionsOutput);
                 }
@@ -165,6 +153,45 @@ class Feed extends \Magento\Rule\Model\AbstractModel
         }
 
         return $this->_conditions;
+    }
+
+    /**
+     * @param $conditionArray
+     * @return array
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     */
+    public function getCombineAndPromoRulesConditions($conditionsArray): array
+    {
+        $usedForPromoRuleAttributeCondition = [];
+        $combineConditions = [];
+        foreach ($conditionsArray as $oneCondition) {
+            if($oneCondition['type'] == self::COMBINE_CONDITION_TYPE){
+                $combineConditions[] = $oneCondition;
+                $nestedConditionsArray = $oneCondition['conditions'];
+                $usedForPromoRuleAttributeCondition[] = $this->getCombineAndPromoRulesConditions($nestedConditionsArray);
+            }
+            $usedForPromoRuleAttributeCondition[] = $this->getUsedForPromoRulesAttributeCondition($oneCondition);
+        }
+        return array_merge($usedForPromoRuleAttributeCondition,$combineConditions);
+    }
+
+    /**
+     * @param $oneCondition
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     */
+    public function getUsedForPromoRulesAttributeCondition($oneCondition)
+    {
+        $attributeCode = $oneCondition['attribute'];
+            if ($attributeCode && $attributeCode != self::NOT_ATTRIBUTE_CODE) {
+                if (!in_array($attributeCode, Product::CUSTOM_ATTRIBUTE_LIST, true)) {
+                    $attribute = $this->attributeRepository->get($attributeCode);
+                    if ($attribute->getIsUsedForPromoRules()) {
+                        return $oneCondition;
+                    }
+                } else {
+                    return $oneCondition;
+                }
+            }
     }
 
     /**
