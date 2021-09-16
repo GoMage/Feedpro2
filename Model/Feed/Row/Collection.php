@@ -101,6 +101,13 @@ class Collection implements \Iterator
         foreach ($this->_items as $row) {
             $attributes = array_merge($attributes, $row->getUsedAttributes());
         }
+
+        if (array_search('price', $attributes) !== false) {
+            $attributes[] = 'special_price';
+            $attributes[] = 'special_from_date';
+            $attributes[] = 'special_to_date';
+        }
+
         return array_unique($attributes);
     }
 
