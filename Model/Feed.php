@@ -37,6 +37,7 @@ class Feed extends \Magento\Rule\Model\AbstractModel
 {
     const NOT_ATTRIBUTE_CODE = 'attribute_set_id';
     const COMBINE_CONDITION_TYPE = "Magento\CatalogRule\Model\Rule\Condition\Combine";
+    const CATEGORY_CODE = 'category_ids';
     /**
      * @var Rule\Condition\CombineFactory
      */
@@ -183,7 +184,7 @@ class Feed extends \Magento\Rule\Model\AbstractModel
     {
         $attributeCode = $oneCondition['attribute'];
             if ($attributeCode && $attributeCode != self::NOT_ATTRIBUTE_CODE) {
-                if (!in_array($attributeCode, Product::CUSTOM_ATTRIBUTE_LIST, true)) {
+                if (!in_array($attributeCode, Product::CUSTOM_ATTRIBUTE_LIST, true) && $attributeCode != self::CATEGORY_CODE) {
                     $attribute = $this->attributeRepository->get($attributeCode);
                     if ($attribute->getIsUsedForPromoRules()) {
                         return $oneCondition;
