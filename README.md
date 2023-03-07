@@ -1,6 +1,6 @@
-## Installation
+## GoMage Feedpro2
 
-## Thank you for choosing our module!
+## Installation
 
 ### Manual
 
@@ -13,3 +13,4 @@
 		php bin/magento setup:upgrade
 		php bin/magento setup:di:compile
 		php bin/magento setup:static-content:deploy
+
